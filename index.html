@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Várzea Simulator</title>
+</head>
+<body onload="carregarTimes()">
+    <button id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
+    <menu>
+        <button class="btnMenu"><i class="fa-solid fa-users"></i> Times</button>
+        <button class="btnMenu"><a href="#"><i class="fa-solid fa-futbol"></i> Jogar</a></button>
+        <button class="btnMenu" onclick="fecharMenu()"><i class="fa-solid fa-reply"></i> Fechar</button>
+    </menu>
+    
+    <main>
+        <button id="criarTimeBtn" onclick="abrirFormulario()"><i class="fa-solid fa-plus"></i> Criar Time</button>
+        <div id="timesDiv">
+            
+        </div>
+    </main>
+        <div id="janela-modal">
+            <div id="formularioDiv">
+                <button onclick="fecharFormulario()" id="sairFormulario"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+                <div id="nomeTimeDiv">
+                    <label for="nomeTime-formulario">Nome</label>
+                    <input type="text" id="nomeTime-formulario" placeholder="Nome do time">
+                </div>
+                <div id="coresDiv">
+                    <div id="cor1Div">
+                        <label for="cor1-formulario">Cor 1</label>
+                        <input type="color" id="cor1-formulario">
+                    </div>
+                    <div id="cor2Div">
+                    <label for="cor2-formulario">Cor 2</label>
+                    <input type="color" id="cor2-formulario">
+                </div>
+            </div>
+            <table id="jogadoresTabela">
+                <thead>
+                    <th>Posição</th>
+                    <th>Nome</th>
+                    <th>Over</th>
+                </thead>
+                <tr>
+                    <td><select name="posicaoSelect" class="posicaoSelect">
+                        <option value="GK">Goleiro</option>
+                    </select></td>
+                    <td>
+                        <input type="text" name="nomePlayer" class="nomePlayer" placeholder="Nome Goleiro">
+                    </td>
+                    <td>
+                        <input type="number" name="overPlayer" class="overPlayer">
+                    </td>
+                </tr>
+                <tr>
+                    <td><select name="posicaoSelect" class="posicaoSelect">
+                        <option value="">Selecione a Posição</option>
+                        <option value="ZG">Zagueiro</option>
+                        <option value="MC">Meio-Campo</option>
+                        <option value="AT">Atacante</option>
+                    </select></td>
+                    <td>
+                        <input type="text" name="nomePlayer" class="nomePlayer" placeholder="Nome Player 1">
+                    </td>
+                    <td>
+                        <input type="number" name="overPlayer" class="overPlayer">
+                    </td>
+                </tr>
+                <tr>
+                    <td><select name="posicaoSelect" class="posicaoSelect">
+                        <option value="">Selecione a Posição</option>
+                        <option value="ZG">Zagueiro</option>
+                        <option value="MC">Meio-Campo</option>
+                        <option value="AT">Atacante</option>
+                    </select></td>
+                    <td>
+                        <input type="text" name="nomePlayer" class="nomePlayer" placeholder="Nome Player 2">
+                    </td>
+                    <td>
+                        <input type="number" name="overPlayer" class="overPlayer">
+                    </td>
+                </tr>
+                <tr>
+                    <td><select name="posicaoSelect" class="posicaoSelect">
+                        <option value="">Selecione a Posição</option>
+                        <option value="ZG">Zagueiro</option>
+                        <option value="MC">Meio-Campo</option>
+                        <option value="AT">Atacante</option>
+                    </select></td>
+                    <td>
+                        <input type="text" name="nomePlayer" class="nomePlayer" placeholder="Nome Player 3">
+                    </td>
+                    <td>
+                        <input type="number" name="overPlayer" class="overPlayer">
+                    </td>
+                </tr>
+                <tr>
+                    <td><select name="posicaoSelect" class="posicaoSelect">
+                        <option value="">Selecione a Posição</option>
+                        <option value="ZG">Zagueiro</option>
+                        <option value="MC">Meio-Campo</option>
+                        <option value="AT">Atacante</option>
+                    </select></td>
+                    <td>
+                        <input type="text" name="nomePlayer" class="nomePlayer" placeholder="Nome Player 4">
+                    </td>
+                    <td>
+                        <input type="number" name="overPlayer" class="overPlayer">
+                    </td>
+                </tr>
+                <tr>
+                    <td><select name="posicaoSelect" class="posicaoSelect">
+                        <option value="">Selecione a Posição</option>
+                        <option value="ZG">Zagueiro</option>
+                        <option value="MC">Meio-Campo</option>
+                        <option value="AT">Atacante</option>
+                    </select></td>
+                    <td>
+                        <input type="text" name="nomePlayer" class="nomePlayer" placeholder="Nome Player 5">
+                    </td>
+                    <td>
+                        <input type="number" name="overPlayer" class="overPlayer">
+                    </td>
+                </tr>
+            </table>
+            <button id="btnConfirmar-formulario" onclick="registrarTime()">Confirmar</button>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+    <script src="https://kit.fontawesome.com/3802d20ec1.js" crossorigin="anonymous"></script>
+</body>
+</html>
