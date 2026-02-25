@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/partida.css">
+    <title>Partida - Várzea Simulator</title>
+</head>
+<body onload="carregarTimesPartida()">
+    <button id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
+    <menu>
+        <button class="btnMenu" onclick="irParaPagina('index.html')"><i class="fa-solid fa-users"></i> Times</button>
+        <button class="btnMenu" onclick="irParaPagina('partida.html')"><i class="fa-solid fa-futbol"></i> Jogar</button>
+        <button class="btnMenu" onclick="fecharMenu()"><i class="fa-solid fa-reply"></i> Fechar</button>
+    </menu>
+
+    <div id="formularioDiv">
+        <div id="configuracoesPartidaDiv">
+            <div class="inputConfig">
+                <label for="estilo">Estilo</label>
+                <select id="estilo">
+                    <option value="normal">Normal</option>
+                    <option value="ofensivo">Ofensivo</option>
+                    <option value="violento">Violento</option>
+                    <option value="varzeano">Varzeano</option>
+                    <option value="maluco">Maluco</option>
+                </select>
+            </div>
+            <div class="inputConfig">
+                <label for="clima">Clima</label>
+                <select id="clima">
+                    <option value="normal">Normal</option>
+                    <option value="quente">Quente</option>
+                    <option value="frio">Frio</option>
+                    <option value="chuvoso">Chuvoso</option>
+                </select>
+            </div>
+            <div class="inputConfig">
+                <label for="torcida">Torcida</label>
+                <select id="torcida">
+                    <option value="normal">Normal</option>
+                    <option value="unica">Única</option>
+                    <option value="mandanteForte">Mandante Forte</option>
+                    <option value="visitanteForte">Visitante Forte</option>
+                    <option value="meio-a-meio">Meio a Meio</option>
+                </select>
+            </div>
+            <div class="inputConfig">
+                <label for="velocidade">Velocidade</label>
+                <select id="velocidade">
+                    <option value=500>Normal</option>
+                    <option value=1000>Super Lento</option>
+                    <option value=700>Lento</option>
+                    <option value=250>Rápido</option>
+                    <option value=100>Super Rápido</option>
+                </select>
+            </div>
+            <div class="inputConfig">
+                <label for="moralTime1">Moral Time 1</label>
+                <select id="moralTime1">
+                    <option value="normal">Normal</option>
+                    <option value="boa">Boa</option>
+                    <option value="ruim">Ruim</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="moralTime2">Moral Time 2</label>
+                <select id="moralTime2">
+                    <option value="normal">Normal</option>
+                    <option value="boa">Boa</option>
+                    <option value="ruim">Ruim</option>
+                </select>
+            </div>
+            <div class="inputConfig">
+                <label for="time1">Time 1</label>
+                <select id="time1">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+            <div class="inputConfig">
+                <label for="time2">Time 2</label>
+                <select id="time2">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+        </div>
+        <button id="iniciarPartidaBtn" onclick="chamarSimulacao()">Iniciar Partida</button>
+    </div>
+    <main>
+        <div id="placar">
+            <div id="time1Placar" class="timeNome">Time 1</div>
+            <h2 id="placarTime1">0</h2>
+            <h2>x</h2>
+            <h2 id="placarTime2">0</h2>
+            <div id="time2Placar" class="timeNome">Time 2</div>
+        </div>
+        <div id="timer">00'</div>
+        <div id="eventos">
+        </div>
+    </main>
+
+    <script src="js/simulacao.js"></script>
+    <script src="js/app.js"></script> 
+    <script src="https://kit.fontawesome.com/3802d20ec1.js" crossorigin="anonymous"></script>
+</body>
+</html>

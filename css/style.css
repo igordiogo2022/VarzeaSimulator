@@ -29,7 +29,7 @@ body{
     top: 3%;
 }
 menu{
-    transform: translateX(-100%);
+    transform: translateX(-100vw);
     pointer-events: none;
     transition: transform 0.3s ease;
     width: 8%;
@@ -50,10 +50,6 @@ menu{
     border-bottom: 1px solid var(--cor2);
     background-color: var(--cor5);
     font-size: 16px;
-    color: white;
-}
-.btnMenu a{
-    text-decoration: none;
     color: white;
 }
 .btnMenu:hover{
@@ -227,7 +223,6 @@ input{
 input[type="color"]{
     border: 0;
 }
-
 .nomePlayer{
     width: 100%;
 }

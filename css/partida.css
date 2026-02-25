@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root{
+    --cor1: #0f172a;
+    --cor2: #1e293b;
+    --cor3: #3b82f6;
+    --cor4: #2563eb;
+    --cor5: #000b25;
+
+    --fonte: "Poppins", "sans-serif";
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    background-color: var(--cor1); 
+    font-family: var(--fonte);
+    color: white;
+}
+#btnAbrirMenu{
+    position: absolute;
+    color: var(--cor4);
+    background-color: #00000000;
+    border: 0;
+    font-size: 24px;
+    left: 3%;
+    top: 3vh;
+}
+menu{
+    transform: translateX(-100vw);
+    pointer-events: none;
+    transition: transform 0.3s ease;
+    width: 8%;
+    height: 100%;
+    background-color: var(--cor5);
+    border: 1px solid black;
+    position: fixed;
+    left: 0;
+    top: 0;
+    animation: menuAnimacao 0.1s ease-in-out ;
+}
+.menuAberto{
+    transform: translateX(0);
+    pointer-events: auto;
+}
+.btnMenu{
+    width: 100%;
+    height: 14vh;
+    border: 0;
+    border-bottom: 1px solid var(--cor2);
+    background-color: var(--cor5);
+    font-size: 16px;
+    color: white;
+}
+.btnMenu:hover{
+    filter: brightness(0.9);
+    transform: scale(1.05);
+}
+
+#formularioDiv{
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    padding-top: 2%;
+}
+#configuracoesPartidaDiv{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 9vh;
+    margin-bottom: 2%;
+}
+.inputConfig{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+select{
+    display: flex;
+    text-align: center;
+    background-color: #00000000;
+    color: white;
+    border-radius: 6px;
+    border: 1px solid var(--cor4);
+    font-size: 14px;
+    padding: 1.5% 0;
+}
+select option{
+    background-color: var(--cor2);
+}
+#iniciarPartidaBtn{
+    width: 40%;
+    margin: 1% 30%;
+    height: 5vh;
+    font-size: 17px;
+    background: linear-gradient(var(--cor3), var(--cor4));
+    color: white;
+    border: 0;
+    border-radius: 6px;
+}
+#iniciarPartidaBtn:hover{
+    filter: brightness(0.9);
+    transform: scale(1.05);
+}
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    height: 60vh;
+    border-radius: 12px;
+    background-color: var(--cor2);
+    overflow-y: auto;
+}
+#placar{
+    display: flex;
+    justify-content: space-around;
+    height: 10%;
+    width: 60%;
+    padding: 1% 0;
+}
+.timeNome{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cor5);
+    color: white;
+    border-radius: 6px;
+    width: 35%;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+#timer{
+    background-color: var(--cor5);
+    padding: 1% 1.5%;
+    border-radius: 20px;
+    letter-spacing: 1.5px;
+}
+#eventos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+}
+.eventoTime1, .eventoTime2{
+    display: flex;
+    width: 50%;
+    gap: 5px;
+}
+.eventoTime1{
+    justify-content: left;
+    border-right: 1px solid black;
+    margin-right: 50%;
+}
+.eventoTime2{
+    justify-content: right;
+    border-left: 1px solid black;
+    margin-left: 50%;
+    flex-direction: row-reverse;
+}
