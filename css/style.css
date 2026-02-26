@@ -19,14 +19,19 @@ body{
     background-color: var(--cor1); 
     font-family: var(--fonte);
 }
-#btnAbrirMenu{
+.btnCanto{
     position: absolute;
     color: var(--cor4);
     background-color: #00000000;
     border: 0;
     font-size: 24px;
+    top: 3vh;
+}
+#btnAbrirMenu{
     left: 3%;
-    top: 3%;
+}
+#btnAbrirJanelaPacotes{
+    right: 3%;
 }
 menu{
     transform: translateX(-100vw);
@@ -149,8 +154,8 @@ main{
     backdrop-filter: blur(10px);
     z-index: 999;
 }
-#formularioDiv{
-    display: flex;
+.divJanela{
+    display: none;
     flex-direction: column;
     align-items: center;
     width: 50%;
@@ -170,7 +175,7 @@ main{
     font-size: 18px;
     position: absolute;
     right: 5%;
-    top: 5%;
+    top: 3vh;
 }
 #nomeTimeDiv{
     display: flex;
@@ -242,4 +247,35 @@ input[type="color"]{
 #btnConfirmar-formulario:hover{
     filter: brightness(0.9);
     transform: scale(1.01); 
+}
+
+@media (max-width: 500px) {
+    #criarTimeBtn{
+        width: 40%;
+        height: 4vh;
+        font-size: 15px;
+    }
+    menu{
+        width: 30%;
+    }
+    main{
+        padding: 5% 2%;
+    }
+    #timesDiv{
+        grid-template-columns: repeat(1, 1fr);
+        margin-top: 5%;
+    }
+    .divJanela{
+        width: 100%;
+        padding: 5% 2%;
+    }
+    #cor1Div, #cor2Div{
+        width: 30%;
+    }
+    #nomeTh{
+        width: 60%;
+    }
+    #overTh{
+        width: 25%;
+    }
 }

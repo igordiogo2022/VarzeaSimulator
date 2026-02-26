@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/varzea-simulator.png" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
     <title>Várzea Simulator</title>
 </head>
 <body onload="carregarTimes()">
-    <button id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
+    <button class="btnCanto" id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
+    <button class="btnCanto" id="btnAbrirJanelaPacotes" onclick="abrirJanela('pacotes')"><i class="fa-solid fa-file-arrow-up"></i></button>
     <menu>
         <button class="btnMenu" onclick="irParaPagina('index.html')"><i class="fa-solid fa-users"></i> Times</button>
         <button class="btnMenu" onclick="irParaPagina('partida.html')"><i class="fa-solid fa-futbol"></i> Jogar</button>
@@ -15,14 +17,14 @@
     </menu>
     
     <main>
-        <button id="criarTimeBtn" onclick="abrirFormulario()"><i class="fa-solid fa-plus"></i> Criar Time</button>
+        <button id="criarTimeBtn" onclick="abrirJanela('formulario')"><i class="fa-solid fa-plus"></i> Criar Time</button>
         <div id="timesDiv">
             
         </div>
     </main>
         <div id="janela-modal">
-            <div id="formularioDiv">
-                <button onclick="fecharFormulario()" id="sairFormulario"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <div id="formularioDiv" class="divJanela">
+                <button onclick="fecharFormulario('formulario')" id="sairFormulario"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
                 <div id="nomeTimeDiv">
                     <label for="nomeTime-formulario">Nome</label>
                     <input type="text" id="nomeTime-formulario" placeholder="Nome do time">
@@ -39,9 +41,9 @@
                 </div>
             <table id="jogadoresTabela">
                 <thead>
-                    <th>Posição</th>
-                    <th>Nome</th>
-                    <th>Over</th>
+                    <th id="posicaoTh">Posição</th>
+                    <th id="nomeTh">Nome</th>
+                    <th id="overTh">Over</th>
                 </thead>
                 <tr>
                     <td><select name="posicaoSelect" class="posicaoSelect">
@@ -126,6 +128,12 @@
                 </tr>
             </table>
             <button id="btnConfirmar-formulario" onclick="registrarTime()">Confirmar</button>
+        </div>
+        <div id="pacotesDiv" class="divJanela">
+            <h2>Importar Times</h2>
+            <button onclick="fecharFormulario('pacotes')" id="sairFormulario"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <input type="file" id="pacote">
+            <button id="btnConfirmar-formulario" onclick="importarPacote()">Confirmar</button>
         </div>
     </div>
     

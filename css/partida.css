@@ -120,6 +120,7 @@ main{
 }
 #placar{
     display: flex;
+    align-items: center;
     justify-content: space-around;
     height: 10%;
     width: 60%;
@@ -133,6 +134,7 @@ main{
     color: white;
     border-radius: 6px;
     width: 35%;
+    height: 100%;
     font-weight: 700;
     letter-spacing: 1px;
 }
@@ -163,4 +165,33 @@ main{
     border-left: 1px solid black;
     margin-left: 50%;
     flex-direction: row-reverse;
+}
+@media (max-width: 500px) {
+    #formularioDiv{
+        width: 80%;
+    }
+    #configuracoesPartidaDiv{
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 7.5vh;
+    }
+    menu{
+        width: 30%;
+    }
+    #iniciarPartidaBtn{
+        margin: 3% 30%;
+    }
+    main{
+        width: 80%;
+    }
+    #placar{
+        width: 100%;
+    }
+    .timeNome{
+        font-size: 13px;
+        text-align: center;
+    }
+    #eventos{
+        width: 100%;
+        font-size: 12px;   
+    }
 }

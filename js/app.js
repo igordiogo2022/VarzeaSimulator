@@ -83,18 +83,40 @@ function irParaPagina(pagina){
     window.location.href = pagina;
 }
 
-function abrirFormulario(){
+function abrirJanela(janela){
     const body =  document.querySelector("body");
     const janelaModal = document.querySelector("#janela-modal");
+
+    switch(janela){
+        case "formulario":
+            let formulario = document.querySelector("#formularioDiv");
+            formulario.style.display = "flex";
+            break;
+        case "pacotes":
+            let pacotes = document.querySelector("#pacotesDiv");
+            pacotes.style.display = "flex";
+            break;
+    }
     
     janelaModal.style.display = "flex";
     window.scrollTo({top: 0});
     body.style.overflow = "hidden";
 }
-function fecharFormulario(){
+function fecharFormulario(janela){
     const body =  document.querySelector("body");
     const janelaModal = document.querySelector("#janela-modal");
     
+    switch(janela){
+        case "formulario":
+            let formulario = document.querySelector("#formularioDiv");
+            formulario.style.display = "none";
+            break;
+        case "pacotes":
+            let pacotes = document.querySelector("#pacotesDiv");
+            pacotes.style.display = "none";
+            break;
+    }
+
     janelaModal.style.display = "none";
     window.scrollTo({top: 0});
     body.style.overflow = "auto";
@@ -182,10 +204,32 @@ function obterDadosFormulario(idTime){
     return time;
 }
 
+async function importarPacote(){
+    const pacoteArquivo = document.querySelector("#pacote").files[0];
+    const conteudo = await pacoteArquivo.text();
+    let pacote = JSON.parse(conteudo);
+
+    for(let time of pacote){
+        if(!listaTimes.includes(time)){
+            if(listaTimes.length == 0){
+                idTime = 0;
+            }else{
+                idTime = listaTimes[listaTimes.length-1].id+1;
+            }
+            time.id = idTime;
+            
+            listaTimes.push(time);
+            localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
+        }
+    }
+
+    window.location.reload();
+}
+
 function carregarFormularioEdicao(id){
     let time = listaTimes.find(item => item.id == id);
     
-    abrirFormulario();  
+    abrirJanela('formulario');  
     document.querySelector("#nomeTime-formulario").value = time.nome;
     document.querySelector("#cor1-formulario").value = time.cor1;
     document.querySelector("#cor2-formulario").value = time.cor2;
@@ -221,7 +265,6 @@ function chamarSimulacao(){
     for(let jogador of time2.jogadores){
         jogador.jogando = true;
     }
-    console.log(time1, time2);
     
     let registroPartida = simulacaoPartida(document.querySelector("#estilo").value,
     document.querySelector("#clima").value, 
