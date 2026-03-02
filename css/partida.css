@@ -195,3 +195,34 @@ main{
         font-size: 12px;   
     }
 }
+@media (max-height: 500px) {
+    #formularioDiv{
+        width: 100%;
+        font-size: 10px;
+    }
+    #configuracoesPartidaDiv{
+        grid-auto-rows: 15vh;
+    }
+    .inputConfig select{
+        font-size: 10px;
+    }
+    #iniciarPartidaBtn{
+        margin: 0 35% 1%;
+        width: 30%;
+        height: 7vh;
+    }
+    main{
+        width: 90%;
+    }
+    #placar{
+        width: 100%;
+        height: 10vh;
+    }
+    #eventos{
+        width: 95%;
+        font-size: 12px;   
+    }
+    #timer{
+        font-size: 12px;
+    }
+}
