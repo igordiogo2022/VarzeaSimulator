@@ -248,13 +248,14 @@ function carregarFormularioEdicao(id){
 function chamarSimulacao(){
     const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
     iniciarPartidaBtn.style.pointerEvents = "none";
-
+    iniciarPartidaBtn.style.background = "linear-gradient(darkgray, gray)";
+    
     const idTime1 = document.querySelector("#time1").value; 
     const idTime2 = document.querySelector("#time2").value;
     
     let time1 = listaTimes.find(item => item.id == idTime1);
     let time2 = listaTimes.find(item => item.id == idTime2);
-
+    
     if(time1==time2 || !time1 || !time2){
         return alert("Erro na escolha dos times.");
     }
@@ -272,7 +273,7 @@ function chamarSimulacao(){
     document.querySelector("#moralTime1").value, 
     document.querySelector("#moralTime2").value,
     time1, time2);
-
+    
     limparEventos();
     exibirTimesPlacar(time1, time2);
     rodarPartida(registroPartida,  document.querySelector("#velocidade").value, time1, time2);
@@ -323,6 +324,7 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
             clearInterval(intervalo);
             
             const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
+            iniciarPartidaBtn.style.background = "linear-gradient(var(--cor3), var(--cor4))";
             iniciarPartidaBtn.style.pointerEvents = "auto";
         }
     }, velocidadePartida);
