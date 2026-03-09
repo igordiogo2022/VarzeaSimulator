@@ -24,7 +24,6 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
     let tempoPartida = 90 + Math.floor(Math.random()*10);
     let timeEvento = "";
 
-    console.log(chanceGolT1, chanceGolT2);
     
     for(let minuto=0;minuto<=tempoPartida;minuto++){
         let valorRandom1 = Math.random() * 100;
@@ -36,13 +35,11 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
                 jogador = sorteiarJogadorEvento(timeEvento.jogadores);
                 jogadorAssistencia = sorteiarJogadorAssistencia(timeEvento.jogadores, jogador);
                 evento = "gol";
-                console.log("gol");
             }else{
                 timeEvento = sorteiarTimeEvento(time1, time2, 50, 50);
                 jogador = sorteiarJogadorEvento(timeEvento.jogadores);
                 jogadorAssistencia = null; 
                 evento = sorteiarCartao(chanceVermelho);
-                console.log("cartao");
                 
                 if(evento=="vermelho"){
                     switch(timeEvento){
@@ -53,17 +50,14 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
                             chanceGolT2 -= 10;
                             break;
                         }
-                        console.log("vermelho");
                         
                         expulsarJogador(timeEvento.jogadores, jogador);
                     }else if(evento=="amarelo"){
                         if(jogador.amarelado){
                             evento = "vermelho";
                             expulsarJogador(timeEvento.jogadores, jogador);
-                            console.log("vermelho por 2 amarelo");
                         }else{
                             jogador.amarelado = true;
-                            console.log("amarelo");
                         }
                 }
             }
@@ -193,8 +187,6 @@ function calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, t
     posicoes.forEach(posicao => {
             let qtdTimePos1 = time1.jogadores.filter(jogador => jogador.pos==posicao).length;
             let qtdTimePos2 = time2.jogadores.filter(jogador => jogador.pos==posicao).length;
-            console.log(`${posicao} - ${time1.nome} - ${qtdTimePos1}`);
-            console.log(`${posicao} - ${time2.nome} - ${qtdTimePos2}`);
    
             if (posicao === "ZG") {
                 if (qtdTimePos1 === 0) chanceGolT2Mod += 40;
