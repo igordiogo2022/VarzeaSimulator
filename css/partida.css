@@ -166,6 +166,10 @@ main{
     margin-left: 50%;
     flex-direction: row-reverse;
 }
+.assistencia{
+    font-size: 14px;
+    color: gray;
+}
 @media (max-width: 500px) {
     #formularioDiv{
         width: 80%;

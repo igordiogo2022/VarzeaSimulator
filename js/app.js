@@ -246,19 +246,19 @@ function carregarFormularioEdicao(id){
 }
 
 function chamarSimulacao(){
-    const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
-    iniciarPartidaBtn.style.pointerEvents = "none";
-    iniciarPartidaBtn.style.background = "linear-gradient(darkgray, gray)";
-    
     const idTime1 = document.querySelector("#time1").value; 
     const idTime2 = document.querySelector("#time2").value;
     
     let time1 = listaTimes.find(item => item.id == idTime1);
     let time2 = listaTimes.find(item => item.id == idTime2);
-    
+
     if(time1==time2 || !time1 || !time2){
         return alert("Erro na escolha dos times.");
     }
+
+    const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
+    iniciarPartidaBtn.style.pointerEvents = "none";
+    iniciarPartidaBtn.style.background = "linear-gradient(darkgray, gray)";
 
     for(let jogador of time1.jogadores){
         jogador.jogando = true;
@@ -316,7 +316,13 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                     emoji = "🟥";
                 }
                 
-                eventos.innerHTML += `<div class="${classeEvento}"><p>${minuto}'</p> <p>${emoji}</p> <p>${evento.jogador}</p></div>`;
+                html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>${emoji}</p> <p>${evento.jogador}</p></div>`;
+
+                if(evento.jogadorAssistencia!=null){
+                    html += `<div class="${classeEvento} assistencia"><p>👟</p> <p>${evento.jogadorAssistencia}</p></div>`;
+                }
+
+                eventos.innerHTML += html;
             }
         }
         
@@ -328,7 +334,6 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
             iniciarPartidaBtn.style.pointerEvents = "auto";
         }
     }, velocidadePartida);
-
 }
 
 function exibirTimesPlacar(time1, time2){

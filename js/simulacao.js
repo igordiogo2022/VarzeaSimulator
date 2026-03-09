@@ -9,7 +9,6 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
     let chanceEvento = 3 + chanceEventoMod;
     let chanceEventoT1 = Math.max(1, (50 + (ataqueTime1-defesaTime2) * 2) + chanceEventoTime1Mod); 
     let chanceEventoT2 = Math.max(1, (50 + (ataqueTime2-defesaTime1) * 2) + chanceEventoTime2Mod); 
-    console.log(chanceEventoT1, chanceEventoT2);
     let chanceVermelho = 5 + chanceVermelhoMod;
 
     let sumula = [];
@@ -23,6 +22,11 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
             timeEvento = sorteiarTimeEvento(time1, time2, chanceEventoT1, chanceEventoT2);
             jogador = sorteiarJogadorEvento(timeEvento.jogadores);
             evento = sorteiarTipoEvento(chanceVermelho);
+            if(evento === "gol"){
+                jogadorAssistencia = sorteiarJogadorAssistencia(timeEvento.jogadores, jogador);
+            }else{
+                jogadorAssistencia = null;
+            }
 
             if(evento=="vermelho"){
                 switch(timeEvento){
@@ -51,7 +55,13 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
                 chanceEvento -= 1;
             }
             
-            sumula.push({minuto: minuto, time: timeEvento, jogador: jogador.nome, tipo: evento});
+            sumula.push({
+                minuto: minuto, 
+                time: timeEvento, 
+                jogador: jogador.nome, 
+                jogadorAssistencia: jogadorAssistencia, 
+                tipo: evento
+            });
         }
     }
 
@@ -185,8 +195,24 @@ function sorteiarJogadorEvento(jogadores){
     }
 }
 
+function sorteiarJogadorAssistencia(jogadores, jogadorGol){
+    let valorRandom1 = Math.floor(Math.random() * 100);
+    if(valorRandom1>70){
+        return null;
+    }
+
+    let valorRandom2 = Math.floor(Math.random() * (jogadores.length-1))+1;
+    let jogador = jogadores[valorRandom2];
+    
+    if(jogador.jogando && jogador!=jogadorGol){
+        return jogador.nome;
+    }else{
+        sorteiarJogadorEvento(jogadores);
+    }
+}
+
 function sorteiarTipoEvento(chanceVermelho){
-    let valorRandom = Math.random() * 100 + 1;
+    let valorRandom = Math.random() * 101;
     if(valorRandom > chanceVermelho){
         evento = "gol";
     }else{
