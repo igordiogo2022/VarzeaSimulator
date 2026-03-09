@@ -259,13 +259,6 @@ function chamarSimulacao(){
     const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
     iniciarPartidaBtn.style.pointerEvents = "none";
     iniciarPartidaBtn.style.background = "linear-gradient(darkgray, gray)";
-
-    for(let jogador of time1.jogadores){
-        jogador.jogando = true;
-    }
-    for(let jogador of time2.jogadores){
-        jogador.jogando = true;
-    }
     
     let registroPartida = simulacaoPartida(document.querySelector("#estilo").value,
     document.querySelector("#clima").value, 
@@ -312,6 +305,8 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                             break;
                     }
                     emoji = "⚽";
+                }else if(evento.tipo=="amarelo"){
+                    emoji = "🟨";
                 }else if(evento.tipo=="vermelho"){
                     emoji = "🟥";
                 }

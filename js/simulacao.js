@@ -1,60 +1,72 @@
 function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1, time2){
-    let [chanceEventoMod, chanceEventoTime1Mod, chanceEventoTime2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2);
+    for(let jogador of time1.jogadores){
+        jogador.jogando = true;
+        jogador.amarelado = false;
+    }
+    for(let jogador of time2.jogadores){
+        jogador.jogando = true;
+        jogador.amarelado = false;
+    }
+
+    let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2);
     
     let ataqueTime1 = calcularForca(time1, "atk");
     let defesaTime1 = calcularForca(time1, "def");
     let ataqueTime2 = calcularForca(time2, "atk");
     let defesaTime2 = calcularForca(time2, "def");
 
-    let chanceEvento = 3 + chanceEventoMod;
-    let chanceEventoT1 = Math.max(1, (50 + (ataqueTime1-defesaTime2) * 2) + chanceEventoTime1Mod); 
-    let chanceEventoT2 = Math.max(1, (50 + (ataqueTime2-defesaTime1) * 2) + chanceEventoTime2Mod); 
-    let chanceVermelho = 5 + chanceVermelhoMod;
+    let chanceEvento = 5 + chanceEventoMod;
+    let chanceGolT1 = Math.max(1, (50 + (ataqueTime1-defesaTime2) * 2) + chanceGolT1Mod); 
+    let chanceGolT2 = Math.max(1, (50 + (ataqueTime2-defesaTime1) * 2) + chanceGolT2Mod); 
+    let chanceAtaque = 52;
+    let chanceVermelho = 3 + chanceVermelhoMod;
 
     let sumula = [];
     let tempoPartida = 90 + Math.floor(Math.random()*10);
     let timeEvento = "";
     
     for(let minuto=0;minuto<=tempoPartida;minuto++){
-        let valorRandom = Math.random() * 100;
-
-        if(valorRandom < chanceEvento){
-            timeEvento = sorteiarTimeEvento(time1, time2, chanceEventoT1, chanceEventoT2);
-            jogador = sorteiarJogadorEvento(timeEvento.jogadores);
-            evento = sorteiarTipoEvento(chanceVermelho);
-            if(evento === "gol"){
+        let valorRandom1 = Math.random() * 100;
+        
+        if(valorRandom1 < chanceEvento){
+            let valorRandom2 = Math.random() * 100;
+            if(valorRandom2<chanceAtaque){
+                timeEvento = sorteiarTimeEvento(time1, time2, chanceGolT1, chanceGolT2);
+                jogador = sorteiarJogadorEvento(timeEvento.jogadores);
                 jogadorAssistencia = sorteiarJogadorAssistencia(timeEvento.jogadores, jogador);
+                evento = "gol";
+                console.log("gol");
             }else{
-                jogadorAssistencia = null;
-            }
-
-            if(evento=="vermelho"){
-                switch(timeEvento){
-                    case time1:
-                        chanceEventoT1 -= 10;
-                        break;
-                    case time2:
-                        chanceEventoT2 -= 10;
-                        break;
-                    }
-                        
-                    for(let i=0;i<timeEvento.jogadores.length;i++){
-                        if(timeEvento.jogadores[i] == jogador){
-                            timeEvento.jogadores[i].jogando = false;
+                timeEvento = sorteiarTimeEvento(time1, time2, 50, 50);
+                jogador = sorteiarJogadorEvento(timeEvento.jogadores);
+                jogadorAssistencia = null; 
+                evento = sorteiarCartao(chanceVermelho);
+                console.log("cartao");
+                
+                if(evento=="vermelho"){
+                    switch(timeEvento){
+                        case time1:
+                            chanceGolT1 -= 10;
+                            break;
+                        case time2:
+                            chanceGolT2 -= 10;
+                            break;
                         }
-                    }
-                    if(timeEvento.jogadores.length<=3){
-                        chanceVermelho = 0;
-                    }
+                        console.log("vermelho");
+                        
+                        expulsarJogador(timeEvento.jogadores, jogador);
+                    }else if(evento=="amarelo"){
+                        if(jogador.amarelado){
+                            evento = "vermelho";
+                            expulsarJogador(timeEvento.jogadores, jogador);
+                            console.log("vermelho por 2 amarelo");
+                        }else{
+                            jogador.amarelado = true;
+                            console.log("amarelo");
+                        }
                 }
-
-            if(minuto==45 && clima=="quente"){
-                chanceEvento -= 3;
             }
-            if(minuto==75 && clima=="quente"){
-                chanceEvento -= 1;
-            }
-            
+                
             sumula.push({
                 minuto: minuto, 
                 time: timeEvento, 
@@ -62,6 +74,12 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
                 jogadorAssistencia: jogadorAssistencia, 
                 tipo: evento
             });
+        }
+        if(minuto==45 && clima=="quente"){
+            chanceEvento -= 3;
+        }
+        if(minuto==75 && clima=="quente"){
+            chanceEvento -= 1;
         }
     }
 
@@ -107,7 +125,7 @@ function calcularForca(time, forca){
 }
 
 function calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2){
-    let [chanceEventoMod, chanceEventoTime1Mod, chanceEventoTime2Mod, chanceVermelhoMod] = [0, 0, 0, 0];
+    let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = [0, 0, 0, 0];
     
     switch(estilo){
         case "varzeano":
@@ -138,38 +156,38 @@ function calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2){
             
     switch(torcida){
         case "unica":
-            chanceEventoTime1Mod += 4;
+            chanceGolT1Mod += 4;
             break;
         case "meio-a-meio":
             chanceEventoMod += 1.5;
             break;
         case "mandanteForte":
-            chanceEventoTime1Mod += 5;
+            chanceGolT1Mod += 5;
             break;    
         case "visitanteForte":
-            chanceEventoTime2Mod += 5;
+            chanceGolT2Mod += 5;
             break;    
     }
         
     switch(moralTime1){
         case "boa":
-            chanceEventoTime1Mod += 5;
+            chanceGolT1Mod += 5;
             break;
         case "ruim":
-            chanceEventoTime1Mod += -5;
+            chanceGolT1Mod += -5;
             break;
     }
         
     switch(moralTime2){
         case "boa":
-            chanceEventoTime2Mod += 8;
+            chanceGolT2Mod += 8;
             break;
         case "ruim":
-            chanceEventoTime2Mod += -8;
+            chanceGolT2Mod += -8;
             break;
     }
                                                 
-    return [chanceEventoMod, chanceEventoTime1Mod, chanceEventoTime2Mod, chanceVermelhoMod];
+    return [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod];
 }
 
 function sorteiarTimeEvento(time1, time2, chanceT1, chanceT2){
@@ -185,13 +203,14 @@ function sorteiarTimeEvento(time1, time2, chanceT1, chanceT2){
 }
 
 function sorteiarJogadorEvento(jogadores){
-    let valorRandom = Math.floor(Math.random() * (jogadores.length-1))+1;
+    const valores = [1, 2, 3, 4, 4, 5, 5];
+    let valorRandom = valores[Math.floor(Math.random() * valores.length)];
     let jogador = jogadores[valorRandom];
 
     if(jogador.jogando){
         return jogador;
     }else{
-        sorteiarJogadorEvento(jogadores);
+        return sorteiarJogadorEvento(jogadores);
     }
 }
 
@@ -207,17 +226,25 @@ function sorteiarJogadorAssistencia(jogadores, jogadorGol){
     if(jogador.jogando && jogador!=jogadorGol){
         return jogador.nome;
     }else{
-        sorteiarJogadorEvento(jogadores);
+        return sorteiarJogadorAssistencia(jogadores, jogadorGol);
     }
 }
 
-function sorteiarTipoEvento(chanceVermelho){
+function sorteiarCartao(chanceVermelho){
     let valorRandom = Math.random() * 101;
-    if(valorRandom > chanceVermelho){
-        evento = "gol";
-    }else{
+    if(valorRandom < chanceVermelho){
         evento = "vermelho";
+    }else{
+        evento = "amarelo";
     }
 
     return evento;
+}
+
+function expulsarJogador(jogadores, jogadorExpulso){
+    jogadores.forEach(jogador => {
+        if(jogador == jogadorExpulso){
+            jogador.jogando = false;
+        }
+    });
 }
