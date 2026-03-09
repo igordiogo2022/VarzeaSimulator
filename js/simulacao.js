@@ -8,22 +8,23 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
         jogador.amarelado = false;
     }
 
-    let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2);
-    
     let ataqueTime1 = calcularForca(time1, "atk");
     let defesaTime1 = calcularForca(time1, "def");
     let ataqueTime2 = calcularForca(time2, "atk");
     let defesaTime2 = calcularForca(time2, "def");
+
+    let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, time1, time2);
 
     let chanceEvento = 5 + chanceEventoMod;
     let chanceGolT1 = Math.max(1, (50 + (ataqueTime1-defesaTime2) * 2) + chanceGolT1Mod); 
     let chanceGolT2 = Math.max(1, (50 + (ataqueTime2-defesaTime1) * 2) + chanceGolT2Mod); 
     let chanceAtaque = 52;
     let chanceVermelho = 3 + chanceVermelhoMod;
-
     let sumula = [];
     let tempoPartida = 90 + Math.floor(Math.random()*10);
     let timeEvento = "";
+
+    console.log(chanceGolT1, chanceGolT2);
     
     for(let minuto=0;minuto<=tempoPartida;minuto++){
         let valorRandom1 = Math.random() * 100;
@@ -124,7 +125,7 @@ function calcularForca(time, forca){
     return valorFinal / pesoIdeal;
 }
 
-function calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2){
+function calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, time1, time2){
     let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = [0, 0, 0, 0];
     
     switch(estilo){
@@ -186,6 +187,23 @@ function calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2){
             chanceGolT2Mod += -8;
             break;
     }
+
+    let posicoes = ["ZG", "MC", "AT"];
+
+    posicoes.forEach(posicao => {
+            let qtdTimePos1 = time1.jogadores.filter(jogador => jogador.pos==posicao).length;
+            let qtdTimePos2 = time2.jogadores.filter(jogador => jogador.pos==posicao).length;
+            console.log(`${posicao} - ${time1.nome} - ${qtdTimePos1}`);
+            console.log(`${posicao} - ${time2.nome} - ${qtdTimePos2}`);
+   
+            if (posicao === "ZG") {
+                if (qtdTimePos1 === 0) chanceGolT2Mod += 40;
+                if (qtdTimePos2 === 0) chanceGolT1Mod += 40;
+            } else if (posicao === "MC" || posicao === "AT") {
+                if (qtdTimePos1 === 0) chanceGolT1Mod -= 40;
+                if (qtdTimePos2 === 0) chanceGolT2Mod -= 40;
+            }
+    });
                                                 
     return [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod];
 }
