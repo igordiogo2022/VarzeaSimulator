@@ -15,7 +15,7 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
 
     let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, time1, time2);
 
-    let chanceEvento = 5 + chanceEventoMod;
+    let chanceEvento = 4.5 + chanceEventoMod;
     let chanceGolT1 = Math.max(1, (50 + (ataqueTime1-defesaTime2) * 2) + chanceGolT1Mod); 
     let chanceGolT2 = Math.max(1, (50 + (ataqueTime2-defesaTime1) * 2) + chanceGolT2Mod); 
     let chanceAtaque = 52;
