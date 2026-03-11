@@ -78,6 +78,7 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
         }
     }
 
+    console.log(sumula);
     return [sumula, tempoPartida];
 }
 

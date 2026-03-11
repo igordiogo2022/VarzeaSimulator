@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Ranking de Jogadores</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#111;
+    color:white;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+textarea{
+    width:100%;
+    height:180px;
+    background:#1e1e1e;
+    color:white;
+    border:1px solid #444;
+    padding:10px;
+}
+
+button,select{
+    padding:10px;
+    margin:5px;
+    border:none;
+}
+
+.processar{
+    background:#00c853;
+    color:white;
+}
+
+.reset{
+    background:#d50000;
+    color:white;
+}
+
+select{
+    background:#222;
+    color:white;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,td{
+    border:1px solid #444;
+    padding:8px;
+    text-align:center;
+}
+
+th{
+    background:#222;
+}
+
+tr:nth-child(even){
+    background:#1a1a1a;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Estatísticas dos Jogadores</h1>
+
+<textarea id="sumula" placeholder="Cole a súmula JSON aqui"></textarea>
+
+<br>
+
+<button class="processar" onclick="processar()">Processar Súmula</button>
+<button class="reset" onclick="resetar()">Resetar Dados</button>
+
+<select id="ranking" onchange="atualizarTabela()">
+<option value="geral">Ranking Geral</option>
+<option value="gols">Artilharia (Gols)</option>
+<option value="assistencias">Assistências</option>
+<option value="amarelos">Cartões Amarelos</option>
+<option value="vermelhos">Cartões Vermelhos</option>
+</select>
+
+<table>
+
+<thead id="cabecalho"></thead>
+
+<tbody id="tabela"></tbody>
+
+</table>
+
+<script>
+
+let stats = JSON.parse(localStorage.getItem("statsJogadores")) || {};
+
+function salvar(){
+    localStorage.setItem("statsJogadores", JSON.stringify(stats));
+}
+
+function garantirJogador(nome){
+
+    if(!stats[nome]){
+        stats[nome] = {
+            gols:0,
+            assistencias:0,
+            amarelos:0,
+            vermelhos:0
+        }
+    }
+
+}
+
+function processar(){
+
+    let texto = document.getElementById("sumula").value;
+
+    if(!texto){
+        alert("Cole a súmula primeiro");
+        return;
+    }
+
+    let eventos;
+
+    try{
+        eventos = JSON.parse(texto);
+    }catch{
+        alert("JSON inválido");
+        return;
+    }
+
+    eventos.forEach(e => {
+
+        garantirJogador(e.jogador);
+
+        if(e.tipo === "gol"){
+
+            stats[e.jogador].gols++;
+
+            if(e.jogadorAssistencia){
+
+                garantirJogador(e.jogadorAssistencia);
+                stats[e.jogadorAssistencia].assistencias++;
+
+            }
+
+        }
+
+        if(e.tipo === "amarelo"){
+            stats[e.jogador].amarelos++;
+        }
+
+        if(e.tipo === "vermelho"){
+            stats[e.jogador].vermelhos++;
+        }
+
+    });
+
+    salvar();
+    atualizarTabela();
+}
+
+function atualizarTabela(){
+
+    let tipo = document.getElementById("ranking").value;
+
+    let jogadores = Object.keys(stats).map(nome => ({
+        nome,
+        ...stats[nome]
+    }));
+
+    if(tipo !== "geral"){
+        jogadores.sort((a,b)=> b[tipo]-a[tipo]);
+    }
+
+    let thead = document.getElementById("cabecalho");
+    let tbody = document.getElementById("tabela");
+
+    tbody.innerHTML="";
+
+    if(tipo==="geral"){
+
+        thead.innerHTML=`
+        <tr>
+        <th>Jogador</th>
+        <th>Gols ⚽</th>
+        <th>Assistências 🎯</th>
+        <th>Amarelos 🟨</th>
+        <th>Vermelhos 🟥</th>
+        </tr>
+        `;
+
+        jogadores.forEach(p=>{
+
+            tbody.innerHTML+=`
+            <tr>
+            <td>${p.nome}</td>
+            <td>${p.gols}</td>
+            <td>${p.assistencias}</td>
+            <td>${p.amarelos}</td>
+            <td>${p.vermelhos}</td>
+            </tr>
+            `;
+
+        });
+
+    }else{
+
+        thead.innerHTML=`
+        <tr>
+        <th>#</th>
+        <th>Jogador</th>
+        <th>${tipo.toUpperCase()}</th>
+        </tr>
+        `;
+
+        jogadores.forEach((p,i)=>{
+
+            tbody.innerHTML+=`
+            <tr>
+            <td>${i+1}</td>
+            <td>${p.nome}</td>
+            <td>${p[tipo]}</td>
+            </tr>
+            `;
+
+        });
+
+    }
+
+}
+
+function resetar(){
+
+    if(confirm("Apagar todas estatísticas?")){
+
+        stats={};
+        salvar();
+        atualizarTabela();
+
+    }
+
+}
+
+atualizarTabela();
+
+</script>
+
+</body>
+</html>
