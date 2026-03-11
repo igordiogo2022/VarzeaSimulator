@@ -32,14 +32,14 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
             let valorRandom2 = Math.random() * 100;
             if(valorRandom2<chanceAtaque){
                 timeEvento = sorteiarTimeEvento(time1, time2, chanceGolT1, chanceGolT2);
-                jogador = sorteiarJogadorEvento(timeEvento.jogadores);
-                jogadorAssistencia = sorteiarJogadorAssistencia(timeEvento.jogadores, jogador);
                 evento = "gol";
+                jogador = sorteiarJogadorEvento(timeEvento.jogadores, evento);
+                jogadorAssistencia = sorteiarJogadorAssistencia(timeEvento.jogadores, jogador);
             }else{
                 timeEvento = sorteiarTimeEvento(time1, time2, 50, 50);
-                jogador = sorteiarJogadorEvento(timeEvento.jogadores);
                 jogadorAssistencia = null; 
                 evento = sorteiarCartao(chanceVermelho);
+                jogador = sorteiarJogadorEvento(timeEvento.jogadores, evento);
                 
                 if(evento=="vermelho"){
                     switch(timeEvento){
@@ -212,11 +212,18 @@ function sorteiarTimeEvento(time1, time2, chanceT1, chanceT2){
     return timeEvento;
 }
 
-function sorteiarJogadorEvento(jogadores){
-    const valores = [1, 2, 3, 4, 4, 5, 5];
+function sorteiarJogadorEvento(jogadores, evento){
+    const valores = [];
+    for(let i=1;i<=5;i++){
+        if(jogadores[i].pos=="AT" && evento=="gol"){
+            valores.push(i);
+        }
+        valores.push(i);
+    }
+
     let valorRandom = valores[Math.floor(Math.random() * valores.length)];
     let jogador = jogadores[valorRandom];
-
+    
     if(jogador.jogando){
         return jogador;
     }else{
@@ -230,7 +237,15 @@ function sorteiarJogadorAssistencia(jogadores, jogadorGol){
         return null;
     }
 
-    let valorRandom2 = Math.floor(Math.random() * (jogadores.length-1))+1;
+    const valores = [];
+    for(let i=1;i<=5;i++){
+        if(jogadores[i].pos=="MC"){
+            valores.push(i);
+        }
+        valores.push(i);
+    }
+
+    let valorRandom2 = valores[Math.floor(Math.random() * valores.length)];
     let jogador = jogadores[valorRandom2];
     
     if(jogador.jogando && jogador!=jogadorGol){
