@@ -17,28 +17,32 @@
     </menu>
     
     <main>
-        <button id="criarTimeBtn" onclick="abrirJanela('formulario')"><i class="fa-solid fa-plus"></i> Criar Time</button>
+        <div id="botoesMain">
+            <button class="btnMain" id="criarTimeBtn" onclick="abrirJanela('formulario')"><i class="fa-solid fa-plus"></i> Criar Time</button>
+            <button class="btnMain" onclick="abrirJanela('transferencia')"><i class="fa-solid fa-arrow-right-arrow-left"></i> Transferir Jogador</button>
+        </div>
         <div id="timesDiv">
             
         </div>
     </main>
-        <div id="janela-modal">
-            <div id="formularioDiv" class="divJanela">
-                <button onclick="fecharFormulario('formulario')" id="sairFormulario"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
-                <div id="nomeTimeDiv">
-                    <label for="nomeTime-formulario">Nome</label>
-                    <input type="text" id="nomeTime-formulario" placeholder="Nome do time">
+    <div id="janela-modal">
+        <div id="formularioDiv" class="divJanela">
+            <button onclick="fecharJanela('formulario')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <div id="nomeTimeDiv">
+                <label for="nomeTime-formulario">Nome</label>
+                <input type="text" id="nomeTime-formulario" placeholder="Nome do time">
+            </div>
+            <button onclick="fecharJanela('formulario')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <div id="coresDiv">
+                <div id="cor1Div">
+                    <label for="cor1-formulario">Cor 1</label>
+                    <input type="color" id="cor1-formulario">
                 </div>
-                <div id="coresDiv">
-                    <div id="cor1Div">
-                        <label for="cor1-formulario">Cor 1</label>
-                        <input type="color" id="cor1-formulario">
-                    </div>
-                    <div id="cor2Div">
-                        <label for="cor2-formulario">Cor 2</label>
-                        <input type="color" id="cor2-formulario">
-                    </div>
+                <div id="cor2Div">
+                    <label for="cor2-formulario">Cor 2</label>
+                    <input type="color" id="cor2-formulario">
                 </div>
+            </div>
             <table id="jogadoresTabela">
                 <thead>
                     <th id="posicaoTh">Posição</th>
@@ -131,9 +135,43 @@
         </div>
         <div id="pacotesDiv" class="divJanela">
             <h2>Importar Times</h2>
-            <button onclick="fecharFormulario('pacotes')" id="sairFormulario"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <button onclick="fecharJanela('pacotes')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
             <input type="file" id="pacote">
             <button id="btnConfirmar-formulario" onclick="importarPacote()">Confirmar</button>
+        </div>
+        <div id="transferenciaDiv" class="divJanela">
+            <button onclick="fecharJanela('transferencia')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <h2>Transferir Jogador</h2>
+            <div class="transferPai" id="transferencia-timesDiv">
+                <div class="transferFilho" id="transferencia-time1Div">
+                    <label for="transferencia-time1">Time 1</label>
+                    <select name="transferencia-time1" id="transferencia-time1" onchange="carregarJogadoresSelect('#transferencia-time1', '#transferencia-jogador1')">
+                        <option>Selecione o Time</option>
+                    </select>
+                </div>
+                <div class="transferFilho" id="transferencia-time2Div">
+                    <label for="transferencia-time2">Time 2</label>
+                    <select name="transferencia-time2" id="transferencia-time2" onchange="carregarJogadoresSelect('#transferencia-time2', '#transferencia-jogador2')">
+                        <option>Selecione o Time</option>
+                    </select>
+                </div>
+            </div>
+            <div class="transferPai" id="transferencia-jogadoresDiv">
+                <div class="transferFilho" id="transferencia-jogador1Div">
+                    <label for="transferencia-jogador1">Jogador 1</label>
+                    <select name="transferencia-jogador1" id="transferencia-jogador1">
+                        <option value="nenhum">Selecione o Jogador</option>
+                    </select>
+                </div>
+                <div class="transferFilho" id="transferencia-jogador2Div">
+                    <label for="transferencia-jogador2">Jogador 2</label>
+                    <select name="transferencia-jogador2" id="transferencia-jogador2">
+                        <option value="nenhum">Selecione o Jogador</option>
+                    </select>
+                </div>
+
+            </div>
+            <button id="btnTransferir" onclick="transferirJogador()">Transferir</button>
         </div>
     </div>
     

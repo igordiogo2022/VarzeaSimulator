@@ -91,166 +91,297 @@ tr:nth-child(even){
 </select>
 
 <table>
-
 <thead id="cabecalho"></thead>
-
 <tbody id="tabela"></tbody>
+</table>
+
+<h2>Tabela de Times</h2>
+
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Pts</th>
+<th>J</th>
+<th>V</th>
+<th>E</th>
+<th>D</th>
+<th>GP</th>
+<th>GC</th>
+</tr>
+</thead>
+
+<tbody id="tabelaTimes"></tbody>
 
 </table>
 
 <script>
 
 let stats = JSON.parse(localStorage.getItem("statsJogadores")) || {};
+let statsTimes = JSON.parse(localStorage.getItem("statsTimes")) || {};
 
 function salvar(){
-    localStorage.setItem("statsJogadores", JSON.stringify(stats));
+localStorage.setItem("statsJogadores", JSON.stringify(stats));
+localStorage.setItem("statsTimes", JSON.stringify(statsTimes));
 }
 
 function garantirJogador(nome){
 
-    if(!stats[nome]){
-        stats[nome] = {
-            gols:0,
-            assistencias:0,
-            amarelos:0,
-            vermelhos:0
-        }
-    }
+if(!stats[nome]){
+stats[nome] = {
+gols:0,
+assistencias:0,
+amarelos:0,
+vermelhos:0
+}
+}
+
+}
+
+function garantirTime(nome){
+
+if(!statsTimes[nome]){
+
+statsTimes[nome] = {
+pontos:0,
+jogos:0,
+vitorias:0,
+empates:0,
+derrotas:0,
+gp:0,
+gc:0
+}
+
+}
 
 }
 
 function processar(){
 
-    let texto = document.getElementById("sumula").value;
+let texto = document.getElementById("sumula").value;
 
-    if(!texto){
-        alert("Cole a súmula primeiro");
-        return;
-    }
+if(!texto){
+alert("Cole a súmula primeiro");
+return;
+}
 
-    let eventos;
+let eventos;
 
-    try{
-        eventos = JSON.parse(texto);
-    }catch{
-        alert("JSON inválido");
-        return;
-    }
+try{
+eventos = JSON.parse(texto);
+}catch{
+alert("JSON inválido");
+return;
+}
 
-    eventos.forEach(e => {
+let golsTimes = {};
 
-        garantirJogador(e.jogador);
+eventos.forEach(e => {
 
-        if(e.tipo === "gol"){
+garantirJogador(e.jogador);
 
-            stats[e.jogador].gols++;
+if(e.tipo === "gol"){
 
-            if(e.jogadorAssistencia){
+stats[e.jogador].gols++;
 
-                garantirJogador(e.jogadorAssistencia);
-                stats[e.jogadorAssistencia].assistencias++;
+let timeNome = e.time.nome;
+golsTimes[timeNome] = (golsTimes[timeNome] || 0) + 1;
 
-            }
+if(e.jogadorAssistencia){
 
-        }
+garantirJogador(e.jogadorAssistencia);
+stats[e.jogadorAssistencia].assistencias++;
 
-        if(e.tipo === "amarelo"){
-            stats[e.jogador].amarelos++;
-        }
+}
 
-        if(e.tipo === "vermelho"){
-            stats[e.jogador].vermelhos++;
-        }
+}
 
-    });
+if(e.tipo === "amarelo"){
+stats[e.jogador].amarelos++;
+}
 
-    salvar();
-    atualizarTabela();
+if(e.tipo === "vermelho"){
+stats[e.jogador].vermelhos++;
+}
+
+});
+
+let times = Object.keys(golsTimes);
+
+if(times.length === 2){
+
+let t1 = times[0];
+let t2 = times[1];
+
+let g1 = golsTimes[t1];
+let g2 = golsTimes[t2];
+
+garantirTime(t1);
+garantirTime(t2);
+
+statsTimes[t1].jogos++;
+statsTimes[t2].jogos++;
+
+statsTimes[t1].gp += g1;
+statsTimes[t1].gc += g2;
+
+statsTimes[t2].gp += g2;
+statsTimes[t2].gc += g1;
+
+if(g1 > g2){
+
+statsTimes[t1].vitorias++;
+statsTimes[t1].pontos += 3;
+
+statsTimes[t2].derrotas++;
+
+}
+
+else if(g2 > g1){
+
+statsTimes[t2].vitorias++;
+statsTimes[t2].pontos += 3;
+
+statsTimes[t1].derrotas++;
+
+}
+
+else{
+
+statsTimes[t1].empates++;
+statsTimes[t2].empates++;
+
+statsTimes[t1].pontos += 1;
+statsTimes[t2].pontos += 1;
+
+}
+
+}
+
+salvar();
+atualizarTabela();
+atualizarTabelaTimes();
+
 }
 
 function atualizarTabela(){
 
-    let tipo = document.getElementById("ranking").value;
+let tipo = document.getElementById("ranking").value;
 
-    let jogadores = Object.keys(stats).map(nome => ({
-        nome,
-        ...stats[nome]
-    }));
+let jogadores = Object.keys(stats).map(nome => ({
+nome,
+...stats[nome]
+}));
 
-    if(tipo !== "geral"){
-        jogadores.sort((a,b)=> b[tipo]-a[tipo]);
-    }
+if(tipo !== "geral"){
+jogadores.sort((a,b)=> b[tipo]-a[tipo]);
+}
 
-    let thead = document.getElementById("cabecalho");
-    let tbody = document.getElementById("tabela");
+let thead = document.getElementById("cabecalho");
+let tbody = document.getElementById("tabela");
 
-    tbody.innerHTML="";
+tbody.innerHTML="";
 
-    if(tipo==="geral"){
+if(tipo==="geral"){
 
-        thead.innerHTML=`
-        <tr>
-        <th>Jogador</th>
-        <th>Gols ⚽</th>
-        <th>Assistências 🎯</th>
-        <th>Amarelos 🟨</th>
-        <th>Vermelhos 🟥</th>
-        </tr>
-        `;
+thead.innerHTML=`
+<tr>
+<th>Jogador</th>
+<th>Gols ⚽</th>
+<th>Assistências 🎯</th>
+<th>Amarelos 🟨</th>
+<th>Vermelhos 🟥</th>
+</tr>
+`;
 
-        jogadores.forEach(p=>{
+jogadores.forEach(p=>{
 
-            tbody.innerHTML+=`
-            <tr>
-            <td>${p.nome}</td>
-            <td>${p.gols}</td>
-            <td>${p.assistencias}</td>
-            <td>${p.amarelos}</td>
-            <td>${p.vermelhos}</td>
-            </tr>
-            `;
+tbody.innerHTML+=`
+<tr>
+<td>${p.nome}</td>
+<td>${p.gols}</td>
+<td>${p.assistencias}</td>
+<td>${p.amarelos}</td>
+<td>${p.vermelhos}</td>
+</tr>
+`;
 
-        });
+});
 
-    }else{
+}else{
 
-        thead.innerHTML=`
-        <tr>
-        <th>#</th>
-        <th>Jogador</th>
-        <th>${tipo.toUpperCase()}</th>
-        </tr>
-        `;
+thead.innerHTML=`
+<tr>
+<th>#</th>
+<th>Jogador</th>
+<th>${tipo.toUpperCase()}</th>
+</tr>
+`;
 
-        jogadores.forEach((p,i)=>{
+jogadores.forEach((p,i)=>{
 
-            tbody.innerHTML+=`
-            <tr>
-            <td>${i+1}</td>
-            <td>${p.nome}</td>
-            <td>${p[tipo]}</td>
-            </tr>
-            `;
+tbody.innerHTML+=`
+<tr>
+<td>${i+1}</td>
+<td>${p.nome}</td>
+<td>${p[tipo]}</td>
+</tr>
+`;
 
-        });
+});
 
-    }
+}
+
+}
+
+function atualizarTabelaTimes(){
+
+let tbody = document.getElementById("tabelaTimes");
+tbody.innerHTML="";
+
+let times = Object.keys(statsTimes).map(nome => ({
+nome,
+...statsTimes[nome]
+}));
+
+times.sort((a,b)=> b.pontos - a.pontos);
+
+times.forEach(t=>{
+
+tbody.innerHTML+=`
+<tr>
+<td>${t.nome}</td>
+<td>${t.pontos}</td>
+<td>${t.jogos}</td>
+<td>${t.vitorias}</td>
+<td>${t.empates}</td>
+<td>${t.derrotas}</td>
+<td>${t.gp}</td>
+<td>${t.gc}</td>
+</tr>
+`;
+
+});
 
 }
 
 function resetar(){
 
-    if(confirm("Apagar todas estatísticas?")){
+if(confirm("Apagar todas estatísticas?")){
 
-        stats={};
-        salvar();
-        atualizarTabela();
+stats={};
+statsTimes={};
 
-    }
+salvar();
+atualizarTabela();
+atualizarTabelaTimes();
+
+}
 
 }
 
 atualizarTabela();
+atualizarTabelaTimes();
 
 </script>
 

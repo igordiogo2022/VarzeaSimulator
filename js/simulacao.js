@@ -29,6 +29,7 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
         let valorRandom1 = Math.random() * 100;
         
         if(valorRandom1 < chanceEvento){
+            let eventoBloqueado = false;
             let valorRandom2 = Math.random() * 100;
             if(valorRandom2<chanceAtaque){
                 timeEvento = sorteiarTimeEvento(time1, time2, chanceGolT1, chanceGolT2);
@@ -40,8 +41,10 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
                 jogadorAssistencia = null; 
                 evento = sorteiarCartao(chanceVermelho);
                 jogador = sorteiarJogadorEvento(timeEvento.jogadores, evento);
-                
-                if(evento=="vermelho"){
+
+                expulsoesJogo = timeEvento.jogadores.filter(jogador=>jogador.jogando==false).length;
+                if (expulsoesJogo>=2) eventoBloqueado=true;
+                if(evento=="vermelho" && !eventoBloqueado){
                     switch(timeEvento){
                         case time1:
                             chanceGolT1 -= 10;
@@ -51,24 +54,26 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
                             break;
                         }
                         
+                    expulsarJogador(timeEvento.jogadores, jogador);
+                }else if(evento=="amarelo" && !eventoBloqueado){
+                    if(jogador.amarelado){
+                        evento = "vermelho";
                         expulsarJogador(timeEvento.jogadores, jogador);
-                    }else if(evento=="amarelo"){
-                        if(jogador.amarelado){
-                            evento = "vermelho";
-                            expulsarJogador(timeEvento.jogadores, jogador);
-                        }else{
-                            jogador.amarelado = true;
-                        }
+                    }else{
+                        jogador.amarelado = true;
+                    }
                 }
             }
                 
-            sumula.push({
-                minuto: minuto, 
-                time: timeEvento, 
-                jogador: jogador.nome, 
-                jogadorAssistencia: jogadorAssistencia, 
-                tipo: evento
-            });
+            if(!eventoBloqueado){
+                sumula.push({
+                    minuto: minuto, 
+                    time: timeEvento, 
+                    jogador: jogador.nome, 
+                    jogadorAssistencia: jogadorAssistencia, 
+                    tipo: evento
+                });
+            }
         }
         if(minuto==45 && clima=="quente"){
             chanceEvento -= 3;

@@ -68,8 +68,15 @@ main{
     width: 90%;
     padding: 2%;
 }
-#criarTimeBtn{
-    width: 17%;
+#botoesMain{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 70%;
+    padding: 2%;
+}
+.btnMain{
+    width: 28%;
     height: 5vh;
     font-size: 17px;
     background: linear-gradient(var(--cor3), var(--cor4));
@@ -77,7 +84,7 @@ main{
     border: 0;
     border-radius: 6px;
 }
-#criarTimeBtn:hover{
+.btnMain:hover{
     filter: brightness(0.9);
     transform: scale(1.01);
 }
@@ -168,7 +175,7 @@ main{
     gap: 16px;
     position: relative;
 }
-#sairFormulario{
+.btnSairJanela{
     border: 0;
     background-color: #00000000;
     color: white;
@@ -228,13 +235,27 @@ input{
 input[type="color"]{
     border: 0;
 }
+#transferenciaDiv{
+    gap: 2.5rem;
+}
+.transferPai{
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+.transferFilho{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 .nomePlayer{
     width: 100%;
 }
 .overPlayer{
     width: 40%;
 }
-#btnConfirmar-formulario{
+#btnConfirmar-formulario, #btnTransferir{
     width: 30%;
     height: 5vh;
     color: white;
@@ -244,13 +265,13 @@ input[type="color"]{
     letter-spacing: 0.5px;
     background: linear-gradient(rgb(13, 170, 26), rgb(11, 131, 21));
 }
-#btnConfirmar-formulario:hover{
+#btnConfirmar-formulario:hover, #btnTransferir:hover{
     filter: brightness(0.9);
     transform: scale(1.01); 
 }
 
 @media (max-width: 500px) {
-    #criarTimeBtn{
+    .btnMain{
         width: 40%;
         height: 4vh;
         font-size: 15px;

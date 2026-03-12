@@ -52,9 +52,8 @@ function carregarTimes(){
     }
 }
 
-function carregarTimesPartida(){
-    timesSelect = [document.querySelector("#time1"), 
-        document.querySelector("#time2")]
+function carregarTimesSelect(idSelect1, idSelect2){
+    timesSelect = [document.querySelector(idSelect1), document.querySelector(idSelect2)]
 
     for(let time of listaTimes){
         for(let i=0;i<2;i++){
@@ -86,23 +85,29 @@ function irParaPagina(pagina){
 function abrirJanela(janela){
     const body =  document.querySelector("body");
     const janelaModal = document.querySelector("#janela-modal");
-
+    
     switch(janela){
         case "formulario":
             let formulario = document.querySelector("#formularioDiv");
             formulario.style.display = "flex";
             break;
-        case "pacotes":
-            let pacotes = document.querySelector("#pacotesDiv");
-            pacotes.style.display = "flex";
-            break;
-    }
-    
-    janelaModal.style.display = "flex";
-    window.scrollTo({top: 0});
-    body.style.overflow = "hidden";
+            case "pacotes":
+                let pacotes = document.querySelector("#pacotesDiv");
+                pacotes.style.display = "flex";
+                break;
+                case "transferencia":
+                    let transferencia = document.querySelector("#transferenciaDiv");
+                    transferencia.style.display = "flex";
+                    carregarTimesSelect("#transferencia-time1", "#transferencia-time2");
+                    break;
+                }
+                
+                janelaModal.style.display = "flex";
+                window.scrollTo({top: 0});
+                body.style.overflow = "hidden";
 }
-function fecharFormulario(janela){
+
+function fecharJanela(janela){
     const body =  document.querySelector("body");
     const janelaModal = document.querySelector("#janela-modal");
     
@@ -111,15 +116,19 @@ function fecharFormulario(janela){
             let formulario = document.querySelector("#formularioDiv");
             formulario.style.display = "none";
             break;
-        case "pacotes":
-            let pacotes = document.querySelector("#pacotesDiv");
-            pacotes.style.display = "none";
-            break;
-    }
-
-    janelaModal.style.display = "none";
-    window.scrollTo({top: 0});
-    body.style.overflow = "auto";
+            case "pacotes":
+                let pacotes = document.querySelector("#pacotesDiv");
+                pacotes.style.display = "none";
+                break;
+                case "transferencia":
+                    let transferencia = document.querySelector("#transferenciaDiv");
+                    transferencia.style.display = "none";
+                    break;
+                }
+                
+                janelaModal.style.display = "none";
+                window.scrollTo({top: 0});
+                body.style.overflow = "auto";
 }
 
 function registrarTime(){
@@ -128,9 +137,9 @@ function registrarTime(){
     }else{
         idTime = listaTimes[listaTimes.length-1].id+1;
     }
-
+    
     const time = obterDadosFormulario(idTime);
-
+    
     if(!time){
         return alert("Não deixe campos incompletos.");
     }
@@ -159,7 +168,7 @@ function deletarTime(id){
             listaTimes.splice(i, 1);
         }
     }
-
+    
     localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
     window.location.reload();
 }
@@ -171,24 +180,71 @@ function preDeletarTime(id){
     deletarBtn.setAttribute("onclick", "deletarTime("+id+")");
 }
 
+function transferirJogador(){
+    
+    const idTime1 = document.querySelector("#transferencia-time1").value;
+    const idTime2 = document.querySelector("#transferencia-time2").value;
+    const idJogador1 = document.querySelector("#transferencia-jogador1").value;
+    const idJogador2 = document.querySelector("#transferencia-jogador2").value;
+    
+    if(idJogador1=="nenhum" || idJogador2=="nenhum"){
+        return alert("Complete todos os campos.");
+    }
+
+    let time1 = listaTimes.find(item => item.id == idTime1);
+    let time2 = listaTimes.find(item => item.id == idTime2);
+    
+    const jogador1 = time1.jogadores[idJogador1]; 
+    const jogador2 = time2.jogadores[idJogador2]; 
+    
+    time1.jogadores[idJogador1] = {...jogador2, pos: jogador1.pos}; 
+    time2.jogadores[idJogador2] = {...jogador1, pos: jogador2.pos};
+    
+    localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
+    window.location.reload();
+}
+
+function carregarJogadoresSelect(idSelectTime, idSelectJogador){
+    const selectJogador = document.querySelector(idSelectJogador);
+    const idTime = document.querySelector(idSelectTime).value;
+    let time = listaTimes.find(item => item.id == idTime);
+    
+    const opcoesJogadores = selectJogador.querySelectorAll(".optJogador");
+    opcoesJogadores.forEach(opt => {
+        opt.remove()
+    });
+    
+    for(let i=0;i<=5;i++){
+        let jogador = time.jogadores[i];
+        let option = document.createElement("option");
+        option.classList.add("optJogador");
+        option.textContent = jogador.nome;
+        option.value = i;
+        option.style.backgroundColor = time.cor1;
+        option.style.color = time.cor2;
+
+        selectJogador.appendChild(option);
+    }
+}
+
 function obterDadosFormulario(idTime){
     const nomeTime = document.querySelector("#nomeTime-formulario").value;
     const cor1Time = document.querySelector("#cor1-formulario").value;
     const cor2Time = document.querySelector("#cor2-formulario").value;
-
+    
     let listajogadores = [];
     for(let i=0;i<6;i++){
         const posJogador = document.querySelectorAll(".posicaoSelect")[i].value;
         const nomeJogador = document.querySelectorAll(".nomePlayer")[i].value;
         const overJogador = document.querySelectorAll(".overPlayer")[i].value;
-
+        
         if(posJogador=="nenhuma" || !nomeJogador || !overJogador){
             return null;
         }
         
         listajogadores.push({pos: posJogador, nome: nomeJogador, over: overJogador});
     }    
-
+    
     if(!nomeTime || !cor1Time || !cor2Time){
         return null;
     }
@@ -200,7 +256,7 @@ function obterDadosFormulario(idTime){
         cor2: cor2Time,
         jogadores: listajogadores
     }
-
+    
     return time;
 }
 
