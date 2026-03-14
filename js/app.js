@@ -405,3 +405,27 @@ function limparEventos(){
     placarT1 = document.querySelector("#placarTime1").innerHTML = "0";
     placarT2 = document.querySelector("#placarTime2").innerHTML = "0";
 }
+
+function exportarTimesTXT(){
+    let timesSemId = [];
+
+    for(let time of listaTimes){
+        let novoTime = {
+            nome: time.nome,
+            cor1: time.cor1,
+            cor2: time.cor2,
+            jogadores: time.jogadores
+        };
+
+        timesSemId.push(novoTime);
+    }
+
+    const json = JSON.stringify(timesSemId, null, 2);
+
+    const blob = new Blob([json], {type: "text/plain"});
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = "times.txt";
+    link.click();
+}
