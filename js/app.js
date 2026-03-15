@@ -152,6 +152,10 @@ function registrarTime(){
 function editarTime(id){
     const time = obterDadosFormulario(id);
     
+    if(!time){
+        return alert("Não deixe campos incompletos.");
+    }
+
     for(let i=0;i<listaTimes.length;i++){
         if(listaTimes[i].id == id){
             listaTimes[i] = time;
