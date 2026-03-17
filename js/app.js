@@ -91,17 +91,21 @@ function abrirJanela(janela){
             let formulario = document.querySelector("#formularioDiv");
             formulario.style.display = "flex";
             break;
-            case "pacotes":
-                let pacotes = document.querySelector("#pacotesDiv");
-                pacotes.style.display = "flex";
-                break;
-                case "transferencia":
-                    let transferencia = document.querySelector("#transferenciaDiv");
-                    transferencia.style.display = "flex";
-                    carregarTimesSelect("#transferencia-time1", "#transferencia-time2");
-                    break;
-                }
-                
+        case "pacotes":
+            let pacotes = document.querySelector("#pacotesDiv");
+            pacotes.style.display = "flex";
+            break;
+        case "transferencia":
+            let transferencia = document.querySelector("#transferenciaDiv");
+            transferencia.style.display = "flex";
+            carregarTimesSelect("#transferencia-time1", "#transferencia-time2");
+            break;
+        case "confirmarDelecao":
+            let confirmarDelecao = document.querySelector("#confirmarDelecaoDiv");
+            confirmarDelecao.style.display = "flex";
+            break;
+    }
+            
                 janelaModal.style.display = "flex";
                 window.scrollTo({top: 0});
                 body.style.overflow = "hidden";
@@ -116,15 +120,19 @@ function fecharJanela(janela){
             let formulario = document.querySelector("#formularioDiv");
             formulario.style.display = "none";
             break;
-            case "pacotes":
-                let pacotes = document.querySelector("#pacotesDiv");
-                pacotes.style.display = "none";
-                break;
-                case "transferencia":
-                    let transferencia = document.querySelector("#transferenciaDiv");
-                    transferencia.style.display = "none";
-                    break;
-                }
+        case "pacotes":
+            let pacotes = document.querySelector("#pacotesDiv");
+            pacotes.style.display = "none";
+            break;
+        case "transferencia":
+            let transferencia = document.querySelector("#transferenciaDiv");
+            transferencia.style.display = "none";
+            break;
+        case "confirmarDelecao":
+            let confirmarDelecao = document.querySelector("#confirmarDelecaoDiv");
+            confirmarDelecao.style.display = "none";
+            break;
+    }
                 
                 janelaModal.style.display = "none";
                 window.scrollTo({top: 0});
@@ -283,7 +291,7 @@ async function importarPacote(){
         }
     }
 
-    window.location.reload();
+    irParaPagina("index.html")
 }
 
 function carregarFormularioEdicao(id){
@@ -432,4 +440,9 @@ function exportarTimesTXT(){
     link.href = URL.createObjectURL(blob);
     link.download = "times.txt";
     link.click();
+}
+
+function deletarTodosDados(){
+    localStorage.clear();
+    irParaPagina("index.html");
 }

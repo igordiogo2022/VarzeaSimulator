@@ -1,0 +1,100 @@
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 4%;
+    gap: 15px;
+}
+.btnOpcao{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 70%;
+    height: 10vh;
+    text-align: left;
+    padding: 0 2%;
+    border: 0;
+    border-radius: 6px;
+    background-color: var(--cor2);
+    color: white;
+}
+.btnOpcao:hover{
+    filter: brightness(0.9);
+    transform: scale(1.005);
+}
+.btnOpcao h2{
+    letter-spacing: 1px;
+}
+.btnOpcao p{
+    color: lightgray;
+}
+#janela-modal{
+    display: none;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: #63636380;
+    backdrop-filter: blur(10px);
+    z-index: 999;
+}
+.divJanela{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    box-shadow: 0 20px 60px #00000040;
+    background-color: var(--cor1);
+    color: white;
+    border: 6px solid var(--cor2);
+    border-radius: 12px;
+    padding: 2%;
+    gap: 16px;
+    position: relative;
+}
+.btnSairJanela{
+    border: 0;
+    background-color: #00000000;
+    color: white;
+    font-size: 18px;
+    position: absolute;
+    right: 5%;
+    top: 3vh;
+}
+input[type="file"]{
+    border: 1px solid var(--cor3);
+    background-color: #00000000;
+    border-radius: 4px;
+    padding: 1.5%;
+    color: white;
+    font-size: 14px;
+}
+.btnConfirmar-formulario{
+    width: 30%;
+    height: 5vh;
+    color: white;
+    border: 0;
+    font-size: 15px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(rgb(13, 170, 26), rgb(11, 131, 21));
+}
+.btnConfirmar-formulario:hover{
+    filter: brightness(0.9);
+    transform: scale(1.01); 
+}
+#btnDeletar{
+    background: linear-gradient(rgb(190, 37, 37), rgb(179, 13, 13));
+}
+
+@media (max-width: 550px) {
+    .divJanela{
+        width: 100%;
+        padding: 5% 2%;
+    }
+}

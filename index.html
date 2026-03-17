@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="img/varzea-simulator.png">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
     <title>Várzea Simulator</title>
 </head>
 <body onload="carregarTimes()">
     <button class="btnCanto" id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
-    <button class="btnCanto" id="btnAbrirJanelaPacotes" onclick="abrirJanela('pacotes')"><i class="fa-solid fa-file-arrow-up"></i></button>
     <menu>
         <button class="btnMenu" onclick="irParaPagina('index.html')"><i class="fa-solid fa-users"></i> Times</button>
         <button class="btnMenu" onclick="irParaPagina('partida.html')"><i class="fa-solid fa-futbol"></i> Jogar</button>
+        <button class="btnMenu" onclick="irParaPagina('configuracoes.html')"><i class="fa-solid fa-gear"></i> Configurações</button>
         <button class="btnMenu" onclick="fecharMenu()"><i class="fa-solid fa-reply"></i> Fechar</button>
     </menu>
     
@@ -132,12 +133,6 @@
                 </tr>
             </table>
             <button id="btnConfirmar-formulario" onclick="registrarTime()">Confirmar</button>
-        </div>
-        <div id="pacotesDiv" class="divJanela">
-            <h2>Importar Times</h2>
-            <button onclick="fecharJanela('pacotes')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
-            <input type="file" id="pacote">
-            <button id="btnConfirmar-formulario" onclick="importarPacote()">Confirmar</button>
         </div>
         <div id="transferenciaDiv" class="divJanela">
             <button onclick="fecharJanela('transferencia')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>

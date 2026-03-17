@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="img/varzea-simulator.png">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/partida.css">
     <title>Partida - Várzea Simulator</title>
 </head>
 <body onload="carregarTimesSelect('#time1', '#time2')">
-    <button id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
+    <button class="btnCanto" id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
     <menu>
         <button class="btnMenu" onclick="irParaPagina('index.html')"><i class="fa-solid fa-users"></i> Times</button>
         <button class="btnMenu" onclick="irParaPagina('partida.html')"><i class="fa-solid fa-futbol"></i> Jogar</button>
+        <button class="btnMenu" onclick="irParaPagina('configuracoes.html')"><i class="fa-solid fa-gear"></i> Configurações</button>
         <button class="btnMenu" onclick="fecharMenu()"><i class="fa-solid fa-reply"></i> Fechar</button>
     </menu>
 

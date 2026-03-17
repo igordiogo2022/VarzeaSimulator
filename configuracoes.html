@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="img/varzea-simulator.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/configuracoes.css">
+    <title>Várzea Simulator - Configurações</title>
+</head>
+<body>
+    <button class="btnCanto" id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
+    <menu>
+        <button class="btnMenu" onclick="irParaPagina('index.html')"><i class="fa-solid fa-users"></i> Times</button>
+        <button class="btnMenu" onclick="irParaPagina('partida.html')"><i class="fa-solid fa-futbol"></i> Jogar</button>
+        <button class="btnMenu" onclick="irParaPagina('configuracoes.html')"><i class="fa-solid fa-gear"></i> Configurações</button>
+        <button class="btnMenu" onclick="fecharMenu()"><i class="fa-solid fa-reply"></i> Fechar</button>
+    </menu>
+
+    <main>
+        <button class="btnOpcao" onclick="abrirJanela('pacotes')">
+            <h2>Importar Times</h2>
+            <p>Carregue um arquivo para importar times.</p>
+        </button>
+        <button class="btnOpcao" onclick="exportarTimesTXT()">
+            <h2>Exportar Times</h2>
+            <p>Baixe um backup de seus times.</p>
+        </button>
+        <button class="btnOpcao" onclick="abrirJanela('confirmarDelecao')">
+            <h2>Limpar Dados</h2>
+            <p>Remover todos os dados do aplicativo.</p>
+        </button>
+    </main>
+
+    <div id="janela-modal">
+        <div id="pacotesDiv" class="divJanela">
+            <h2>Importar Times</h2>
+            <button onclick="fecharJanela('pacotes')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <input type="file" id="pacote">
+            <button class="btnConfirmar-formulario" onclick="importarPacote()">Confirmar</button>
+        </div>
+        <div id="confirmarDelecaoDiv" class="divJanela">
+            <button onclick="fecharJanela('confirmarDelecao')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <h2>Deletar Dados</h2>
+            <p>Você tem certeza que quer deletar todos os dados(times)?</p>
+            <button class="btnConfirmar-formulario" id="btnDeletar" onclick="deletarTodosDados()">Deletar</button>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script> 
+    <script src="https://kit.fontawesome.com/3802d20ec1.js" crossorigin="anonymous"></script>
+</body>
+</html>
