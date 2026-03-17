@@ -18,6 +18,9 @@ body{
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: 9vh;
     margin-bottom: 2%;
+    background-color: #0000007c;
+    border-radius: 8px;
+    padding: 1% 0;
 }
 .inputConfig{
     display: flex;
@@ -28,7 +31,7 @@ body{
 select{
     display: flex;
     text-align: center;
-    background-color: #00000000;
+    background-color: var(--cor1);
     color: white;
     border-radius: 6px;
     border: 1px solid var(--cor4);
@@ -59,7 +62,7 @@ main{
     width: 60%;
     height: 60vh;
     border-radius: 12px;
-    background-color: var(--cor2);
+    background-color: #0000007c;
     overflow-y: auto;
 }
 #placar{
@@ -93,7 +96,7 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 60%;
+    width: 70%;
 }
 .eventoTime1, .eventoTime2{
     display: flex;
@@ -127,17 +130,18 @@ main{
         margin: 3% 30%;
     }
     main{
-        width: 80%;
+        width: 100%;
+        border-radius: 0;
     }
     #placar{
-        width: 100%;
+        width: 90%;
     }
     .timeNome{
         font-size: 13px;
         text-align: center;
     }
     #eventos{
-        width: 100%;
+        width: 90%;
         font-size: 12px;   
     }
 }

@@ -17,14 +17,17 @@ body{
     display: flex;
     position: relative;
     background-color: var(--cor1); 
+    background-attachment: fixed;
+    background-image: url(../img/background.png);
+    background-position-x: center;
     font-family: var(--fonte);
 }
 .btnCanto{
     position: absolute;
-    color: var(--cor4);
+    color: white;
     background-color: #00000000;
     border: 0;
-    font-size: 24px;
+    font-size: 28px;
     top: 3vh;
 }
 #btnAbrirMenu{

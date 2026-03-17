@@ -346,7 +346,9 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
     const eventos = document.querySelector("#eventos");
     const placarT1 = document.querySelector("#placarTime1");
     const placarT2 = document.querySelector("#placarTime2");
-    
+    const audioGol = document.querySelector("#audioGol");
+    const audioApito = document.querySelector("#audioApito");
+
     const timer = document.querySelector("#timer");
     let minuto = 0;
     
@@ -372,13 +374,18 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                             placarT2.textContent ++;
                             break;
                     }
+                    audioEvento = audioGol;
                     emoji = "⚽";
                 }else if(evento.tipo=="amarelo"){
                     emoji = "🟨";
+                    audioEvento = audioApito;
                 }else if(evento.tipo=="vermelho"){
                     emoji = "🟥";
+                    audioEvento = audioApito;
                 }
                 
+                audioEvento.currentTime = 0;
+                audioEvento.play();
                 html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>${emoji}</p> <p>${evento.jogador}</p></div>`;
 
                 if(evento.jogadorAssistencia!=null){
@@ -405,11 +412,29 @@ function exibirTimesPlacar(time1, time2){
     
     time1Placar.textContent = time1.nome;
     time1Placar.style.background = `linear-gradient(90deg, ${time1.cor1}, ${time1.cor2}, ${time1.cor1})`;
-    time1Placar.style.color = time1.cor1;
+    let tom1 = obterTomCor(time1.cor2);
+    textoCor1 = tom1=="claro" ? "#000000" : "#ffffff"; 
+    time1Placar.style.color = textoCor1;
     
     time2Placar.textContent = time2.nome;
     time2Placar.style.background = `linear-gradient(90deg, ${time2.cor1}, ${time2.cor2}, ${time2.cor1})`;
-    time2Placar.style.color = time2.cor1;
+    let tom2 = obterTomCor(time2.cor2);
+    textoCor2 = tom2=="claro" ? "#000000" : "#ffffff"; 
+    time2Placar.style.color = textoCor2;
+}
+
+function obterTomCor(cor){
+    cor = cor.replace("#", "");
+
+    let r = parseInt(cor.substring(1,3), 16);
+    let g = parseInt(cor.substring(3,5), 16);
+    let b = parseInt(cor.substring(5,7), 16);
+
+    let brilho = 0.299 * r + 0.587 * g + 0.114 * b;
+
+    tom = brilho > 128 ?  "claro" : "escuro";
+
+    return tom;
 }
 
 function limparEventos(){
