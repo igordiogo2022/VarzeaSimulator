@@ -13,7 +13,7 @@ function carregarTimes(){
 
         tituloCard.classList.add("tituloCard");
         tituloCard.textContent = time.nome;
-        tituloCard.style.backgroundColor = time.cor1;
+        tituloCard.style.background = `linear-gradient(45deg, ${time.cor1} 50%, ${time.cor2})`;
         tituloCard.style.color = time.cor2;
 
         jogadoresTabela.classList.add("jogadoresTabela");
@@ -38,7 +38,7 @@ function carregarTimes(){
         deletarBtn.setAttribute("onclick", "preDeletarTime("+time.id+")");
         
         botoesCard.classList.add("botoesCard");
-        botoesCard.style.backgroundColor = time.cor1;
+        botoesCard.style.background = `linear-gradient(45deg, ${time.cor1} 60%, ${time.cor2})`;
         botoesCard.appendChild(editarBtn);
         botoesCard.appendChild(deletarBtn);
         
@@ -404,12 +404,12 @@ function exibirTimesPlacar(time1, time2){
     const time2Placar = document.querySelector("#time2Placar");
     
     time1Placar.textContent = time1.nome;
-    time1Placar.style.backgroundColor = time1.cor1;
-    time1Placar.style.color = time1.cor2;
+    time1Placar.style.background = `linear-gradient(90deg, ${time1.cor1}, ${time1.cor2}, ${time1.cor1})`;
+    time1Placar.style.color = time1.cor1;
     
     time2Placar.textContent = time2.nome;
-    time2Placar.style.backgroundColor = time2.cor1;
-    time2Placar.style.color = time2.cor2;
+    time2Placar.style.background = `linear-gradient(90deg, ${time2.cor1}, ${time2.cor2}, ${time2.cor1})`;
+    time2Placar.style.color = time2.cor1;
 }
 
 function limparEventos(){
