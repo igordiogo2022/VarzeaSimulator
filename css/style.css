@@ -60,7 +60,7 @@ menu{
     filter: brightness(0.9);
     transform: scale(1.05);
 }
-@media (max-width: 500px) {
+@media (max-width: 550px) {
     menu{
         width: 45% !important;
     }
