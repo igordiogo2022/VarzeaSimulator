@@ -86,57 +86,25 @@ function abrirJanela(janela){
     const body =  document.querySelector("body");
     const janelaModal = document.querySelector("#janela-modal");
     
-    switch(janela){
-        case "formulario":
-            let formulario = document.querySelector("#formularioDiv");
-            formulario.style.display = "flex";
-            break;
-        case "pacotes":
-            let pacotes = document.querySelector("#pacotesDiv");
-            pacotes.style.display = "flex";
-            break;
-        case "transferencia":
-            let transferencia = document.querySelector("#transferenciaDiv");
-            transferencia.style.display = "flex";
-            carregarTimesSelect("#transferencia-time1", "#transferencia-time2");
-            break;
-        case "confirmarDelecao":
-            let confirmarDelecao = document.querySelector("#confirmarDelecaoDiv");
-            confirmarDelecao.style.display = "flex";
-            break;
-    }
+    let div = document.querySelector(`#${janela}Div`);
+    div.style.display = "flex";
+    if(janela=="transferencia"){carregarTimesSelect("#transferencia-time1", "#transferencia-time2")};
             
-                janelaModal.style.display = "flex";
-                window.scrollTo({top: 0});
-                body.style.overflow = "hidden";
+    janelaModal.style.display = "flex";
+    window.scrollTo({top: 0});
+    body.style.overflow = "hidden";
 }
 
 function fecharJanela(janela){
     const body =  document.querySelector("body");
     const janelaModal = document.querySelector("#janela-modal");
     
-    switch(janela){
-        case "formulario":
-            let formulario = document.querySelector("#formularioDiv");
-            formulario.style.display = "none";
-            break;
-        case "pacotes":
-            let pacotes = document.querySelector("#pacotesDiv");
-            pacotes.style.display = "none";
-            break;
-        case "transferencia":
-            let transferencia = document.querySelector("#transferenciaDiv");
-            transferencia.style.display = "none";
-            break;
-        case "confirmarDelecao":
-            let confirmarDelecao = document.querySelector("#confirmarDelecaoDiv");
-            confirmarDelecao.style.display = "none";
-            break;
-    }
-                
-                janelaModal.style.display = "none";
-                window.scrollTo({top: 0});
-                body.style.overflow = "auto";
+    let div = document.querySelector(`#${janela}Div`);
+    div.style.display = "none";
+    
+    janelaModal.style.display = "none";
+    window.scrollTo({top: 0});
+    body.style.overflow = "auto";
 }
 
 function registrarTime(){
@@ -314,16 +282,21 @@ function carregarFormularioEdicao(id){
 }
 
 function chamarSimulacao(){
+    const main = document.querySelector("main");
+    const estatisticasDiv = document.querySelector("#estatisticasDiv");
+    main.appendChild(estatisticasDiv);
+    estatisticasDiv.style.display = "none";
+    
     const idTime1 = document.querySelector("#time1").value; 
     const idTime2 = document.querySelector("#time2").value;
     
     let time1 = listaTimes.find(item => item.id == idTime1);
     let time2 = listaTimes.find(item => item.id == idTime2);
-
+    
     if(time1==time2 || !time1 || !time2){
         return alert("Erro na escolha dos times.");
     }
-
+    
     const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
     iniciarPartidaBtn.style.pointerEvents = "none";
     iniciarPartidaBtn.style.background = "linear-gradient(darkgray, gray)";
@@ -351,10 +324,42 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
 
     const timer = document.querySelector("#timer");
     let minuto = 0;
+    let varIntervem = false;
+    let eventoVar;
+    let exibirResultadoVar;
     
     const intervalo = setInterval(() => {
         minuto++;
         timer.textContent = minuto+"'";
+
+        if(varIntervem){
+            html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>⚠️</p> <p>Var está checando!</p></div>`;
+            
+            eventos.innerHTML += html;
+            varIntervem = false;
+            exibirResultadoVar = true;
+        }else if(exibirResultadoVar){
+            audioEvento = audioApito;
+            if(eventoVar.tipo=="varGol"){
+                html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>✅</p> <p>Gol válido!</p></div>`;
+            }else if(eventoVar.tipo=="varAnulou"){
+                html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>❌</p> <p>Gol anulado!</p></div>`;
+                
+                switch(eventoVar.time){
+                    case time1:
+                        placarT1.textContent --;
+                        break;
+                    case time2:
+                        placarT2.textContent --;
+                        break;
+                    }
+                }
+            audioEvento.currentTime = 0;
+            audioEvento.play();
+
+            eventos.innerHTML += html;
+            exibirResultadoVar = false;
+        }
         
         for(let evento of sumula){
             if(evento.minuto==minuto){
@@ -365,17 +370,23 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                     classeEvento = "eventoTime2";
                 }
                 
-                if(evento.tipo=="gol"){
+                if(evento.tipo=="gol" || evento.tipo=="contra" || evento.tipo=="varGol" || evento.tipo=="varAnulou"){
                     switch(evento.time){
                         case time1:
                             placarT1.textContent ++;
                             break;
                             case time2:
-                            placarT2.textContent ++;
+                                placarT2.textContent ++;
                             break;
                     }
                     audioEvento = audioGol;
-                    emoji = "⚽";
+                    emoji = evento.tipo!="contra"  ? "⚽" : "⁉️";
+                    if(evento.tipo=="varGol" || evento.tipo=="varAnulou"){
+                        eventoVar = evento;
+                        varIntervem = true;
+                    }
+                }else if(evento.tipo=="superDefesaGoleiro"){
+                    emoji = "🧤🧤";
                 }else if(evento.tipo=="amarelo"){
                     emoji = "🟨";
                     audioEvento = audioApito;
@@ -384,15 +395,17 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                     audioEvento = audioApito;
                 }
                 
-                audioEvento.currentTime = 0;
-                audioEvento.play();
-                html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>${emoji}</p> <p>${evento.jogador}</p></div>`;
-
-                if(evento.jogadorAssistencia!=null){
-                    html += `<div class="${classeEvento} assistencia"><p>👟</p> <p>${evento.jogadorAssistencia}</p></div>`;
+                if(evento.exibir){
+                    audioEvento.currentTime = 0;
+                    audioEvento.play();
+                    html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>${emoji}</p> <p>${evento.jogador}</p></div>`;
+                    
+                    if(evento.jogadorAssistencia!=null){
+                        html += `<div class="${classeEvento} assistencia"><p>👟</p> <p>${evento.jogadorAssistencia}</p></div>`;
+                    }
+                    
+                    eventos.innerHTML += html;
                 }
-
-                eventos.innerHTML += html;
             }
         }
         
@@ -400,6 +413,7 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
             clearInterval(intervalo);
             
             const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
+            carregarEstatisticas(time1, time2, sumula);
             iniciarPartidaBtn.style.background = "linear-gradient(var(--cor3), var(--cor4))";
             iniciarPartidaBtn.style.pointerEvents = "auto";
         }
@@ -421,6 +435,46 @@ function exibirTimesPlacar(time1, time2){
     let tom2 = obterTomCor(time2.cor2);
     textoCor2 = tom2=="claro" ? "#000000" : "#ffffff"; 
     time2Placar.style.color = textoCor2;
+}
+
+function carregarEstatisticas(time1, time2, sumula){
+    const eventos = document.querySelector("#eventos");
+    const estatisticasDiv = document.querySelector("#estatisticasDiv");
+    eventos.appendChild(estatisticasDiv);
+    estatisticasDiv.style.display = "flex";
+
+    const time1Th = document.querySelector("#time1Estatisticas");
+    const time2Th = document.querySelector("#time2Estatisticas");
+    time1Th.textContent = time1.nome;
+    time2Th.textContent = time2.nome;
+    
+    const posseTime1Td = document.querySelector("#posseTime1");
+    const posseTime2Td = document.querySelector("#posseTime2");
+    let [posseT1, posseT2] = converterParaPorcentagem(sumula.filter(evento => evento.time==time1).length, sumula.filter(evento => evento.time==time2).length);
+    posseTime1Td.textContent = posseT1+"%";
+    posseTime2Td.textContent = posseT2+"%";
+    
+    const defesasGoleiroTime1Td = document.querySelector("#defesasGoleiroTime1");
+    const defesasGoleiroTime2Td = document.querySelector("#defesasGoleiroTime2");
+    let defesasTime1 = sumula.filter(evento => evento.tipo=="defesaGoleiro" || evento.tipo=="superDefesaGoleiro").filter(evento => evento.time==time1).length;
+    let defesasTime2 = sumula.filter(evento => evento.tipo=="defesaGoleiro" || evento.tipo=="superDefesaGoleiro").filter(evento => evento.time==time2).length;
+    defesasGoleiroTime1Td.textContent = defesasTime1;
+    defesasGoleiroTime2Td.textContent = defesasTime2;
+
+    const chutesTime1Td = document.querySelector("#chutesTime1");
+    const chutesTime2Td = document.querySelector("#chutesTime2");
+    chutesTime1Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora").filter(evento => evento.time==time1).length+defesasTime2;
+    chutesTime2Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora").filter(evento => evento.time==time2).length+defesasTime1;
+
+    const chutesForaTime1Td = document.querySelector("#chutesForaTime1");
+    const chutesForaTime2Td = document.querySelector("#chutesForaTime2");
+    chutesForaTime1Td.textContent = sumula.filter(evento => evento.tipo=="fora").filter(evento => evento.time==time1).length;
+    chutesForaTime2Td.textContent = sumula.filter(evento => evento.tipo=="fora").filter(evento => evento.time==time2).length;
+
+    const cartoesTime1Td = document.querySelector("#cartoesTime1");
+    const cartoesTime2Td = document.querySelector("#cartoesTime2");
+    cartoesTime1Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time1).length;
+    cartoesTime2Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time2).length;
 }
 
 function obterTomCor(cor){

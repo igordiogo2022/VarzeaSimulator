@@ -16,9 +16,25 @@
         <button class="btnMenu" onclick="irParaPagina('configuracoes.html')"><i class="fa-solid fa-gear"></i> Configurações</button>
         <button class="btnMenu" onclick="fecharMenu()"><i class="fa-solid fa-reply"></i> Fechar</button>
     </menu>
-
+    
     <div id="formularioDiv">
         <div id="configuracoesPartidaDiv">
+            <div class="inputConfig">
+                <label for="moralTime1">Moral Time 1</label>
+                <select id="moralTime1">
+                    <option value="normal">Normal</option>
+                    <option value="boa">Boa</option>
+                    <option value="ruim">Ruim</option>
+                    </select>
+            </div>
+            <div class="inputConfig">
+                    <label for="moralTime2">Moral Time 2</label>
+                <select id="moralTime2">
+                    <option value="normal">Normal</option>
+                    <option value="boa">Boa</option>
+                    <option value="ruim">Ruim</option>
+                </select>
+            </div>
             <div class="inputConfig">
                 <label for="estilo">Estilo</label>
                 <select id="estilo">
@@ -48,6 +64,10 @@
                     <option value="meio-a-meio">Meio a Meio</option>
                 </select>
             </div>
+            <!-- <div class="inputConfig">
+                <label for="jogoDecisivo">Jogo decisivo</label>
+                <input type="checkbox" name="jogoDecisivo" id="jogoDecisivo">
+            </div> -->
             <div class="inputConfig">
                 <label for="velocidade">Velocidade</label>
                 <select id="velocidade">
@@ -56,22 +76,6 @@
                     <option value=700>Lento</option>
                     <option value=250>Rápido</option>
                     <option value=100>Super Rápido</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="moralTime1">Moral Time 1</label>
-                <select id="moralTime1">
-                    <option value="normal">Normal</option>
-                    <option value="boa">Boa</option>
-                    <option value="ruim">Ruim</option>
-                    </select>
-                </div>
-                <div class="inputConfig">
-                    <label for="moralTime2">Moral Time 2</label>
-                <select id="moralTime2">
-                    <option value="normal">Normal</option>
-                    <option value="boa">Boa</option>
-                    <option value="ruim">Ruim</option>
                 </select>
             </div>
             <div class="inputConfig">
@@ -101,10 +105,49 @@
         <div id="eventos">
         </div>
     </main>
-
+    <div id="estatisticasDiv">
+        <h2>Estatísticas</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th id="time1Estatisticas">Time 1</th>
+                    <th> </th>
+                    <th id="time2Estatisticas">Time 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="posseTime1">00</td>
+                    <td>Posse</td>
+                    <td id="posseTime2">00</td>
+                </tr>
+                <tr>
+                    <td id="chutesTime1">00</td>
+                    <td>Chutes</td>
+                    <td id="chutesTime2">00</td>
+                </tr>
+                <tr>
+                    <td id="chutesForaTime1">00</td>
+                    <td>Fora</td>
+                    <td id="chutesForaTime2">00</td>
+                </tr>
+                <tr>
+                    <td id="defesasGoleiroTime1">00</td>
+                    <td>Defesa</td>
+                    <td id="defesasGoleiroTime2">00</td>
+                </tr>
+                <tr>
+                    <td id="cartoesTime1">00</td>
+                    <td>Cartões</td>
+                    <td id="cartoesTime2">00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
     <audio src="sounds/gol.mp3" id="audioGol"></audio>
     <audio src="sounds/apito.mp3" id="audioApito"></audio>
-
+    
     <script src="js/simulacao.js"></script>
     <script src="js/app.js"></script> 
     <script src="https://kit.fontawesome.com/3802d20ec1.js" crossorigin="anonymous"></script>

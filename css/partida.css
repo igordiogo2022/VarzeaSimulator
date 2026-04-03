@@ -6,10 +6,9 @@ body{
     position: relative;
     color: white;
 }
-
 #formularioDiv{
     display: flex;
-    width: 50%;
+    width: 60%;
     flex-direction: column;
     padding-top: 2%;
 }
@@ -40,6 +39,10 @@ select{
 }
 select option{
     background-color: var(--cor2);
+}
+#jogoDecisivo{
+    width: 30%;
+    height: 30%;
 }
 #iniciarPartidaBtn{
     width: 40%;
@@ -118,6 +121,25 @@ main{
     font-size: 14px;
     color: gray;
 }
+#estatisticasDiv{
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+#estatisticasDiv table{
+    width: 100%;
+    border: 0;
+    border-spacing: 0;
+    text-align: center;
+}
+#time1Estatisticas, #time2Estatisticas{
+    width: 45%;
+}
+#estatisticasDiv tr:nth-child(even){
+    background-color: var(--cor2);
+}
+
 @media (max-width: 550px) {
     #formularioDiv{
         width: 80%;
@@ -143,6 +165,9 @@ main{
     #eventos{
         width: 90%;
         font-size: 12px;   
+    }
+    #estatisticasDiv{
+        font-size: 13px;
     }
 }
 @media (max-height: 500px) {
