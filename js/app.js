@@ -371,6 +371,7 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                 }
                 
                 if(evento.tipo=="gol" || evento.tipo=="contra" || evento.tipo=="varGol" || evento.tipo=="varAnulou"){
+                    console.log("hove gol");
                     switch(evento.time){
                         case time1:
                             placarT1.textContent ++;
