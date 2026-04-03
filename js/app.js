@@ -319,7 +319,7 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
     const eventos = document.querySelector("#eventos");
     const placarT1 = document.querySelector("#placarTime1");
     const placarT2 = document.querySelector("#placarTime2");
-    const audioGol = document.querySelector("#audioGol");
+    const audioTorcida = document.querySelector("#audioTorcida");
     const audioApito = document.querySelector("#audioApito");
 
     const timer = document.querySelector("#timer");
@@ -379,13 +379,14 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                                 placarT2.textContent ++;
                             break;
                     }
-                    audioEvento = audioGol;
+                    audioEvento = audioTorcida;
                     emoji = evento.tipo!="contra"  ? "⚽" : "⁉️";
                     if(evento.tipo=="varGol" || evento.tipo=="varAnulou"){
                         eventoVar = evento;
                         varIntervem = true;
                     }
                 }else if(evento.tipo=="superDefesaGoleiro"){
+                    audioEvento = audioTorcida;
                     emoji = "🧤🧤";
                 }else if(evento.tipo=="amarelo"){
                     emoji = "🟨";
