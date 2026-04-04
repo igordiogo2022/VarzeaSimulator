@@ -6,18 +6,19 @@ Simulador de futebol, times são criados pelo usuário, sua imaginação é quem
 <hr>
 
 ### 🎮Funcionalidades
-- Criação de times(Reais ou imaginários)
+- Criação de times (reais ou imaginários)
 - Over de jogadores que influenciam no jogo
-- Simulação com eventos reais(gols, assistências, cartões, VAR, gol contra)
+- Simulação com eventos reais (gols, assistências, cartões, VAR, gol contra)
 - Estatísticas do jogo no fim da partida
-- Modificadores de partida(clima, torcida, estilo, moral)
+- Modificadores de partida (clima, torcida, estilo, moral)
 - Menu interativo
 - Importação e exportação de pacotes de times
 
 <hr>
 
 ### ❓Como se funciona
-O usuário cria seus times ou pode importar um pacote pronto, com os times ele pode simular partidas emocionantes, e mudar os modificadores que influenciam na partida, dessa forma o usuário pode usar sua criatividade para fazer torneios, ligas, copas.
+O usuário cria seus times ou pode importar um pacote pronto, com os times ele pode simular partidas emocionantes, e mudar os modificadores que influenciam na partida, dessa forma o usuário pode usar sua criatividade para fazer torneios, ligas, copas. <br> <br>
+Pack times do Brasileirão 2026: https://drive.google.com/uc?export=download&id=1-x-mwV6pBVnIGebcCDmyIyDfbPs8TxPT
 
 <hr>
 
