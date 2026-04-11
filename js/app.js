@@ -527,3 +527,12 @@ function deletarTodosDados(){
     localStorage.clear();
     irParaPagina("index.html");
 }
+
+function ativarOpcoesSecretas(){
+    const opcoesSecretas = document.querySelectorAll(".opcaoSecreta");
+
+    for(let opcao of opcoesSecretas){
+        opcao.style.display = "flex";
+    }
+    console.log("Opções secretas ativadas.");
+}

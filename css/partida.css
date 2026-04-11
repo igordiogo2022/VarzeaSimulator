@@ -40,6 +40,9 @@ select{
 select option{
     background-color: var(--cor2);
 }
+.opcaoSecreta{
+    display: none;
+}
 #jogoDecisivo{
     width: 30%;
     height: 30%;
