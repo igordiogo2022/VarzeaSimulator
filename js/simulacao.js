@@ -12,16 +12,12 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
     let [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForca(time1, "mc"), calcularForca(time2, "mc"));
     let [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForca(time1, "def"), calcularForca(time2, "def"));
 
-    console.log("atk: "+ataqueTime1, ataqueTime2);
-    console.log("mc: "+meiocampoTime1, meiocampoTime2);
-    console.log("def: "+defesaTime1, defesaTime2);
 
     let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, time1, time2);
 
     let chanceEvento = 23 + chanceEventoMod;
     let chanceGolT1 = Math.max(1, ((ataqueTime1-defesaTime2)/9.5)+9.5 + chanceGolT1Mod); 
     let chanceGolT2 = Math.max(1, ((ataqueTime2-defesaTime1)/9.5)+9.5 + chanceGolT2Mod); 
-    console.log(chanceGolT1, chanceGolT2);
     let chanceAtaque = 94;
     let chanceVermelho = 3 + chanceVermelhoMod;
     let sumula = [];
@@ -123,7 +119,6 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
         }
     }
 
-    console.log(sumula);
     return [sumula, tempoPartida];
 }
 
