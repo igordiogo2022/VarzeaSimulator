@@ -530,9 +530,12 @@ function deletarTodosDados(){
 
 function ativarOpcoesSecretas(){
     const opcoesSecretas = document.querySelectorAll(".opcaoSecreta");
+    const body = document.querySelector("body");
 
     for(let opcao of opcoesSecretas){
         opcao.style.display = "flex";
+        body.style.backgroundImage = "url(../img/background_dourado.png)";
+        
     }
     console.log("Opções secretas ativadas.");
 }
