@@ -528,7 +528,7 @@ function deletarTodosDados(){
     irParaPagina("index.html");
 }
 
-function ativarOpcoesSecretas(){
+function activeHiddenOptions(){
     const opcoesSecretas = document.querySelectorAll(".opcaoSecreta");
     const body = document.querySelector("body");
 
