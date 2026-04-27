@@ -1,4 +1,4 @@
-function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1, time2){
+function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogoDecisivo, placarIdaTime1, placarIdaTime2, time1, time2){
     for(let jogador of time1.jogadores){
         jogador.jogando = true;
         jogador.amarelado = false;
@@ -117,9 +117,85 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, time1,
         if(minuto==75 && clima=="quente"){
             chanceEvento -= 1;
         }
+
+        if(ehJogoDecisivo && minuto==tempoPartida){
+            let placarTime1 = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="contra" || evento.tipo=="varGol").filter(evento => evento.time==time1).length || 0;
+            let placarTime2 = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="contra" || evento.tipo=="varGol").filter(evento => evento.time==time2).length || 0;
+            
+            console.log((placarTime1+placarIdaTime1), "x",(placarTime2+placarIdaTime2));
+            if((placarTime1+placarIdaTime1)==(placarTime2+placarIdaTime2)){
+                let sumulaPenaltis = disputaPenaltis(time1, time2);
+                return [sumula, tempoPartida, sumulaPenaltis];
+            }
+        }
     }
 
-    return [sumula, tempoPartida];
+    return [sumula, tempoPartida, "sem penaltis"];
+}
+
+function disputaPenaltis(time1, time2){
+    let gkTime1 = time1.jogadores[0];
+    let gkTime2 = time2.jogadores[0];
+    let batedoresTime1 = JSON.parse(JSON.stringify(time1.jogadores)).reverse();
+    let batedoresTime2 = JSON.parse(JSON.stringify(time2.jogadores)).reverse();
+    let [expulsosTime1, expulsosTime2, placarTime1, placarTime2] = [0,0,0,0];
+    let sumulaPenaltis = [{
+        gkTime1: gkTime1,
+        gkTime2: gkTime2
+    }];
+    
+    let qtdPenaltis = 4;
+    for(i=0;i<=qtdPenaltis;i++){
+        [batedor1, expulsosTime1] = definirBatedorPenalti(batedoresTime1, expulsosTime1, i);
+        let decisaoTime1 = penalti(batedor1, gkTime2);
+        
+        [batedor2, expulsosTime2] = definirBatedorPenalti(batedoresTime2, expulsosTime2, i);
+        let decisaoTime2 = penalti(batedor2, gkTime1);
+
+        placarTime1 = decisaoTime1=="gol" ? placarTime1+1 : placarTime1;
+        placarTime2 = decisaoTime2=="gol" ? placarTime2+1 : placarTime2;
+        sumulaPenaltis.push({
+            decisao: decisaoTime1,
+            batedor: batedor1,
+            time: time1
+        });
+        sumulaPenaltis.push({
+            decisao: decisaoTime2,
+            batedor: batedor2,
+            time: time2
+        });
+
+        if(i>=4 && placarTime1==placarTime2){
+            qtdPenaltis++;
+        }
+    }
+    console.log(sumulaPenaltis);
+    console.log("---------------------------------------------------------------");
+    return sumulaPenaltis;
+    
+}
+function definirBatedorPenalti(listaBatedores, expulsosTime, i){
+    if(listaBatedores[(i+expulsosTime)%6].jogando){
+        return [listaBatedores[(i+expulsosTime)%6], expulsosTime];
+    }else{
+        expulsosTime++;
+        return definirBatedorPenalti(listaBatedores, expulsosTime, i);
+    }
+}
+
+function penalti(batedor, goleiro){
+    let random = Math.random()*100;
+
+    chanceDefender = 12+((goleiro.over-batedor.over)/2);
+    chanceFora = 10;
+
+    if(random<chanceDefender){
+        return "defesa";
+    }else if(random<chanceFora+chanceDefender){
+        return "fora";
+    }else{
+        return "gol";
+    }
 }
 
 function calcularForca(time, forca){

@@ -306,6 +306,9 @@ function chamarSimulacao(){
     document.querySelector("#torcida").value, 
     document.querySelector("#moralTime1").value, 
     document.querySelector("#moralTime2").value,
+    document.querySelector("#jogoDecisivo").checked,
+    parseInt(document.querySelector("#placarIdaTime1").value),
+    parseInt(document.querySelector("#placarIdaTime2").value),
     time1, time2);
     
     limparEventos();
@@ -314,7 +317,7 @@ function chamarSimulacao(){
 }
 
 function rodarPartida(registroPartida, velocidadePartida, time1, time2){
-    let [sumula, tempoPartida] = registroPartida;
+    let [sumula, tempoPartida, sumulaPenaltis] = registroPartida;
     
     const eventos = document.querySelector("#eventos");
     const placarT1 = document.querySelector("#placarTime1");
@@ -402,7 +405,7 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
                     html = `<div class="${classeEvento}"><p>${minuto}'</p> <p>${emoji}</p> <p>${evento.jogador}</p></div>`;
                     
                     if(evento.jogadorAssistencia!=null){
-                        html += `<div class="${classeEvento} assistencia"><p>👟</p> <p>${evento.jogadorAssistencia}</p></div>`;
+                        html += `<div class="${classeEvento} subEvento"><p>👟</p> <p>${evento.jogadorAssistencia}</p></div>`;
                     }
                     
                     eventos.innerHTML += html;
@@ -410,14 +413,19 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
             }
         }
         
+        
         if(minuto >= tempoPartida){
+            if(sumulaPenaltis!="sem penaltis"){
+                eventos.innerHTML += `<div><h2>Disputa de pênaltis</h2></div>`;
+                exibirPenaltis(sumulaPenaltis, time1, time2).then(() => {
+                    finalizarPartida(time1, time2, sumula);
+                });
+            }else{
+                finalizarPartida(time1, time2, sumula);
+            }
             clearInterval(intervalo);
-            
-            const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
-            carregarEstatisticas(time1, time2, sumula);
-            iniciarPartidaBtn.style.background = "linear-gradient(var(--cor3), var(--cor4))";
-            iniciarPartidaBtn.style.pointerEvents = "auto";
         }
+        
     }, velocidadePartida);
 }
 
@@ -438,12 +446,19 @@ function exibirTimesPlacar(time1, time2){
     time2Placar.style.color = textoCor2;
 }
 
+function finalizarPartida(time1, time2, sumula){
+    carregarEstatisticas(time1, time2, sumula);
+    const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
+    iniciarPartidaBtn.style.background = "linear-gradient(var(--cor3), var(--cor4))";
+    iniciarPartidaBtn.style.pointerEvents = "auto";
+}
+
 function carregarEstatisticas(time1, time2, sumula){
     const eventos = document.querySelector("#eventos");
     const estatisticasDiv = document.querySelector("#estatisticasDiv");
     eventos.appendChild(estatisticasDiv);
     estatisticasDiv.style.display = "flex";
-
+    
     const time1Th = document.querySelector("#time1Estatisticas");
     const time2Th = document.querySelector("#time2Estatisticas");
     time1Th.textContent = time1.nome;
@@ -461,22 +476,64 @@ function carregarEstatisticas(time1, time2, sumula){
     let defesasTime2 = sumula.filter(evento => evento.tipo=="defesaGoleiro" || evento.tipo=="superDefesaGoleiro").filter(evento => evento.time==time2).length;
     defesasGoleiroTime1Td.textContent = defesasTime1;
     defesasGoleiroTime2Td.textContent = defesasTime2;
-
+    
     const chutesTime1Td = document.querySelector("#chutesTime1");
     const chutesTime2Td = document.querySelector("#chutesTime2");
-    chutesTime1Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora").filter(evento => evento.time==time1).length+defesasTime2;
-    chutesTime2Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora").filter(evento => evento.time==time2).length+defesasTime1;
-
+    chutesTime1Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora" || evento.tipo=="varGol").filter(evento => evento.time==time1).length+defesasTime2;
+    chutesTime2Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora" || evento.tipo=="varGol").filter(evento => evento.time==time2).length+defesasTime1;
+    
     const chutesForaTime1Td = document.querySelector("#chutesForaTime1");
     const chutesForaTime2Td = document.querySelector("#chutesForaTime2");
     chutesForaTime1Td.textContent = sumula.filter(evento => evento.tipo=="fora").filter(evento => evento.time==time1).length;
     chutesForaTime2Td.textContent = sumula.filter(evento => evento.tipo=="fora").filter(evento => evento.time==time2).length;
-
+    
     const cartoesTime1Td = document.querySelector("#cartoesTime1");
     const cartoesTime2Td = document.querySelector("#cartoesTime2");
     cartoesTime1Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time1).length;
     cartoesTime2Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time2).length;
 }
+
+function exibirPenaltis(sumulaPenaltis, time1, time2){
+    const placarT1 = document.querySelector("#placarTime1");
+    const placarT2 = document.querySelector("#placarTime2");
+    return new Promise((resolve) => {
+        let contadorInterval = 0;
+        const intervaloPenaltis = setInterval(() => {
+            contadorInterval++;
+        
+            penalti = sumulaPenaltis[contadorInterval];
+
+            if(penalti.time == time1){
+                classeEvento = "eventoTime1";
+                goleiro = sumulaPenaltis[0].gkTime2;
+            }else{
+                classeEvento = "eventoTime2";
+                goleiro = sumulaPenaltis[0].gkTime1;
+            }
+
+            emoji = penalti.decisao=="gol" ? "⚽" : "❌";
+
+            html = `<div class="${classeEvento}"><p>${emoji}</p> <p>${penalti.batedor.nome}</p></div>`;
+            
+            if(penalti.decisao=="defesa"){
+                html += `<div class="${classeEvento} subEvento"> <p>🧤</p> <p>${goleiro.nome}</p></div>`;
+            }
+
+            eventos.innerHTML += html;
+            
+            
+            if(contadorInterval>=sumulaPenaltis.length-1){
+                clearInterval(intervaloPenaltis);
+                resolve();  
+            }
+        }, 200)
+        let placarPenaltisTime1 = sumulaPenaltis.filter((penalti) => penalti.time==time1 && penalti.decisao=="gol").length;
+        let placarPenaltisTime2 = sumulaPenaltis.filter((penalti) => penalti.time==time2 && penalti.decisao=="gol").length;
+
+        placarT1.textContent = placarT1.textContent+` (${placarPenaltisTime1})`;
+        placarT2.textContent = `(${placarPenaltisTime2}) `+placarT2.textContent;
+    });
+}   
 
 function obterTomCor(cor){
     cor = cor.replace("#", "");
@@ -525,6 +582,17 @@ function exportarTimesTXT(){
 function deletarTodosDados(){
     localStorage.clear();
     irParaPagina("index.html");
+}
+
+function exibirConfiguracaoPlacarIda(){
+    const placarIda = document.querySelectorAll(".placarIda");
+    placarIda.forEach(elemento => {
+        if(elemento.style.display=="" || elemento.style.display=="none"){
+            elemento.style.display = "flex";
+        }else{
+            elemento.style.display = "none";
+        }
+    });
 }
 
 function activeHiddenOptions(){
