@@ -52,6 +52,11 @@ function carregarTimes(){
     }
 }
 
+function iniciarPaginaPartida(idSelect1, idSelect2){
+    collectorsModeEstaAtivo = false;
+    carregarTimesSelect(idSelect1, idSelect2);
+}
+
 function carregarTimesSelect(idSelect1, idSelect2){
     timesSelect = [document.querySelector(idSelect1), document.querySelector(idSelect2)]
 
@@ -310,6 +315,10 @@ function chamarSimulacao(){
     parseInt(document.querySelector("#placarIdaTime1").value),
     parseInt(document.querySelector("#placarIdaTime2").value),
     time1, time2);
+
+    if(collectorsModeEstaAtivo){
+        definirBackground(time1.nome);
+    }
     
     limparEventos();
     exibirTimesPlacar(time1, time2);
@@ -496,12 +505,15 @@ function carregarEstatisticas(time1, time2, sumula){
 function exibirPenaltis(sumulaPenaltis, time1, time2){
     const placarT1 = document.querySelector("#placarTime1");
     const placarT2 = document.querySelector("#placarTime2");
+    const audioTorcida = document.querySelector("#audioTorcida");
+    const audioTorcidaDesapontada = document.querySelector("#audioTorcidaDesapontada");
+
     return new Promise((resolve) => {
         let contadorInterval = 0;
         const intervaloPenaltis = setInterval(() => {
             contadorInterval++;
         
-            penalti = sumulaPenaltis[contadorInterval];
+            let penalti = sumulaPenaltis[contadorInterval];
 
             if(penalti.time == time1){
                 classeEvento = "eventoTime1";
@@ -512,6 +524,7 @@ function exibirPenaltis(sumulaPenaltis, time1, time2){
             }
 
             emoji = penalti.decisao=="gol" ? "⚽" : "❌";
+            audioEvento = penalti.decisao=="gol" ? audioTorcida : audioTorcidaDesapontada;
 
             html = `<div class="${classeEvento}"><p>${emoji}</p> <p>${penalti.batedor.nome}</p></div>`;
             
@@ -519,19 +532,23 @@ function exibirPenaltis(sumulaPenaltis, time1, time2){
                 html += `<div class="${classeEvento} subEvento"> <p>🧤</p> <p>${goleiro.nome}</p></div>`;
             }
 
+            audioEvento.currentTime = 0;
+            audioEvento.play();
             eventos.innerHTML += html;
             
             
             if(contadorInterval>=sumulaPenaltis.length-1){
+                let placarPenaltisTime1 = sumulaPenaltis.filter((penalti) => penalti.time==time1 && penalti.decisao=="gol").length;
+                let placarPenaltisTime2 = sumulaPenaltis.filter((penalti) => penalti.time==time2 && penalti.decisao=="gol").length;
+                
+                placarT1.textContent = placarT1.textContent+` (${placarPenaltisTime1})`;
+                placarT2.textContent = `(${placarPenaltisTime2}) `+placarT2.textContent;
+
                 clearInterval(intervaloPenaltis);
                 resolve();  
             }
-        }, 200)
-        let placarPenaltisTime1 = sumulaPenaltis.filter((penalti) => penalti.time==time1 && penalti.decisao=="gol").length;
-        let placarPenaltisTime2 = sumulaPenaltis.filter((penalti) => penalti.time==time2 && penalti.decisao=="gol").length;
+        }, 2000)
 
-        placarT1.textContent = placarT1.textContent+` (${placarPenaltisTime1})`;
-        placarT2.textContent = `(${placarPenaltisTime2}) `+placarT2.textContent;
     });
 }   
 
@@ -595,14 +612,40 @@ function exibirConfiguracaoPlacarIda(){
     });
 }
 
-function activeHiddenOptions(){
-    const opcoesSecretas = document.querySelectorAll(".opcaoSecreta");
+function ativarCollectorsMode(){
+    const opcoesCollectors = document.querySelectorAll(".opcoesCollectors");
+    
+    for(let opcao of opcoesCollectors){
+        opcao.style.display = "flex";
+    }
+    
+    collectorsModeEstaAtivo = true;
+    console.log("Collectors Mode Ativo.");
+}
+
+function definirBackground(timeMandante){
     const body = document.querySelector("body");
 
-    for(let opcao of opcoesSecretas){
-        opcao.style.display = "flex";
-        body.style.backgroundImage = "url(../img/background_dourado.png)";
-        
+    listaTimesCollectors = {
+        "Jumentus FC": "https://i.imgur.com/NQrjATk.jpeg",
+        "Safados FC": "https://i.imgur.com/9OrE0n4.jpeg",
+        "Sweetie Fox Fc": "https://i.imgur.com/DqFsLEv.jpeg",
+        "Bagres FC": "https://i.imgur.com/1vtSNE1.jpeg",
+        "Anaconda Mineira": "https://i.imgur.com/BEjyq3g.jpeg",
+        "Carlos FC": "https://i.imgur.com/wvLq987.jpeg",
+        "Team Flash": "https://i.imgur.com/ywjwv4s.jpeg",
+        "Danados FC": "https://i.imgur.com/FAKwxbM.jpeg",
+        "Magic All Stars": "https://i.imgur.com/CugH1FX.jpeg",
+        "Dinasty FC": "https://i.imgur.com/pHlQBGH.jpeg",
+        "Trapper's FC": "https://i.imgur.com/Rcdiz6H.jpeg",
+        "Devedores FC": "https://i.imgur.com/Rz6Dd59.jpeg",
+        "Flarinthians FC": "https://i.imgur.com/V88IQaq.jpeg",
+        "Olaria Tietê FC": "https://i.imgur.com/wYPtyri.jpeg"
+    };
+    
+    if(listaTimesCollectors[timeMandante]){
+        body.style.backgroundImage = `url(${listaTimesCollectors[timeMandante]})`;
+    }else{
+        body.style.backgroundImage = "url(../img/background.png)";
     }
-    console.log("Opções secretas ativadas.");
 }

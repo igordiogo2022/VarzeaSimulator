@@ -26,7 +26,7 @@ body{
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: 9.5vh;
     margin-bottom: 2%;
-    background-color: #0000007c;
+    background-color: #000000be;
     border-radius: 8px;
     padding: 1% 0;
 }
@@ -52,7 +52,7 @@ select{
 select option{
     background-color: var(--cor2);
 }
-.opcaoSecreta{
+.opcoesCollectors{
     display: none;
 }
 #jogoDecisivo{
@@ -87,7 +87,7 @@ main{
     width: 60%;
     height: 90vh;
     border-radius: 12px;
-    background-color: #0000007c;
+    background-color: #000000be;
     overflow-y: auto;
 }
 #placar{

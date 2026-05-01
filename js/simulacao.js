@@ -1,4 +1,7 @@
 function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogoDecisivo, placarIdaTime1, placarIdaTime2, time1, time2){
+    placarIdaTime1 = !placarIdaTime1 ? 0 : placarIdaTime1;
+    placarIdaTime2 = !placarIdaTime2 ? 0 : placarIdaTime2;
+    
     for(let jogador of time1.jogadores){
         jogador.jogando = true;
         jogador.amarelado = false;
@@ -122,7 +125,6 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
             let placarTime1 = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="contra" || evento.tipo=="varGol").filter(evento => evento.time==time1).length || 0;
             let placarTime2 = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="contra" || evento.tipo=="varGol").filter(evento => evento.time==time2).length || 0;
             
-            console.log((placarTime1+placarIdaTime1), "x",(placarTime2+placarIdaTime2));
             if((placarTime1+placarIdaTime1)==(placarTime2+placarIdaTime2)){
                 let sumulaPenaltis = disputaPenaltis(time1, time2);
                 return [sumula, tempoPartida, sumulaPenaltis];
@@ -169,8 +171,6 @@ function disputaPenaltis(time1, time2){
             qtdPenaltis++;
         }
     }
-    console.log(sumulaPenaltis);
-    console.log("---------------------------------------------------------------");
     return sumulaPenaltis;
     
 }

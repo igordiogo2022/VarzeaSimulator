@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/partida.css">
     <title>Partida - Várzea Simulator</title>
 </head>
-<body onload="carregarTimesSelect('#time1', '#time2')">
+<body onload="iniciarPaginaPartida('#time1', '#time2')">
     <button class="btnCanto" id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
     <menu>
         <button class="btnMenu" onclick="irParaPagina('index.html')"><i class="fa-solid fa-users"></i> Times</button>
@@ -74,8 +74,7 @@
                     <option value=700>Lento</option>
                     <option value=250>Rápido</option>
                     <option value=100>Super Rápido</option>
-                    <option value=1 >Insta</option>
-                    <!-- <option value=1 class="opcaoSecreta">Insta</option> -->
+                    <option value=1 class="opcoesCollectors">Insta</option>
                 </select>
             </div>
             <div class="inputConfig">
@@ -178,7 +177,8 @@
         </div>
     </div>
     
-    <audio src="sounds/gol.mp3" id="audioTorcida"></audio>
+    <audio src="sounds/torcidaFeliz.mp3" id="audioTorcida"></audio>
+    <audio src="sounds/torcidaDesapontada.mp3" id="audioTorcidaDesapontada"></audio>
     <audio src="sounds/apito.mp3" id="audioApito"></audio>
     
     <script src="js/simulacao.js"></script>
