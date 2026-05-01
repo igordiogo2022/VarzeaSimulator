@@ -95,7 +95,7 @@ main{
     align-items: center;
     justify-content: space-around;
     height: 7%;
-    width: 60%;
+    width: 80%;
     padding: 1% 0;
 }
 .timeNome{
@@ -220,6 +220,7 @@ main{
     #placar{
         height: 10%;
         width: 90%;
+        font-size: 14px;
     }
     .timeNome{
         font-size: 13px;
