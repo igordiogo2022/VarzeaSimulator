@@ -19,94 +19,6 @@
 
     <button id="btnDuvida" onclick="abrirJanela('duvida')"><i class="fa-solid fa-question"></i></button>
     
-    <div id="formularioDiv">
-        <div id="configuracoesPartidaDiv">
-            <div class="inputConfig">
-                <label for="moralTime1">Moral Time 1</label>
-                <select id="moralTime1">
-                    <option value="normal">Normal</option>
-                    <option value="boa">Boa</option>
-                    <option value="ruim">Ruim</option>
-                    </select>
-            </div>
-            <div class="inputConfig">
-                    <label for="moralTime2">Moral Time 2</label>
-                <select id="moralTime2">
-                    <option value="normal">Normal</option>
-                    <option value="boa">Boa</option>
-                    <option value="ruim">Ruim</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="estilo">Estilo</label>
-                <select id="estilo">
-                    <option value="normal">Normal</option>
-                    <option value="ofensivo">Ofensivo</option>
-                    <option value="violento">Violento</option>
-                    <option value="varzeano">Varzeano</option>
-                    <option value="maluco">Maluco</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="clima">Clima</label>
-                <select id="clima">
-                    <option value="normal">Normal</option>
-                    <option value="quente">Quente</option>
-                    <option value="frio">Frio</option>
-                    <option value="chuvoso">Chuvoso</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="torcida">Torcida</label>
-                <select id="torcida">
-                    <option value="normal">Normal</option>
-                    <option value="unica">Única</option>
-                    <option value="mandanteForte">Mandante Forte</option>
-                    <option value="visitanteForte">Visitante Forte</option>
-                    <option value="meio-a-meio">Meio a Meio</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="velocidade">Velocidade</label>
-                <select id="velocidade">
-                    <option value=500>Normal</option>
-                    <option value=1000>Super Lento</option>
-                    <option value=700>Lento</option>
-                    <option value=250>Rápido</option>
-                    <option value=100>Super Rápido</option>
-                    <option value=1 class="opcoesCollectors">Insta</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="time1">Time 1</label>
-                <select id="time1">
-                    <option value="">Selecione</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="time2">Time 2</label>
-                <select id="time2">
-                    <option value="">Selecione</option>
-                </select>
-            </div>
-            <div class="inputConfig">
-                <label for="jogoDecisivo">Jogo decisivo</label>
-                <input type="checkbox" name="jogoDecisivo" id="jogoDecisivo" onchange="exibirConfiguracaoPlacarIda()">
-            </div>
-            <div>
-                
-            </div>
-            <div class="inputConfig placarIda">
-                <label for="placarIdaTime1">Placar Ida Time 1</label>
-                <input type="number" name="placarIdaTime1" id="placarIdaTime1" placeholder="0">
-            </div>
-            <div class="inputConfig placarIda">
-                <label for="placarIdaTime2">Placar Ida Time 2</label>
-                <input type="number" name="placarIdaTime2" id="placarIdaTime2" placeholder="0">
-            </div>
-        </div>
-        <button id="iniciarPartidaBtn" onclick="chamarSimulacao()">Iniciar Partida</button>
-    </div>
     <main>
         <div id="placar">
             <div id="time1Placar" class="timeNome">Time 1</div>
@@ -118,6 +30,7 @@
         <div id="timer">00'</div>
         <div id="eventos">
         </div>
+        <button id="btnProximaPartida" onclick="abrirJanela('formulario')">Próxima Partida</button>
     </main>
     <div id="estatisticasDiv">
         <h2>Estatísticas</h2>
@@ -173,7 +86,95 @@
                 <li>⁉️ Gol contra</li>
                 <li>🧤🧤 Grande defesa</li>
             </ul>
-
+        </div>
+        <div id="formularioDiv" class="divJanela">
+            <button onclick="fecharJanela('formulario')" class="btnSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
+            <div id="configuracoesPartidaDiv">
+                <div class="inputConfig">
+                    <label for="moralTime1">Moral Time 1</label>
+                    <select id="moralTime1">
+                        <option value="normal">Normal</option>
+                        <option value="boa">Boa</option>
+                        <option value="ruim">Ruim</option>
+                        </select>
+                </div>
+                <div class="inputConfig">
+                        <label for="moralTime2">Moral Time 2</label>
+                    <select id="moralTime2">
+                        <option value="normal">Normal</option>
+                        <option value="boa">Boa</option>
+                        <option value="ruim">Ruim</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="estilo">Estilo</label>
+                    <select id="estilo">
+                        <option value="normal">Normal</option>
+                        <option value="ofensivo">Ofensivo</option>
+                        <option value="violento">Violento</option>
+                        <option value="varzeano">Varzeano</option>
+                        <option value="maluco">Maluco</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="clima">Clima</label>
+                    <select id="clima">
+                        <option value="normal">Normal</option>
+                        <option value="quente">Quente</option>
+                        <option value="frio">Frio</option>
+                        <option value="chuvoso">Chuvoso</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="torcida">Torcida</label>
+                    <select id="torcida">
+                        <option value="normal">Normal</option>
+                        <option value="unica">Única</option>
+                        <option value="mandanteForte">Mandante Forte</option>
+                        <option value="visitanteForte">Visitante Forte</option>
+                        <option value="meio-a-meio">Meio a Meio</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="velocidade">Velocidade</label>
+                    <select id="velocidade">
+                        <option value=500>Normal</option>
+                        <option value=1000>Super Lento</option>
+                        <option value=700>Lento</option>
+                        <option value=250>Rápido</option>
+                        <option value=100>Super Rápido</option>
+                        <option value=1 class="opcoesCollectors">Insta</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="time1">Time 1</label>
+                    <select id="time1">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="time2">Time 2</label>
+                    <select id="time2">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+                <div class="inputConfig">
+                    <label for="jogoDecisivo">Jogo decisivo</label>
+                    <input type="checkbox" name="jogoDecisivo" id="jogoDecisivo" onchange="exibirConfiguracaoPlacarIda()">
+                </div>
+                <div>
+                    
+                </div>
+                <div class="inputConfig placarIda">
+                    <label for="placarIdaTime1">Placar Ida Time 1</label>
+                    <input type="number" name="placarIdaTime1" id="placarIdaTime1" placeholder="0">
+                </div>
+                <div class="inputConfig placarIda">
+                    <label for="placarIdaTime2">Placar Ida Time 2</label>
+                    <input type="number" name="placarIdaTime2" id="placarIdaTime2" placeholder="0">
+                </div>
+            </div>
+            <button id="iniciarPartidaBtn" onclick="chamarSimulacao()">Iniciar Partida</button>
         </div>
     </div>
     

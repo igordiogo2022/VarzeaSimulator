@@ -55,6 +55,7 @@ function carregarTimes(){
 function iniciarPaginaPartida(idSelect1, idSelect2){
     collectorsModeEstaAtivo = false;
     carregarTimesSelect(idSelect1, idSelect2);
+    abrirJanela("formulario");
 }
 
 function carregarTimesSelect(idSelect1, idSelect2){
@@ -289,8 +290,11 @@ function carregarFormularioEdicao(id){
 function chamarSimulacao(){
     const main = document.querySelector("main");
     const estatisticasDiv = document.querySelector("#estatisticasDiv");
+    const btnProximaPartida = document.querySelector("#btnProximaPartida");
+    main.appendChild(btnProximaPartida);
     main.appendChild(estatisticasDiv);
     estatisticasDiv.style.display = "none";
+    btnProximaPartida.style.display = "none";
     
     const idTime1 = document.querySelector("#time1").value; 
     const idTime2 = document.querySelector("#time2").value;
@@ -301,10 +305,8 @@ function chamarSimulacao(){
     if(time1==time2 || !time1 || !time2){
         return alert("Erro na escolha dos times.");
     }
-    
-    const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
-    iniciarPartidaBtn.style.pointerEvents = "none";
-    iniciarPartidaBtn.style.background = "linear-gradient(darkgray, gray)";
+
+    fecharJanela("formulario");
     
     let registroPartida = simulacaoPartida(document.querySelector("#estilo").value,
     document.querySelector("#clima").value, 
@@ -457,9 +459,10 @@ function exibirTimesPlacar(time1, time2){
 
 function finalizarPartida(time1, time2, sumula){
     carregarEstatisticas(time1, time2, sumula);
-    const iniciarPartidaBtn = document.querySelector("#iniciarPartidaBtn");
-    iniciarPartidaBtn.style.background = "linear-gradient(var(--cor3), var(--cor4))";
-    iniciarPartidaBtn.style.pointerEvents = "auto";
+    document.querySelector("#eventos");
+    const btnProximaPartida = document.querySelector("#btnProximaPartida");
+    eventos.appendChild(btnProximaPartida);
+    btnProximaPartida.style.display = "block";
 }
 
 function carregarEstatisticas(time1, time2, sumula){
