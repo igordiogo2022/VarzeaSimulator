@@ -82,6 +82,7 @@ input[type="number"]{
 }
 #btnProximaPartida{
     margin-top: 2%;
+    width: 40%;
 }
 main{
     display: flex;
