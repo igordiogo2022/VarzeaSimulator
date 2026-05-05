@@ -10,13 +10,40 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
         jogador.jogando = true;
         jogador.amarelado = false;
     }
-
-    let [ataqueTime1, ataqueTime2] = converterParaPorcentagem(calcularForca(time1, "atk"), calcularForca(time2, "atk"));
-    let [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForca(time1, "mc"), calcularForca(time2, "mc"));
-    let [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForca(time1, "def"), calcularForca(time2, "def"));
-
-
+    
     let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, time1, time2);
+
+    let [ataqueTime1, ataqueTime2] = converterParaPorcentagem(calcularForcaBase(time1, "atk"), calcularForcaBase(time2, "atk"));
+    let [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForcaBase(time1, "mc"), calcularForcaBase(time2, "mc"));
+    let [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForcaBase(time1, "def"), calcularForcaBase(time2, "def"));
+
+    console.log(`${ataqueTime1} x ${ataqueTime2}`);
+    console.log(`${meiocampoTime1} x ${meiocampoTime2}`);
+    console.log(`${defesaTime1} x ${defesaTime2}`);
+    
+    let mcModT1 = calcularModificadoresTaticos(time1, time2);
+    let mcModT2 = calcularModificadoresTaticos(time2, time1);
+    let [atkModT1, defModT1] = definirBonusTatico(time1);
+    let [atkModT2, defModT2] = definirBonusTatico(time2);
+
+    if(mcModT1>1 && mcModT2>1){
+        chanceEventoMod += 5;
+        mcModT1 = 1;
+        mcModT2 = 1;
+    }else if(mcModT1<1 && mcModT2<1){
+        chanceEventoMod -= 5;
+        mcModT1 = 1;
+        mcModT2 = 1;
+    }
+    
+    console.log(`modificadores: ${mcModT1} x ${mcModT2}`);
+    [ataqueTime1, ataqueTime2] = converterParaPorcentagem(calcularForcaBase(time1, "atk")*atkModT1, calcularForcaBase(time2, "atk")*atkModT2);
+    [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForcaBase(time1, "mc")*mcModT1, calcularForcaBase(time2, "mc")*mcModT2);
+    [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForcaBase(time1, "def")*defModT1, calcularForcaBase(time2, "def")*defModT2);
+    console.log(`${ataqueTime1} x ${ataqueTime2}`);
+    console.log(`${meiocampoTime1} x ${meiocampoTime2}`);
+    console.log(`${defesaTime1} x ${defesaTime2}`);
+    
 
     let chanceEvento = 23 + chanceEventoMod;
     let chanceGolT1 = Math.max(1, ((ataqueTime1-defesaTime2)/9.5)+9.5 + chanceGolT1Mod); 
@@ -174,6 +201,7 @@ function disputaPenaltis(time1, time2){
     return sumulaPenaltis;
     
 }
+
 function definirBatedorPenalti(listaBatedores, expulsosTime, i){
     if(listaBatedores[(i+expulsosTime)%6].jogando){
         return [listaBatedores[(i+expulsosTime)%6], expulsosTime];
@@ -198,14 +226,14 @@ function penalti(batedor, goleiro){
     }
 }
 
-function calcularForca(time, forca){
+function calcularForcaBase(time, forca){
     switch (forca){
         case "atk": 
             pesos = [0, 0.5, 2, 4];
             pesoIdeal = 11;
             break;
         case "mc":
-            pesos = [0, 1.5, 4, 1.5];
+            pesos = [0, 2.2, 2.85, 2.2];
             pesoIdeal = 10;
             break;
         case "def": 
@@ -329,6 +357,52 @@ function calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, t
     });
                                                 
     return [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod];
+}
+
+function calcularModificadoresTaticos(time1, time2){
+    const regrasTaticas = {
+        trocaPasses: {
+            zona: "vAtaque",
+            individual: "vDefesa",
+            pressaoAlta: "vDefesa",
+            linhaImpedimento: "vAtaque"
+        },
+        cruzamentos: {
+            zona: "vDefesa",
+            individual: "vAtaque",
+            pressaoAlta: "vDefesa",
+            linhaImpedimento: "vAtaque"
+        },
+        contraAtaque: {
+            zona: "vAtaque",
+            individual: "vDefesa",
+            pressaoAlta: "vAtaque",
+            linhaImpedimento: "vDefesa"
+        },
+        pontas: {
+            zona: "vDefesa",
+            individual: "vAtaque",
+            pressaoAlta: "vAtaque",
+            linhaImpedimento: "vDefesa"
+        }
+    };
+
+    let vantagem = regrasTaticas[time1.modoAtaque][time2.modoDefesa];
+    if(vantagem=="vAtaque"){
+        return 1.1;
+    }else if(vantagem=="vDefesa"){
+        return 0.9;
+    }
+}
+
+function definirBonusTatico(time){
+    if(time.estiloJogo=="ofensivo"){
+        return [1.12, 1];
+    }else if(time.estiloJogo=="defensivo"){
+        return [1, 1.12];
+    }else{
+        return [1.06, 1.06];
+    }
 }
 
 function definirPosseBola(time1, time2, meiocampoTime1, meiocampoTime2, eventoOfensivo){

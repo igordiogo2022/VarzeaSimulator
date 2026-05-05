@@ -30,7 +30,7 @@ function carregarTimes(){
         }
         editarBtn.classList.add("editarBtn");
         editarBtn.textContent = "Editar";
-        editarBtn.setAttribute("onclick", "carregarFormularioEdicao("+time.id+")");
+        editarBtn.setAttribute("onclick", `atualizarFormularioEdicao(${time.id}, "carregar")`);
 
         deletarBtn.classList.add("deletarBtn");
         deletarBtn.id = "deletarBtn"+time.id;
@@ -55,7 +55,7 @@ function carregarTimes(){
 function iniciarPaginaPartida(idSelect1, idSelect2){
     collectorsModeEstaAtivo = false;
     carregarTimesSelect(idSelect1, idSelect2);
-    abrirJanela("formulario");
+    abrirJanela("configuracoesPartida");
 }
 
 function carregarTimesSelect(idSelect1, idSelect2){
@@ -107,6 +107,10 @@ function fecharJanela(janela){
     
     let div = document.querySelector(`#${janela}Div`);
     div.style.display = "none";
+
+    if(janela=="formulario"){
+        atualizarFormularioEdicao("", "descarregar");
+    }
     
     janelaModal.style.display = "none";
     window.scrollTo({top: 0});
@@ -123,7 +127,7 @@ function registrarTime(){
     const time = obterDadosFormulario(idTime);
     
     if(!time){
-        return alert("Não deixe campos incompletos.");
+        return alert("Não deixe campos incompletos ou táticas não definidas.");
     }
     
     listaTimes.push(time);
@@ -135,7 +139,7 @@ function editarTime(id){
     const time = obterDadosFormulario(id);
     
     if(!time){
-        return alert("Não deixe campos incompletos.");
+        return alert("Não deixe campos incompletos ou táticas não definidas.");
     }
 
     for(let i=0;i<listaTimes.length;i++){
@@ -217,6 +221,9 @@ function obterDadosFormulario(idTime){
     const nomeTime = document.querySelector("#nomeTime-formulario").value;
     const cor1Time = document.querySelector("#cor1-formulario").value;
     const cor2Time = document.querySelector("#cor2-formulario").value;
+    const estiloJogoTime = document.querySelector("#estiloJogo").value;
+    const modoAtaqueTime = document.querySelector("#modoAtaque").value;
+    const modoDefesaTime = document.querySelector("#modoDefesa").value;
     
     let listajogadores = [];
     for(let i=0;i<6;i++){
@@ -224,7 +231,7 @@ function obterDadosFormulario(idTime){
         const nomeJogador = document.querySelectorAll(".nomePlayer")[i].value;
         const overJogador = document.querySelectorAll(".overPlayer")[i].value;
         
-        if(posJogador=="nenhuma" || !nomeJogador || !overJogador){
+        if(posJogador=="nenhuma" || !nomeJogador || !overJogador || estiloJogoTime=="nenhum" || modoAtaqueTime=="nenhum" || modoDefesaTime=="nenhum"){
             return null;
         }
         
@@ -240,6 +247,9 @@ function obterDadosFormulario(idTime){
         nome: nomeTime,     
         cor1: cor1Time,
         cor2: cor2Time,
+        estiloJogo: estiloJogoTime,
+        modoAtaque: modoAtaqueTime,
+        modoDefesa: modoDefesaTime,
         jogadores: listajogadores
     }
     
@@ -268,23 +278,50 @@ async function importarPacote(){
     irParaPagina("index.html")
 }
 
-function carregarFormularioEdicao(id){
-    let time = listaTimes.find(item => item.id == id);
+function atualizarFormularioEdicao(id, acao){
+    const btnConfirmar = document.querySelector("#btnConfirmar-formulario");
+    if(acao=="carregar"){
+        time = listaTimes.find(item => item.id == id);
+
+        btnConfirmar.setAttribute("onclick", "editarTime("+id+")");
+    }else if(acao=="descarregar"){
+        time = {
+            id: "",
+            nome: "",
+            cor1: "#000000",
+            cor2: "#000000",
+            estiloJogo: "nenhum",
+            modoAtaque: "nenhum",
+            modoDefesa: "nenhum",
+            jogadores: [{pos: "GK",nome: "",over: ""},
+                {pos: "nenhuma",nome: "",over: ""},
+                {pos: "nenhuma",nome: "",over: ""},
+                {pos: "nenhuma",nome: "",over: ""},
+                {pos: "nenhuma",nome: "",over: ""},
+                {pos: "nenhuma",nome: "",over: ""}]
+            }
+
+        btnConfirmar.setAttribute("onclick", "registrarTime()");
+    }
     
     abrirJanela('formulario');  
     document.querySelector("#nomeTime-formulario").value = time.nome;
     document.querySelector("#cor1-formulario").value = time.cor1;
     document.querySelector("#cor2-formulario").value = time.cor2;
-    
+    const estiloJogoTime = document.querySelector("#estiloJogo");
+    const modoAtaqueTime = document.querySelector("#modoAtaque");
+    const modoDefesaTime = document.querySelector("#modoDefesa");
+
+    estiloJogoTime.value = !time.estiloJogo ? "nenhum" : time.estiloJogo;
+    modoAtaqueTime.value = !time.modoAtaque ? "nenhum" : time.modoAtaque;
+    modoDefesaTime.value = !time.modoDefesa ? "nenhum" : time.modoDefesa;
+
     for(let i=0;i<6;i++){
         jogador = time.jogadores[i];
         document.querySelectorAll(".posicaoSelect")[i].value = jogador.pos;
         document.querySelectorAll(".nomePlayer")[i].value = jogador.nome;
         document.querySelectorAll(".overPlayer")[i].value = jogador.over;
     }    
-    
-    const btnConfirmar = document.querySelector("#btnConfirmar-formulario");
-    btnConfirmar.setAttribute("onclick", "editarTime("+id+")");
 }
 
 function chamarSimulacao(){
@@ -306,7 +343,14 @@ function chamarSimulacao(){
         return alert("Erro na escolha dos times.");
     }
 
-    fecharJanela("formulario");
+    if(!time1.estiloJogo || !time1.modoAtaque || !time1.modoDefesa){
+        return alert(`O time(${time1.nome}) não está com táticas definidas, edite o time e defina suas táticas.`);
+    }
+    if(!time2.estiloJogo || !time2.modoAtaque || !time2.modoDefesa){
+        return alert(`O time(${time2.nome}) não está com táticas definidas, edite o time e defina suas táticas.`);
+    }
+
+    fecharJanela("configuracoesPartida");
     
     let registroPartida = simulacaoPartida(document.querySelector("#estilo").value,
     document.querySelector("#clima").value, 
