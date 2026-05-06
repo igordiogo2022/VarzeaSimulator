@@ -12,14 +12,6 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
     }
     
     let [chanceEventoMod, chanceGolT1Mod, chanceGolT2Mod, chanceVermelhoMod] = calcularModificadores(estilo, clima, torcida, moralTime1, moralTime2, time1, time2);
-
-    let [ataqueTime1, ataqueTime2] = converterParaPorcentagem(calcularForcaBase(time1, "atk"), calcularForcaBase(time2, "atk"));
-    let [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForcaBase(time1, "mc"), calcularForcaBase(time2, "mc"));
-    let [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForcaBase(time1, "def"), calcularForcaBase(time2, "def"));
-
-    console.log(`${ataqueTime1} x ${ataqueTime2}`);
-    console.log(`${meiocampoTime1} x ${meiocampoTime2}`);
-    console.log(`${defesaTime1} x ${defesaTime2}`);
     
     let mcModT1 = calcularModificadoresTaticos(time1, time2);
     let mcModT2 = calcularModificadoresTaticos(time2, time1);
@@ -36,13 +28,9 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
         mcModT2 = 1;
     }
     
-    console.log(`modificadores: ${mcModT1} x ${mcModT2}`);
-    [ataqueTime1, ataqueTime2] = converterParaPorcentagem(calcularForcaBase(time1, "atk")*atkModT1, calcularForcaBase(time2, "atk")*atkModT2);
-    [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForcaBase(time1, "mc")*mcModT1, calcularForcaBase(time2, "mc")*mcModT2);
-    [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForcaBase(time1, "def")*defModT1, calcularForcaBase(time2, "def")*defModT2);
-    console.log(`${ataqueTime1} x ${ataqueTime2}`);
-    console.log(`${meiocampoTime1} x ${meiocampoTime2}`);
-    console.log(`${defesaTime1} x ${defesaTime2}`);
+    let [ataqueTime1, ataqueTime2] = converterParaPorcentagem(calcularForcaBase(time1, "atk")*atkModT1, calcularForcaBase(time2, "atk")*atkModT2);
+    let [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForcaBase(time1, "mc")*mcModT1, calcularForcaBase(time2, "mc")*mcModT2);
+    let [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForcaBase(time1, "def")*defModT1, calcularForcaBase(time2, "def")*defModT2);
     
 
     let chanceEvento = 23 + chanceEventoMod;

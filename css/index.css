@@ -62,15 +62,6 @@ main{
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
-#taticasTime{
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-}
-.taticaDiv{
-    display: flex;
-    flex-direction: column;
-}
 .jogadoresTabela{
     padding: 2%;
     width: 96%;
@@ -156,6 +147,15 @@ main{
     display: flex;
     width: 15%;
     justify-content: space-between;
+}
+#taticasTime{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+.taticaDiv{
+    display: flex;
+    flex-direction: column;
 }
 #jogadoresTabela{
     width: 100%;
@@ -254,5 +254,19 @@ input[type="color"]{
     }
     #overTh{
         width: 25%;
+    }
+    #taticasTime{
+        flex-direction: column;
+    }
+    .taticaDiv{
+        justify-content: space-around;
+        flex-direction: row;
+        margin-bottom: 5px;
+    }
+    .taticaDiv label{
+        width: 40%;
+    }
+    .taticaDiv select{
+        width: 60%;
     }
 }
