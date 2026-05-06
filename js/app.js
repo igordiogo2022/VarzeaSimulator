@@ -690,7 +690,8 @@ function definirBackground(timeMandante){
         "Trapper's FC": "https://i.imgur.com/Rcdiz6H.jpeg",
         "Devedores FC": "https://i.imgur.com/Rz6Dd59.jpeg",
         "Flarinthians FC": "https://i.imgur.com/V88IQaq.jpeg",
-        "Olaria Tietê FC": "https://i.imgur.com/wYPtyri.jpeg"
+        "Olaria Tietê FC": "https://i.imgur.com/wYPtyri.jpeg",
+        "Atl. Várzeanos": "https://i.imgur.com/x2FB1Ll.png"
     };
     
     if(listaTimesCollectors[timeMandante]){
