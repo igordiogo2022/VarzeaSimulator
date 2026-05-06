@@ -256,28 +256,6 @@ function obterDadosFormulario(idTime){
     return time;
 }
 
-async function importarPacote(){
-    const pacoteArquivo = document.querySelector("#pacote").files[0];
-    const conteudo = await pacoteArquivo.text();
-    let pacote = JSON.parse(conteudo);
-
-    for(let time of pacote){
-        if(!listaTimes.includes(time)){
-            if(listaTimes.length == 0){
-                idTime = 0;
-            }else{
-                idTime = listaTimes[listaTimes.length-1].id+1;
-            }
-            time.id = idTime;
-            
-            listaTimes.push(time);
-            localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
-        }
-    }
-
-    irParaPagina("index.html")
-}
-
 function atualizarFormularioEdicao(id, acao){
     const btnConfirmar = document.querySelector("#btnConfirmar-formulario");
     if(acao=="carregar"){
@@ -619,7 +597,29 @@ function limparEventos(){
     placarT2 = document.querySelector("#placarTime2").innerHTML = "0";
 }
 
-function exportarTimesTXT(){
+async function importarPacote(){
+    const pacoteArquivo = document.querySelector("#pacote").files[0];
+    const conteudo = await pacoteArquivo.text();
+    let pacote = JSON.parse(conteudo);
+
+    for(let time of pacote){
+        if(!listaTimes.includes(time)){
+            if(listaTimes.length == 0){
+                idTime = 0;
+            }else{
+                idTime = listaTimes[listaTimes.length-1].id+1;
+            }
+            time.id = idTime;
+            
+            listaTimes.push(time);
+            localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
+        }
+    }
+
+    irParaPagina("index.html")
+}
+
+function exportarPacote(){
     let timesSemId = [];
 
     for(let time of listaTimes){
@@ -627,6 +627,9 @@ function exportarTimesTXT(){
             nome: time.nome,
             cor1: time.cor1,
             cor2: time.cor2,
+            estiloJogo: time.estiloJogo,
+            modoAtaque: time.modoAtaque,
+            modoDefesa: time.modoDefesa,
             jogadores: time.jogadores
         };
 
