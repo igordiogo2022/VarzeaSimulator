@@ -692,7 +692,8 @@ function definirBackground(timeMandante){
         "Dylwas FC": "https://i.imgur.com/eUYIHKL.png",
         "Olaria Tietê FC": "https://i.imgur.com/wYPtyri.jpeg",
         "Atl. Várzeanos": "https://i.imgur.com/x2FB1Ll.png",
-        "Odiados FC": "https://i.imgur.com/6jJOENo.png"
+        "Odiados FC": "https://i.imgur.com/6jJOENo.png",
+        "Jabatiuma FC": "https://i.imgur.com/kaSK1es.png"
     };
     
     if(listaTimesCollectors[timeMandante]){
