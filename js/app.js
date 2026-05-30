@@ -682,7 +682,7 @@ function definirBackground(timeMandante){
         "Sweetie Fox Fc": "https://i.imgur.com/DqFsLEv.jpeg",
         "Bagres FC": "https://i.imgur.com/1vtSNE1.jpeg",
         "Anaconda Mineira": "https://i.imgur.com/BEjyq3g.jpeg",
-        "Carlos FC": "https://i.imgur.com/wvLq987.jpeg",
+        "Carlos FC": "https://i.imgur.com/CaqWGam.png",
         "Team Flash": "https://i.imgur.com/ywjwv4s.jpeg",
         "Danados FC": "https://i.imgur.com/FAKwxbM.jpeg",
         "Magic All Stars": "https://i.imgur.com/CugH1FX.jpeg",
@@ -693,7 +693,9 @@ function definirBackground(timeMandante){
         "Olaria Tietê FC": "https://i.imgur.com/wYPtyri.jpeg",
         "Atl. Várzeanos": "https://i.imgur.com/x2FB1Ll.png",
         "Odiados FC": "https://i.imgur.com/6jJOENo.png",
-        "Jabatiuma FC": "https://i.imgur.com/kaSK1es.png"
+        "Jabatiuma FC": "https://i.imgur.com/kaSK1es.png",
+        "Bet FC": "https://i.imgur.com/Pgfpv1m.png",
+        "Davi FC": "https://i.imgur.com/sEAvd1Q.png"
     };
     
     if(listaTimesCollectors[timeMandante]){
