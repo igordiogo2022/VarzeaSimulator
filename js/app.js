@@ -1,5 +1,9 @@
 const listaTimes = JSON.parse(localStorage.getItem("listaTimes")||"[]");
 
+function $(seletor){
+    return document.querySelector(seletor);
+}
+
 function carregarTimes(){
     for(let time of listaTimes){
         let atributosJogador = ["pos", "nome", "over"];
@@ -8,8 +12,8 @@ function carregarTimes(){
         let tituloCard = document.createElement("p");
         let jogadoresTabela = document.createElement("table");
         let botoesCard = document.createElement("div");
-        let editarBtn = document.createElement("button");
-        let deletarBtn = document.createElement("button");
+        let botaoEditar = document.createElement("button");
+        let botaoDeletar = document.createElement("button");
 
         tituloCard.classList.add("tituloCard");
         tituloCard.textContent = time.nome;
@@ -28,26 +32,26 @@ function carregarTimes(){
             }
             jogadoresTabela.appendChild(tr);
         }
-        editarBtn.classList.add("editarBtn");
-        editarBtn.textContent = "Editar";
-        editarBtn.setAttribute("onclick", `atualizarFormularioEdicao(${time.id}, "carregar")`);
+        botaoEditar.classList.add("botaoEditar");
+        botaoEditar.textContent = "Editar";
+        botaoEditar.setAttribute("onclick", `atualizarFormularioEdicao(${time.id}, "carregar")`);
 
-        deletarBtn.classList.add("deletarBtn");
-        deletarBtn.id = "deletarBtn"+time.id;
-        deletarBtn.textContent = "Deletar";
-        deletarBtn.setAttribute("onclick", "preDeletarTime("+time.id+")");
-        
+        botaoDeletar.classList.add("botaoDeletar");
+        botaoDeletar.id = "botaoDeletar"+time.id;
+        botaoDeletar.textContent = "Deletar";
+        botaoDeletar.setAttribute("onclick", "preDeletarTime("+time.id+")");
+         
         botoesCard.classList.add("botoesCard");
         botoesCard.style.background = `linear-gradient(45deg, ${time.cor1} 60%, ${time.cor2})`;
-        botoesCard.appendChild(editarBtn);
-        botoesCard.appendChild(deletarBtn);
+        botoesCard.appendChild(botaoEditar);
+        botoesCard.appendChild(botaoDeletar);
         
         cardTime.classList.add("cardTime");
         cardTime.appendChild(tituloCard);
         cardTime.appendChild(jogadoresTabela);
         cardTime.appendChild(botoesCard);
 
-        const timesDiv = document.querySelector("#timesDiv");
+        const timesDiv = $("#timesDiv");
         timesDiv.appendChild(cardTime);
     }
 }
@@ -59,7 +63,7 @@ function iniciarPaginaPartida(idSelect1, idSelect2){
 }
 
 function carregarTimesSelect(idSelect1, idSelect2){
-    timesSelect = [document.querySelector(idSelect1), document.querySelector(idSelect2)]
+    timesSelect = [$(idSelect1), $(idSelect2)]
 
     for(let time of listaTimes){
         for(let i=0;i<2;i++){
@@ -75,12 +79,12 @@ function carregarTimesSelect(idSelect1, idSelect2){
 }
 
 function abrirMenu(){
-    const menu = document.querySelector("menu");
+    const menu = $("menu");
     menu.classList.add("menuAberto");
 }
 
 function fecharMenu(){
-    const menu = document.querySelector("menu");
+    const menu = $("menu");
     menu.classList.remove("menuAberto");
 }
 
@@ -89,10 +93,10 @@ function irParaPagina(pagina){
 }
 
 function abrirJanela(janela){
-    const body =  document.querySelector("body");
-    const janelaModal = document.querySelector("#janela-modal");
+    const body =  $("body");
+    const janelaModal = $("#janela-modal");
     
-    let div = document.querySelector(`#${janela}Div`);
+    let div = $(`#${janela}Div`);
     div.style.display = "flex";
     if(janela=="transferencia"){carregarTimesSelect("#transferencia-time1", "#transferencia-time2")};
             
@@ -102,15 +106,15 @@ function abrirJanela(janela){
 }
 
 function fecharJanela(janela){
-    const body =  document.querySelector("body");
-    const janelaModal = document.querySelector("#janela-modal");
+    const body =  $("body");
+    const janelaModal = $("#janela-modal");
     
-    let div = document.querySelector(`#${janela}Div`);
-    div.style.display = "none";
-
     if(janela=="formulario"){
         atualizarFormularioEdicao("", "descarregar");
     }
+
+    let div = $(`#${janela}Div`);
+    div.style.display = "none";
     
     janelaModal.style.display = "none";
     window.scrollTo({top: 0});
@@ -164,18 +168,18 @@ function deletarTime(id){
 }
 
 function preDeletarTime(id){
-    const deletarBtn = document.querySelector("#deletarBtn"+id);
-    deletarBtn.textContent = "Confirmar";
-    deletarBtn.style.background = "linear-gradient(rgb(255, 0, 13), rgb(216, 0, 0)";
-    deletarBtn.setAttribute("onclick", "deletarTime("+id+")");
+    const botaoDeletar = $("#botaoDeletar"+id);
+    botaoDeletar.textContent = "Confirmar";
+    botaoDeletar.style.background = "linear-gradient(rgb(255, 0, 13), rgb(216, 0, 0)";
+    botaoDeletar.setAttribute("onclick", "deletarTime("+id+")");
 }
 
 function transferirJogador(){
     
-    const idTime1 = document.querySelector("#transferencia-time1").value;
-    const idTime2 = document.querySelector("#transferencia-time2").value;
-    const idJogador1 = document.querySelector("#transferencia-jogador1").value;
-    const idJogador2 = document.querySelector("#transferencia-jogador2").value;
+    const idTime1 = $("#transferencia-time1").value;
+    const idTime2 = $("#transferencia-time2").value;
+    const idJogador1 = $("#transferencia-jogador1").value;
+    const idJogador2 = $("#transferencia-jogador2").value;
     
     if(idJogador1=="nenhum" || idJogador2=="nenhum"){
         return alert("Complete todos os campos.");
@@ -195,8 +199,8 @@ function transferirJogador(){
 }
 
 function carregarJogadoresSelect(idSelectTime, idSelectJogador){
-    const selectJogador = document.querySelector(idSelectJogador);
-    const idTime = document.querySelector(idSelectTime).value;
+    const selectJogador = $(idSelectJogador);
+    const idTime = $(idSelectTime).value;
     let time = listaTimes.find(item => item.id == idTime);
     
     const opcoesJogadores = selectJogador.querySelectorAll(".optJogador");
@@ -218,12 +222,12 @@ function carregarJogadoresSelect(idSelectTime, idSelectJogador){
 }
 
 function obterDadosFormulario(idTime){
-    const nomeTime = document.querySelector("#nomeTime-formulario").value;
-    const cor1Time = document.querySelector("#cor1-formulario").value;
-    const cor2Time = document.querySelector("#cor2-formulario").value;
-    const estiloJogoTime = document.querySelector("#estiloJogo").value;
-    const modoAtaqueTime = document.querySelector("#modoAtaque").value;
-    const modoDefesaTime = document.querySelector("#modoDefesa").value;
+    const nomeTime = $("#nomeTime-formulario").value;
+    const cor1Time = $("#cor1-formulario").value;
+    const cor2Time = $("#cor2-formulario").value;
+    const estiloJogoTime = $("#estiloJogo").value;
+    const modoAtaqueTime = $("#modoAtaque").value;
+    const modoDefesaTime = $("#modoDefesa").value;
     
     let listajogadores = [];
     for(let i=0;i<6;i++){
@@ -257,11 +261,11 @@ function obterDadosFormulario(idTime){
 }
 
 function atualizarFormularioEdicao(id, acao){
-    const btnConfirmar = document.querySelector("#btnConfirmar-formulario");
+    const botaoConfirmar = $("#botaoConfirmarFormulario");
     if(acao=="carregar"){
         time = listaTimes.find(item => item.id == id);
 
-        btnConfirmar.setAttribute("onclick", "editarTime("+id+")");
+        botaoConfirmar.setAttribute("onclick", "editarTime("+id+")");
     }else if(acao=="descarregar"){
         time = {
             id: "",
@@ -279,16 +283,16 @@ function atualizarFormularioEdicao(id, acao){
                 {pos: "nenhuma",nome: "",over: ""}]
             }
 
-        btnConfirmar.setAttribute("onclick", "registrarTime()");
+        botaoConfirmar.setAttribute("onclick", "registrarTime()");
     }
     
     abrirJanela('formulario');  
-    document.querySelector("#nomeTime-formulario").value = time.nome;
-    document.querySelector("#cor1-formulario").value = time.cor1;
-    document.querySelector("#cor2-formulario").value = time.cor2;
-    const estiloJogoTime = document.querySelector("#estiloJogo");
-    const modoAtaqueTime = document.querySelector("#modoAtaque");
-    const modoDefesaTime = document.querySelector("#modoDefesa");
+    $("#nomeTime-formulario").value = time.nome;
+    $("#cor1-formulario").value = time.cor1;
+    $("#cor2-formulario").value = time.cor2;
+    const estiloJogoTime = $("#estiloJogo");
+    const modoAtaqueTime = $("#modoAtaque");
+    const modoDefesaTime = $("#modoDefesa");
 
     estiloJogoTime.value = !time.estiloJogo ? "nenhum" : time.estiloJogo;
     modoAtaqueTime.value = !time.modoAtaque ? "nenhum" : time.modoAtaque;
@@ -303,16 +307,16 @@ function atualizarFormularioEdicao(id, acao){
 }
 
 function chamarSimulacao(){
-    const main = document.querySelector("main");
-    const estatisticasDiv = document.querySelector("#estatisticasDiv");
-    const btnProximaPartida = document.querySelector("#btnProximaPartida");
-    main.appendChild(btnProximaPartida);
+    const main = $("main");
+    const estatisticasDiv = $("#estatisticasDiv");
+    const botaoProximaPartida = $("#botaoProximaPartida");
+    main.appendChild(botaoProximaPartida);
     main.appendChild(estatisticasDiv);
     estatisticasDiv.style.display = "none";
-    btnProximaPartida.style.display = "none";
+    botaoProximaPartida.style.display = "none";
     
-    const idTime1 = document.querySelector("#time1").value; 
-    const idTime2 = document.querySelector("#time2").value;
+    const idTime1 = $("#time1").value; 
+    const idTime2 = $("#time2").value;
     
     let time1 = listaTimes.find(item => item.id == idTime1);
     let time2 = listaTimes.find(item => item.id == idTime2);
@@ -330,14 +334,14 @@ function chamarSimulacao(){
 
     fecharJanela("configuracoesPartida");
     
-    let registroPartida = simulacaoPartida(document.querySelector("#estilo").value,
-    document.querySelector("#clima").value, 
-    document.querySelector("#torcida").value, 
-    document.querySelector("#moralTime1").value, 
-    document.querySelector("#moralTime2").value,
-    document.querySelector("#jogoDecisivo").checked,
-    parseInt(document.querySelector("#placarIdaTime1").value),
-    parseInt(document.querySelector("#placarIdaTime2").value),
+    let registroPartida = simulacaoPartida($("#estilo").value,
+    $("#clima").value, 
+    $("#torcida").value, 
+    $("#moralTime1").value, 
+    $("#moralTime2").value,
+    $("#jogoDecisivo").checked,
+    parseInt($("#placarIdaTime1").value),
+    parseInt($("#placarIdaTime2").value),
     time1, time2);
 
     if(collectorsModeEstaAtivo){
@@ -346,19 +350,19 @@ function chamarSimulacao(){
     
     limparEventos();
     exibirTimesPlacar(time1, time2);
-    rodarPartida(registroPartida,  document.querySelector("#velocidade").value, time1, time2);
+    rodarPartida(registroPartida,  $("#velocidade").value, time1, time2);
 }
 
 function rodarPartida(registroPartida, velocidadePartida, time1, time2){
     let [sumula, tempoPartida, sumulaPenaltis] = registroPartida;
     
-    const eventos = document.querySelector("#eventos");
-    const placarT1 = document.querySelector("#placarTime1");
-    const placarT2 = document.querySelector("#placarTime2");
-    const audioTorcida = document.querySelector("#audioTorcida");
-    const audioApito = document.querySelector("#audioApito");
+    const eventos = $("#eventos");
+    const placarT1 = $("#placarTime1");
+    const placarT2 = $("#placarTime2");
+    const audioTorcida = $("#audioTorcida");
+    const audioApito = $("#audioApito");
 
-    const timer = document.querySelector("#timer");
+    const timer = $("#timer");
     let minuto = 0;
     let varIntervem = false;
     let eventoVar;
@@ -463,8 +467,8 @@ function rodarPartida(registroPartida, velocidadePartida, time1, time2){
 }
 
 function exibirTimesPlacar(time1, time2){
-    const time1Placar = document.querySelector("#time1Placar");
-    const time2Placar = document.querySelector("#time2Placar");
+    const time1Placar = $("#time1Placar");
+    const time2Placar = $("#time2Placar");
     
     time1Placar.textContent = time1.nome;
     time1Placar.style.background = `linear-gradient(90deg, ${time1.cor1}, ${time1.cor2}, ${time1.cor1})`;
@@ -481,57 +485,57 @@ function exibirTimesPlacar(time1, time2){
 
 function finalizarPartida(time1, time2, sumula){
     carregarEstatisticas(time1, time2, sumula);
-    document.querySelector("#eventos");
-    const btnProximaPartida = document.querySelector("#btnProximaPartida");
-    eventos.appendChild(btnProximaPartida);
-    btnProximaPartida.style.display = "block";
+    $("#eventos");
+    const botaoProximaPartida = $("#botaoProximaPartida");
+    eventos.appendChild(botaoProximaPartida);
+    botaoProximaPartida.style.display = "block";
 }
 
 function carregarEstatisticas(time1, time2, sumula){
-    const eventos = document.querySelector("#eventos");
-    const estatisticasDiv = document.querySelector("#estatisticasDiv");
+    const eventos = $("#eventos");
+    const estatisticasDiv = $("#estatisticasDiv");
     eventos.appendChild(estatisticasDiv);
     estatisticasDiv.style.display = "flex";
     
-    const time1Th = document.querySelector("#time1Estatisticas");
-    const time2Th = document.querySelector("#time2Estatisticas");
+    const time1Th = $("#time1Estatisticas");
+    const time2Th = $("#time2Estatisticas");
     time1Th.textContent = time1.nome;
     time2Th.textContent = time2.nome;
     
-    const posseTime1Td = document.querySelector("#posseTime1");
-    const posseTime2Td = document.querySelector("#posseTime2");
+    const posseTime1Td = $("#posseTime1");
+    const posseTime2Td = $("#posseTime2");
     let [posseT1, posseT2] = converterParaPorcentagem(sumula.filter(evento => evento.time==time1).length, sumula.filter(evento => evento.time==time2).length);
     posseTime1Td.textContent = posseT1+"%";
     posseTime2Td.textContent = posseT2+"%";
     
-    const defesasGoleiroTime1Td = document.querySelector("#defesasGoleiroTime1");
-    const defesasGoleiroTime2Td = document.querySelector("#defesasGoleiroTime2");
+    const defesasGoleiroTime1Td = $("#defesasGoleiroTime1");
+    const defesasGoleiroTime2Td = $("#defesasGoleiroTime2");
     let defesasTime1 = sumula.filter(evento => evento.tipo=="defesaGoleiro" || evento.tipo=="superDefesaGoleiro").filter(evento => evento.time==time1).length;
     let defesasTime2 = sumula.filter(evento => evento.tipo=="defesaGoleiro" || evento.tipo=="superDefesaGoleiro").filter(evento => evento.time==time2).length;
     defesasGoleiroTime1Td.textContent = defesasTime1;
     defesasGoleiroTime2Td.textContent = defesasTime2;
     
-    const chutesTime1Td = document.querySelector("#chutesTime1");
-    const chutesTime2Td = document.querySelector("#chutesTime2");
+    const chutesTime1Td = $("#chutesTime1");
+    const chutesTime2Td = $("#chutesTime2");
     chutesTime1Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora" || evento.tipo=="varGol").filter(evento => evento.time==time1).length+defesasTime2;
     chutesTime2Td.textContent = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="fora" || evento.tipo=="varGol").filter(evento => evento.time==time2).length+defesasTime1;
     
-    const chutesForaTime1Td = document.querySelector("#chutesForaTime1");
-    const chutesForaTime2Td = document.querySelector("#chutesForaTime2");
+    const chutesForaTime1Td = $("#chutesForaTime1");
+    const chutesForaTime2Td = $("#chutesForaTime2");
     chutesForaTime1Td.textContent = sumula.filter(evento => evento.tipo=="fora").filter(evento => evento.time==time1).length;
     chutesForaTime2Td.textContent = sumula.filter(evento => evento.tipo=="fora").filter(evento => evento.time==time2).length;
     
-    const cartoesTime1Td = document.querySelector("#cartoesTime1");
-    const cartoesTime2Td = document.querySelector("#cartoesTime2");
+    const cartoesTime1Td = $("#cartoesTime1");
+    const cartoesTime2Td = $("#cartoesTime2");
     cartoesTime1Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time1).length;
     cartoesTime2Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time2).length;
 }
 
 function exibirPenaltis(sumulaPenaltis, time1, time2){
-    const placarT1 = document.querySelector("#placarTime1");
-    const placarT2 = document.querySelector("#placarTime2");
-    const audioTorcida = document.querySelector("#audioTorcida");
-    const audioTorcidaDesapontada = document.querySelector("#audioTorcidaDesapontada");
+    const placarT1 = $("#placarTime1");
+    const placarT2 = $("#placarTime2");
+    const audioTorcida = $("#audioTorcida");
+    const audioTorcidaDesapontada = $("#audioTorcidaDesapontada");
 
     return new Promise((resolve) => {
         let contadorInterval = 0;
@@ -592,13 +596,13 @@ function obterTomCor(cor){
 }
 
 function limparEventos(){
-    document.querySelector("#eventos").innerHTML = "";
-    placarT1 = document.querySelector("#placarTime1").innerHTML = "0";
-    placarT2 = document.querySelector("#placarTime2").innerHTML = "0";
+    $("#eventos").innerHTML = "";
+    placarT1 = $("#placarTime1").innerHTML = "0";
+    placarT2 = $("#placarTime2").innerHTML = "0";
 }
 
 async function importarPacote(){
-    const pacoteArquivo = document.querySelector("#pacote").files[0];
+    const pacoteArquivo = $("#pacote").files[0];
     const conteudo = await pacoteArquivo.text();
     let pacote = JSON.parse(conteudo);
 
@@ -674,7 +678,7 @@ function ativarCollectorsMode(){
 }
 
 function definirBackground(timeMandante){
-    const body = document.querySelector("body");
+    const body = $("body");
 
     listaTimesCollectors = {
         "Jumentus FC": "https://i.imgur.com/NQrjATk.jpeg",

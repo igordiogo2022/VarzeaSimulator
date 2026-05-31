@@ -6,7 +6,7 @@ body{
     position: relative;
     color: white;
 }
-#btnDuvida{
+#botaoDuvida{
     position: absolute;
     color: white;
     background-color: #00000000;
@@ -66,7 +66,7 @@ input[type="number"]{
 .placarIda{
     display: none;
 }
-#iniciarPartidaBtn, #btnProximaPartida{
+#botaoIniciarPartida, #botaoProximaPartida{
     width: 60%;
     margin: 1% 20%;
     height: 5vh;
@@ -76,11 +76,11 @@ input[type="number"]{
     border: 0;
     border-radius: 6px;
 }
-#iniciarPartidaBtn:hover, #btnProximaPartida:hover{
+#botaoIniciarPartida:hover, #botaoProximaPartida:hover{
     filter: brightness(0.9);
     transform: scale(1.05);
 }
-#btnProximaPartida{
+#botaoProximaPartida{
     margin-top: 2%;
     width: 40%;
 }

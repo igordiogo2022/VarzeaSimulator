@@ -31,6 +31,11 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
     let [ataqueTime1, ataqueTime2] = converterParaPorcentagem(calcularForcaBase(time1, "atk")*atkModT1, calcularForcaBase(time2, "atk")*atkModT2);
     let [meiocampoTime1, meiocampoTime2] = converterParaPorcentagem(calcularForcaBase(time1, "mc")*mcModT1, calcularForcaBase(time2, "mc")*mcModT2);
     let [defesaTime1, defesaTime2] = converterParaPorcentagem(calcularForcaBase(time1, "def")*defModT1, calcularForcaBase(time2, "def")*defModT2);
+
+    console.log("-");
+    console.log(ataqueTime1, meiocampoTime1, defesaTime1);
+    console.log(ataqueTime2, meiocampoTime2, defesaTime2);
+    
     
 
     let chanceEvento = 23 + chanceEventoMod;
@@ -253,7 +258,7 @@ function calcularForcaBase(time, forca){
         valorFinal += (valor*peso);
     }
 
-    valorFinal = valorFinal**2;
+    valorFinal = valorFinal**3.5;
     
     return valorFinal / pesoIdeal;
 }
