@@ -681,25 +681,21 @@ function definirBackground(timeMandante){
     const body = $("body");
 
     listaTimesCollectors = {
-        "Jumentus FC": "https://i.imgur.com/NQrjATk.jpeg",
-        "Safados FC": "https://i.imgur.com/9OrE0n4.jpeg",
-        "Sweetie Fox Fc": "https://i.imgur.com/DqFsLEv.jpeg",
-        "Bagres FC": "https://i.imgur.com/1vtSNE1.jpeg",
-        "Anaconda Mineira": "https://i.imgur.com/BEjyq3g.jpeg",
+        "Safados FC": "https://i.imgur.com/mh3bRqV.png",
+        "Anaconda Mineira": "https://i.imgur.com/rpFpNus.png",
         "Carlos FC": "https://i.imgur.com/CaqWGam.png",
-        "Team Flash": "https://i.imgur.com/ywjwv4s.jpeg",
         "Danados FC": "https://i.imgur.com/FAKwxbM.jpeg",
         "Magic All Stars": "https://i.imgur.com/CugH1FX.jpeg",
-        "Dinasty FC": "https://i.imgur.com/pHlQBGH.jpeg",
-        "Trapper's FC": "https://i.imgur.com/Rcdiz6H.jpeg",
-        "Renegados FC": "https://i.imgur.com/rp9auhU.png",
-        "Dylwas FC": "https://i.imgur.com/eUYIHKL.png",
+        "Renegados FC": "https://i.imgur.com/caLNRG7.png",
         "Olaria Tietê FC": "https://i.imgur.com/wYPtyri.jpeg",
         "Atl. Várzeanos": "https://i.imgur.com/x2FB1Ll.png",
-        "Odiados FC": "https://i.imgur.com/6jJOENo.png",
         "Jabatiuma FC": "https://i.imgur.com/kaSK1es.png",
-        "Bet FC": "https://i.imgur.com/Pgfpv1m.png",
-        "Davi FC": "https://i.imgur.com/sEAvd1Q.png"
+        "Davi FC": "https://i.imgur.com/sEAvd1Q.png",
+        "Sinistros FC": "https://i.imgur.com/J4tLOOd.png",
+        "Geral Sabe FC":"https://i.imgur.com/7wc3F9c.png",
+        "Maconharia do botafogo":"https://i.imgur.com/uw7WmIN.png",
+        "Kauanverse":"https://i.imgur.com/hRkb025.png",
+        "Batistuta FC":"https://i.imgur.com/2DkyfbB.png"
     };
     
     if(listaTimesCollectors[timeMandante]){
