@@ -37,8 +37,6 @@ function migrarDados1Para2() {
 
         for (const jogadorAntigo of timeAntigo.jogadores) {
 
-            console.log(jogadorAntigo);
-            console.log(jogadorAntigo.nome);
             
             const jogadorNovo = {
                 id: idJogador,
@@ -49,7 +47,6 @@ function migrarDados1Para2() {
                 pos: jogadorAntigo.pos
             };
             
-            console.log(jogadorNovo);
             
             
             jogadores.push(jogadorNovo);
@@ -241,7 +238,6 @@ function editarTime(){
     const modoAtaqueTime = $("#modoAtaque").value;
     const modoDefesaTime = $("#modoDefesa").value;
     const formacao = $("#formacao").value;
-    console.log(formacao);
 
     
     if(!nomeTime || !cor1Time || !cor2Time || estiloJogoTime=="nenhum" || modoAtaqueTime=="nenhum" || modoDefesaTime=="nenhum"){
@@ -354,7 +350,6 @@ function carregarJogadores(jogadores){
     for (const jogador of jogadores){
         time = listaTimes.find(time => time.id==jogador.time);
         
-        console.log(time);
 
         conteudo += `<tr>
         <td>${jogador.nome}</td>
@@ -476,7 +471,6 @@ function chamarSimulacao(){
         return alert(`O time(${time2.nome}) não está com táticas definidas, edite o time e defina suas táticas.`);
     }
 
-    
     time1 = verificarFormacao(time1);
     if(!time1){
         return alert(`O time 1 está com a formação inválida.`);
@@ -708,7 +702,6 @@ function carregarPaginaTime(atualizarFormacao){
     
     if(atualizarFormacao){
         formacao = $("#formacao").value;
-        console.log(formacao);
     }else{
         $("#formacao").value = formacao;
     }
@@ -998,13 +991,15 @@ function definirBackground(timeMandante){
 function verificarFormacao(time){
     let jogadores = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id==id)).filter(jogador => jogador.pos);
 
+    timeVerificado = {...time};
+
     if(jogadores.length!=6){
         return null;
     }else{
-        time.jogadores = jogadores;
+        timeVerificado.jogadores = jogadores;
     }
     
-    return time;
+    return timeVerificado;
 }
 
 function gerarId(lista){
