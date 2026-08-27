@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --cor1: #0C1420;
+    --cor2: #020B17;
+    --cor3: #3e48d3;
+    --cor4: #141C2A;
+    --cor5: #17202D;
+    --cor6: #a51414;
+    --cor7: #00b800;
+    
+    --fonte: "Poppins", "sans-serif";
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cor1);
+    color: white;
+    font-family: var(--fonte);
+}
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    letter-spacing: 1.5px;
+    width: 94%;
+    padding: 0.5% 3%;
+    background-color: var(--cor2);
+}
+
+#botao-home{
+    color: white;
+    background-color: #00000000;
+    border: 0;
+    font-size: 28px;
+}
+
+#formulario{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2% 0;
+    width: 100%;
+}
+
+.formulario-input{
+    display: flex;
+    justify-content: space-between;
+    width: 30%;
+    margin-bottom: 1%;
+}
+
+.formulario-input input, .formulario-input select{
+    width: 50%;
+    background-color: #00000000;
+    border: 1px solid var(--cor3);
+    border-radius: 6px;
+    color: white;
+    padding-left: 1%;
+}
+
+.formulario-input option{
+    color: black;
+}
+
+#botao-adicionar-jogador{
+    background-color: var(--cor3);
+    color: white;
+    border: 1px solid var(--cor2);
+    border-radius: 6px;
+    padding: 0.5% 0;
+    width: 14%;
+    font-size: 17px;
+}
+
+thead{
+    background-color: var(--cor2);
+}
+
+td{
+    margin: 0 auto;
+    text-align: center;
+}
+
+tbody tr:nth-child(even){
+    background-color: var(--cor4);
+}
+
+img{
+    width: 75px;
+}
+
+.botao-tabela{
+    width: 80%;
+    height: 3vh;
+    font-size: 16px;
+    border: 0;
+    border-radius: 6px;
+    color: white;
+}
+
+.botao-tabela:hover{
+    scale: 1.02;
+}
+
+.botao-ver{
+    color: var(--cor7);
+}
+
+.botao-editar{
+    background-color: var(--cor3);
+}
+
+.botao-deletar{
+    background-color: var(--cor6);
+}

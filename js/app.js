@@ -1,4 +1,73 @@
+let versaoDados = Number(localStorage.getItem("versaoDados") || "1");
+
 const listaTimes = JSON.parse(localStorage.getItem("listaTimes")||"[]");
+const listaJogadores = JSON.parse(localStorage.getItem("listaJogadores")||"[]");
+
+if (versaoDados < 2){
+    migrarDados1Para2();
+    versaoDados = 2;
+    localStorage.setItem("versaoDados", versaoDados);
+}
+
+
+function migrarDados1Para2() {
+    const times = [];
+    const jogadores = [];
+    
+    let idJogador = 0;
+    
+    for (let i = 0; i < listaTimes.length; i++) {
+        
+        const timeAntigo = listaTimes[i];
+        
+        const timeNovo = {
+            id: String(i),
+            nome: timeAntigo.nome,
+            cor1: timeAntigo.cor1,
+            cor2: timeAntigo.cor2,
+            estiloJogo: timeAntigo.estiloJogo,
+            modoAtaque: timeAntigo.modoAtaque,
+            modoDefesa: timeAntigo.modoDefesa,
+            
+            // O modelo antigo não possui formação
+            formacao: null,
+            
+            jogadores: []
+        };
+
+        for (const jogadorAntigo of timeAntigo.jogadores) {
+
+            console.log(jogadorAntigo);
+            console.log(jogadorAntigo.nome);
+            
+            const jogadorNovo = {
+                id: idJogador,
+                nome: jogadorAntigo.nome,
+                over: jogadorAntigo.over,
+                time: String(i),
+                clube: String(i),
+                pos: jogadorAntigo.pos
+            };
+            
+            console.log(jogadorNovo);
+            
+            
+            jogadores.push(jogadorNovo);
+            
+            // O time passa a guardar somente o ID
+            timeNovo.jogadores.push(idJogador);
+            
+            idJogador++;
+        }
+        
+        times.push(timeNovo);
+    }
+    
+    localStorage.setItem("listaTimes", JSON.stringify(times));
+    localStorage.setItem("listaJogadores", JSON.stringify(jogadores));
+
+    window.location.reload();
+}
 
 function $(seletor){
     return document.querySelector(seletor);
@@ -7,40 +76,58 @@ function $(seletor){
 function carregarTimes(){
     for(let time of listaTimes){
         let atributosJogador = ["pos", "nome", "over"];
-
+        
         let cardTime = document.createElement("div");
         let tituloCard = document.createElement("p");
         let jogadoresTabela = document.createElement("table");
         let botoesCard = document.createElement("div");
         let botaoEditar = document.createElement("button");
         let botaoDeletar = document.createElement("button");
-
+        
         tituloCard.classList.add("tituloCard");
         tituloCard.textContent = time.nome;
         tituloCard.style.background = `linear-gradient(45deg, ${time.cor1} 50%, ${time.cor2})`;
         tituloCard.style.color = time.cor2;
-
+        
         jogadoresTabela.classList.add("jogadoresTabela");
         
-        for(let jogador of time.jogadores){
+        if (time.jogadores.length == 0){
             let tr = document.createElement("tr");
-
-            for(let atributo of atributosJogador){
-                let td = document.createElement("td");
-                td.textContent = jogador[atributo];
-                tr.appendChild(td);
-            }
+            
+            let td = document.createElement("td");
+            td.textContent = "Não há jogadores";
+            tr.appendChild(td);
+            
             jogadoresTabela.appendChild(tr);
         }
+        
+        const ordemPosicoes = ["GK", "ZG", "MC", "AT", null];
+        jogadores = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id === id));
+        
+        for (const posicao of ordemPosicoes){
+            for(const jogador of jogadores){
+                if(jogador.pos == posicao){
+                    let tr = document.createElement("tr");
+                    
+                    for(let atributo of atributosJogador){
+                        let td = document.createElement("td");
+                        td.textContent = jogador[atributo];
+                        tr.appendChild(td);
+                    }
+                    jogadoresTabela.appendChild(tr);        
+                }
+            }
+        }
+        
         botaoEditar.classList.add("botaoEditar");
         botaoEditar.textContent = "Editar";
-        botaoEditar.setAttribute("onclick", `atualizarFormularioEdicao(${time.id}, "carregar")`);
+        botaoEditar.setAttribute("onclick", `irParaPagina("time.html?id=${time.id}")`);
 
         botaoDeletar.classList.add("botaoDeletar");
         botaoDeletar.id = "botaoDeletar"+time.id;
         botaoDeletar.textContent = "Deletar";
         botaoDeletar.setAttribute("onclick", "preDeletarTime("+time.id+")");
-         
+        
         botoesCard.classList.add("botoesCard");
         botoesCard.style.background = `linear-gradient(45deg, ${time.cor1} 60%, ${time.cor2})`;
         botoesCard.appendChild(botaoEditar);
@@ -50,31 +137,38 @@ function carregarTimes(){
         cardTime.appendChild(tituloCard);
         cardTime.appendChild(jogadoresTabela);
         cardTime.appendChild(botoesCard);
-
+        
         const timesDiv = $("#timesDiv");
         timesDiv.appendChild(cardTime);
     }
 }
 
+function carregarPaginaJogadores(){
+    const inputNome = $("#nome-input");
+    inputNome.addEventListener("input", () => buscarJogadores());
+    
+    carregarTimesSelect('#clube-select');
+    carregarJogadores(listaJogadores);
+}
+
 function iniciarPaginaPartida(idSelect1, idSelect2){
     collectorsModeEstaAtivo = false;
-    carregarTimesSelect(idSelect1, idSelect2);
+    carregarTimesSelect(idSelect1);
+    carregarTimesSelect(idSelect2);
     abrirJanela("configuracoesPartida");
 }
 
-function carregarTimesSelect(idSelect1, idSelect2){
-    timesSelect = [$(idSelect1), $(idSelect2)]
-
+function carregarTimesSelect(idSelect){
+    let select = $(idSelect);
+    
     for(let time of listaTimes){
-        for(let i=0;i<2;i++){
-            let option = document.createElement("option");
-            option.textContent = time.nome;
-            option.value = time.id;
-            option.style.backgroundColor = time.cor1;
-            option.style.color = time.cor2;
-
-            timesSelect[i].appendChild(option);
-        }   
+        let option = document.createElement("option");
+        option.textContent = time.nome;
+        option.value = time.id;
+        option.style.backgroundColor = time.cor1;
+        option.style.color = time.cor2;
+        
+        select.appendChild(option);
     }
 }
 
@@ -98,7 +192,6 @@ function abrirJanela(janela){
     
     let div = $(`#${janela}Div`);
     div.style.display = "flex";
-    if(janela=="transferencia"){carregarTimesSelect("#transferencia-time1", "#transferencia-time2")};
             
     janelaModal.style.display = "flex";
     window.scrollTo({top: 0});
@@ -109,10 +202,6 @@ function fecharJanela(janela){
     const body =  $("body");
     const janelaModal = $("#janela-modal");
     
-    if(janela=="formulario"){
-        atualizarFormularioEdicao("", "descarregar");
-    }
-
     let div = $(`#${janela}Div`);
     div.style.display = "none";
     
@@ -139,21 +228,72 @@ function registrarTime(){
     window.location.reload();
 }
 
-function editarTime(id){
-    const time = obterDadosFormulario(id);
+function editarTime(){
+    const params = new URLSearchParams(window.location.search);
+    const idTime = params.get("id");
+
+    let timeAntes = listaTimes.find(time => time.id==idTime);
     
-    if(!time){
+    const nomeTime = $("#nomeTime").value;
+    const cor1Time = $("#cor1").value;
+    const cor2Time = $("#cor2").value;
+    const estiloJogoTime = $("#estiloJogo").value;
+    const modoAtaqueTime = $("#modoAtaque").value;
+    const modoDefesaTime = $("#modoDefesa").value;
+    const formacao = $("#formacao").value;
+    console.log(formacao);
+
+    
+    if(!nomeTime || !cor1Time || !cor2Time || estiloJogoTime=="nenhum" || modoAtaqueTime=="nenhum" || modoDefesaTime=="nenhum"){
         return alert("Não deixe campos incompletos ou táticas não definidas.");
     }
 
+    const posicoes = document.querySelectorAll(".posicao");
+
+    for (const posicao of posicoes){
+        jogadorHtml = posicao.querySelectorAll(".jogador");
+        if(jogadorHtml.length>1){
+            return alert("Existem mais de um jogador na mesma posição.");
+        } 
+        
+        posicaoJogador = posicao.classList[1];
+
+        if(jogadorHtml[0]){
+            jogador = listaJogadores.find(jogador => jogador.id==jogadorHtml[0].id);
+
+            jogador.pos = posicaoJogador;
+        }
+    }
+    
+    const reservaHtml = $("#reservasDiv");
+    const reservas = reservaHtml.querySelectorAll(".jogador");
+    for (const reserva of reservas){
+        jogador = listaJogadores.find(jogador => jogador.id==reserva.id);
+    
+        jogador.pos = null;
+    }
+
+    const timeAtualizado = {
+        id: idTime,
+        nome: nomeTime,     
+        cor1: cor1Time,
+        cor2: cor2Time,
+        estiloJogo: estiloJogoTime,
+        modoAtaque: modoAtaqueTime,
+        modoDefesa: modoDefesaTime,
+        formacao: formacao,
+        jogadores: timeAntes.jogadores
+    }
+
     for(let i=0;i<listaTimes.length;i++){
-        if(listaTimes[i].id == id){
-            listaTimes[i] = time;
+        if(listaTimes[i].id == idTime){
+            listaTimes[i] = timeAtualizado;
         }
     }
     
     localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
-    window.location.reload();
+    localStorage.setItem("listaJogadores", JSON.stringify(listaJogadores));
+    irParaPagina("index.html");
 }
 
 function deletarTime(id){
@@ -174,53 +314,6 @@ function preDeletarTime(id){
     botaoDeletar.setAttribute("onclick", "deletarTime("+id+")");
 }
 
-function transferirJogador(){
-    
-    const idTime1 = $("#transferencia-time1").value;
-    const idTime2 = $("#transferencia-time2").value;
-    const idJogador1 = $("#transferencia-jogador1").value;
-    const idJogador2 = $("#transferencia-jogador2").value;
-    
-    if(idJogador1=="nenhum" || idJogador2=="nenhum"){
-        return alert("Complete todos os campos.");
-    }
-
-    let time1 = listaTimes.find(item => item.id == idTime1);
-    let time2 = listaTimes.find(item => item.id == idTime2);
-    
-    const jogador1 = time1.jogadores[idJogador1]; 
-    const jogador2 = time2.jogadores[idJogador2]; 
-    
-    time1.jogadores[idJogador1] = {...jogador2, pos: jogador1.pos}; 
-    time2.jogadores[idJogador2] = {...jogador1, pos: jogador2.pos};
-    
-    localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
-    window.location.reload();
-}
-
-function carregarJogadoresSelect(idSelectTime, idSelectJogador){
-    const selectJogador = $(idSelectJogador);
-    const idTime = $(idSelectTime).value;
-    let time = listaTimes.find(item => item.id == idTime);
-    
-    const opcoesJogadores = selectJogador.querySelectorAll(".optJogador");
-    opcoesJogadores.forEach(opt => {
-        opt.remove()
-    });
-    
-    for(let i=0;i<=5;i++){
-        let jogador = time.jogadores[i];
-        let option = document.createElement("option");
-        option.classList.add("optJogador");
-        option.textContent = jogador.nome;
-        option.value = i;
-        option.style.backgroundColor = time.cor1;
-        option.style.color = time.cor2;
-
-        selectJogador.appendChild(option);
-    }
-}
-
 function obterDadosFormulario(idTime){
     const nomeTime = $("#nomeTime-formulario").value;
     const cor1Time = $("#cor1-formulario").value;
@@ -228,19 +321,6 @@ function obterDadosFormulario(idTime){
     const estiloJogoTime = $("#estiloJogo").value;
     const modoAtaqueTime = $("#modoAtaque").value;
     const modoDefesaTime = $("#modoDefesa").value;
-    
-    let listajogadores = [];
-    for(let i=0;i<6;i++){
-        const posJogador = document.querySelectorAll(".posicaoSelect")[i].value;
-        const nomeJogador = document.querySelectorAll(".nomePlayer")[i].value;
-        const overJogador = document.querySelectorAll(".overPlayer")[i].value;
-        
-        if(posJogador=="nenhuma" || !nomeJogador || !overJogador || estiloJogoTime=="nenhum" || modoAtaqueTime=="nenhum" || modoDefesaTime=="nenhum"){
-            return null;
-        }
-        
-        listajogadores.push({pos: posJogador, nome: nomeJogador, over: overJogador});
-    }    
     
     if(!nomeTime || !cor1Time || !cor2Time){
         return null;
@@ -254,56 +334,120 @@ function obterDadosFormulario(idTime){
         estiloJogo: estiloJogoTime,
         modoAtaque: modoAtaqueTime,
         modoDefesa: modoDefesaTime,
-        jogadores: listajogadores
+        jogadores: []
     }
     
     return time;
 }
 
-function atualizarFormularioEdicao(id, acao){
-    const botaoConfirmar = $("#botaoConfirmarFormulario");
-    if(acao=="carregar"){
-        time = listaTimes.find(item => item.id == id);
+function buscarJogadores(){
+    const valorBusca = $("#nome-input").value.toLowerCase();
 
-        botaoConfirmar.setAttribute("onclick", "editarTime("+id+")");
-    }else if(acao=="descarregar"){
-        time = {
-            id: "",
-            nome: "",
-            cor1: "#000000",
-            cor2: "#000000",
-            estiloJogo: "nenhum",
-            modoAtaque: "nenhum",
-            modoDefesa: "nenhum",
-            jogadores: [{pos: "GK",nome: "",over: ""},
-                {pos: "nenhuma",nome: "",over: ""},
-                {pos: "nenhuma",nome: "",over: ""},
-                {pos: "nenhuma",nome: "",over: ""},
-                {pos: "nenhuma",nome: "",over: ""},
-                {pos: "nenhuma",nome: "",over: ""}]
-            }
+    const jogadoresFiltrados = listaJogadores.filter(jogador => jogador.nome.toLowerCase().includes(valorBusca))
+    carregarJogadores(jogadoresFiltrados)
+}
 
-        botaoConfirmar.setAttribute("onclick", "registrarTime()");
+function carregarJogadores(jogadores){
+    conteudo = "";
+    let time;
+    
+    for (const jogador of jogadores){
+        time = listaTimes.find(time => time.id==jogador.time);
+        
+        console.log(time);
+
+        conteudo += `<tr>
+        <td>${jogador.nome}</td>
+        <td>${jogador.over}</td>
+        <td>${time.nome}</td>
+        <td><button class="botao-tabela botao-editar" onclick="carregarDadosFormularioJogador(${jogador.id})">Editar</button></td>
+        <td><button class="botao-tabela botao-deletar" onclick="preDeletar(${jogador.id}, 'deletarJogador')" data-id="${jogador.id}">Deletar</button></td>
+        </tr>`
     }
     
-    abrirJanela('formulario');  
-    $("#nomeTime-formulario").value = time.nome;
-    $("#cor1-formulario").value = time.cor1;
-    $("#cor2-formulario").value = time.cor2;
-    const estiloJogoTime = $("#estiloJogo");
-    const modoAtaqueTime = $("#modoAtaque");
-    const modoDefesaTime = $("#modoDefesa");
+    tbody = $("tbody");
+    tbody.innerHTML = conteudo;
+}
 
-    estiloJogoTime.value = !time.estiloJogo ? "nenhum" : time.estiloJogo;
-    modoAtaqueTime.value = !time.modoAtaque ? "nenhum" : time.modoAtaque;
-    modoDefesaTime.value = !time.modoDefesa ? "nenhum" : time.modoDefesa;
+function adicionarJogador(){
+    const nome = $("#nome-input").value;
+    const over = $("#over-input").value;
+    const clube = $("#clube-select").value;
+    
+    if (!nome || !clube){
+        return alert("Complete todos os campos.")
+    }
+    
+    const id = gerarId(listaJogadores);
 
-    for(let i=0;i<6;i++){
-        jogador = time.jogadores[i];
-        document.querySelectorAll(".posicaoSelect")[i].value = jogador.pos;
-        document.querySelectorAll(".nomePlayer")[i].value = jogador.nome;
-        document.querySelectorAll(".overPlayer")[i].value = jogador.over;
-    }    
+    time = listaTimes.find(time => time.id==clube);
+    time.jogadores.push(id);
+    
+    jogador = {
+        id: id,
+        nome: nome,
+        over: over, 
+        pos: null,
+        time: Number(clube),
+    }
+    
+    listaJogadores.push(jogador);
+
+    localStorage.setItem("listaJogadores", JSON.stringify(listaJogadores));
+    localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
+    window.location.reload();
+}
+
+function carregarDadosFormularioJogador(id){
+    const nome = $("#nome-input");
+    const over = $("#over-input");
+    const clube = $("#clube-select");
+    const botaoEditar = $("#botao-adicionar-jogador");
+    
+    const jogador = listaJogadores.find(jogador => jogador.id === id);
+    
+    nome.value = jogador.nome;
+    over.value = jogador.over;
+    clube.value = jogador.time;
+
+    botaoEditar.textContent = "Editar Jogador";
+    botaoEditar.onclick = () => editarJogador(id);
+}
+
+function editarJogador(id){
+    const nome = $("#nome-input").value;
+    const over = $("#over-input").value;
+    const clube = $("#clube-select").value;
+    
+    if (!nome || !clube){
+        return alert("Complete todos os campos.")
+    }
+    
+    const jogador = listaJogadores.find(jogador => jogador.id === id);
+    
+    timeAntigo = listaTimes.find(time => time.id==jogador.time);
+    indexParaRemover = timeAntigo.jogadores.findIndex(id => id==jogador.id);
+    timeAntigo.jogadores.splice(indexParaRemover, 1);
+
+    novoTime = listaTimes.find(time => time.id==clube);
+    novoTime.jogadores.push(id);
+    
+    jogador.nome = nome;
+    jogador.over = over;
+    jogador.time = clube;
+    
+    localStorage.setItem("listaJogadores", JSON.stringify(listaJogadores));
+    localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
+    window.location.reload();
+}
+
+function deletarJogador(id){
+    const index = listaJogadores.findIndex(jogador => jogador.id === id);
+    
+    listaJogadores.splice(index, 1);
+
+    localStorage.setItem("listaJogadores", JSON.stringify(listaJogadores));
+    window.location.reload();
 }
 
 function chamarSimulacao(){
@@ -330,6 +474,17 @@ function chamarSimulacao(){
     }
     if(!time2.estiloJogo || !time2.modoAtaque || !time2.modoDefesa){
         return alert(`O time(${time2.nome}) não está com táticas definidas, edite o time e defina suas táticas.`);
+    }
+
+    
+    time1 = verificarFormacao(time1);
+    if(!time1){
+        return alert(`O time 1 está com a formação inválida.`);
+    }
+    
+    time2 = verificarFormacao(time2);
+    if(!time2){
+        return alert(`O time 2 está com a formação inválida.`);
     }
 
     fecharJanela("configuracoesPartida");
@@ -531,6 +686,137 @@ function carregarEstatisticas(time1, time2, sumula){
     cartoesTime2Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time2).length;
 }
 
+function carregarPaginaTime(atualizarFormacao){
+    const params = new URLSearchParams(window.location.search);
+    const idTime = params.get("id");
+    
+    const time = listaTimes.find(item => item.id == idTime);
+
+    $("#nomeTime").value = time.nome;
+    $("#cor1").value = time.cor1;
+    $("#cor2").value = time.cor2;
+    
+    const estiloJogoTime = !time.estiloJogo ? "nenhum" : time.estiloJogo;
+    const modoAtaqueTime = !time.modoAtaque ? "nenhum" : time.modoAtaque;
+    const modoDefesaTime = !time.modoDefesa ? "nenhum" : time.modoDefesa;
+    let formacao = !time.formacao ? "221" : time.formacao;
+    
+    
+    $("#estiloJogo").value = estiloJogoTime;
+    $("#modoAtaque").value = modoAtaqueTime;
+    $("#modoDefesa").value = modoDefesaTime;
+    
+    if(atualizarFormacao){
+        formacao = $("#formacao").value;
+        console.log(formacao);
+    }else{
+        $("#formacao").value = formacao;
+    }
+
+    carregarCampoTaticoHtml(formacao);
+
+    let jogadoresDisponiveis = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id === id));
+    let posicoes = ["GK", "ZG", "MC", "AT"];
+    let posicaoAtual;
+    let jogadoresPorPosicao;
+
+    for(let i=0;i<4;i++){
+        if(i==0){
+            jogadoresPorPosicao = 1;
+        }else{
+            jogadoresPorPosicao = formacao[i-1];
+        }
+        posicaoAtual = posicoes[i];
+
+        posicoesPorLinhaHtml = document.querySelectorAll("."+posicaoAtual);
+
+        for(let n=0;n<jogadoresPorPosicao;n++){
+            jogador = jogadoresDisponiveis.find(jogador => jogador.pos==posicaoAtual);
+
+            if(jogador){
+                posicaoHtml = posicoesPorLinhaHtml[n];
+                posicaoHtml.innerHTML += `<div class="jogador" id=${jogador.id} draggable="true">
+                <span class="nomeJogador">${jogador.nome}</span>
+                <span class="overJogador">${jogador.over}</span>
+            </div>`;
+                idJogador = jogadoresDisponiveis.indexOf(jogador);
+                jogadoresDisponiveis.splice(idJogador, 1); 
+            }
+        }
+    }
+
+    
+    let conteudo = "";
+    for (const jogador1 of jogadoresDisponiveis){
+        conteudo += `<div class="jogador" draggable="true" id=${jogador1.id}>
+                <span class="nomeJogador">${jogador1.nome}</span>
+                <span class="overJogador">${jogador1.over}</span>
+            </div>`;
+    }
+
+    const reservasDiv = $("#reservasDiv");
+    reservasDiv.innerHTML += conteudo;
+
+    document.addEventListener("dragstart", (elemento) => {
+        elemento.target.classList.add("arrastando");
+    });
+    
+    document.addEventListener("dragend", (elemento) => {
+        elemento.target.classList.remove("arrastando");
+    });
+
+    let posicoesHtml = [...document.querySelectorAll(".posicao"),
+    $("#reservasDiv")];
+    
+    posicoesHtml.forEach((item) => {
+        item.addEventListener("dragover", (event) => {
+            event.preventDefault();
+        })
+
+        item.addEventListener("drop", () => {
+            const jogador = document.querySelector(".arrastando");
+
+            item.appendChild(jogador);
+        });
+    })
+}
+
+function carregarCampoTaticoHtml(formacao){
+    limparCampoTatico();
+
+    let posicoesAtaque = "";
+    let posicoesMeio = "";
+    let posicoesDefesa = "";
+    for (let i=0; i<formacao[2]; i++){
+        posicoesAtaque += `<div class="posicao AT">
+        <span class="funcao">Atacante</span>
+        </div>`;
+    }
+    $(".ataque").innerHTML = posicoesAtaque;
+    
+    for (let i=0; i<formacao[1]; i++){
+        posicoesMeio += `<div class="posicao MC">
+        <span class="funcao">Meio-Campo</span>
+        </div>`;
+    }
+    $(".meio").innerHTML = posicoesMeio;
+    
+    for (let i=0; i<formacao[0]; i++){
+        posicoesDefesa += `<div class="posicao ZG">
+        <span class="funcao">Zagueiro</span>
+        </div>`;
+    }
+    $(".defesa").innerHTML = posicoesDefesa;
+}
+
+function limparCampoTatico(){
+    const jogadores = document.querySelectorAll(".jogador");
+
+    for(const jogador of jogadores){
+        jogador.remove();
+    }
+}
+
 function exibirPenaltis(sumulaPenaltis, time1, time2){
     const placarT1 = $("#placarTime1");
     const placarT2 = $("#placarTime2");
@@ -602,52 +888,56 @@ function limparEventos(){
 }
 
 async function importarPacote(){
-    const pacoteArquivo = $("#pacote").files[0];
-    const conteudo = await pacoteArquivo.text();
-    let pacote = JSON.parse(conteudo);
-
-    for(let time of pacote){
-        if(!listaTimes.includes(time)){
-            if(listaTimes.length == 0){
-                idTime = 0;
-            }else{
-                idTime = listaTimes[listaTimes.length-1].id+1;
+    const dadosArquivo = $("#dados").files[0];
+    const conteudo = await dadosArquivo.text();
+    let dados = JSON.parse(conteudo);    
+    
+    if(!dados.versaoDados){
+        for(let time of dados){
+            if(!listaTimes.includes(time)){
+                if(listaTimes.length == 0){
+                    idTime = 0;
+                }else{
+                    idTime = listaTimes[listaTimes.length-1].id+1;
+                }
+                time.id = idTime;
+                
+                listaTimes.push(time);
+                localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
             }
-            time.id = idTime;
-            
-            listaTimes.push(time);
-            localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
         }
+        localStorage.setItem("versaoDados", 1);
+    }else{
+        localStorage.setItem("versaoDados", JSON.stringify(dados.versaoDados));
+        localStorage.setItem("listaTimes", JSON.stringify(dados.times));
+        localStorage.setItem("listaJogadores", JSON.stringify(dados.jogadores));
     }
 
     irParaPagina("index.html")
 }
 
 function exportarPacote(){
-    let timesSemId = [];
-
-    for(let time of listaTimes){
-        let novoTime = {
-            nome: time.nome,
-            cor1: time.cor1,
-            cor2: time.cor2,
-            estiloJogo: time.estiloJogo,
-            modoAtaque: time.modoAtaque,
-            modoDefesa: time.modoDefesa,
-            jogadores: time.jogadores
-        };
-
-        timesSemId.push(novoTime);
+    const conteudo = {
+        versaoDados: 2,
+        times: listaTimes,
+        jogadores: listaJogadores
     }
 
-    const json = JSON.stringify(timesSemId, null, 2);
+    const json = JSON.stringify(conteudo, null, 4);
 
-    const blob = new Blob([json], {type: "text/plain"});
-    const link = document.createElement("a");
+    const blob = new Blob([json],{
+        type: "application/json"
+    });
 
-    link.href = URL.createObjectURL(blob);
-    link.download = "times.txt";
-    link.click();
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "dados-varzea-simulator.json";
+
+    a.click()
+
+    URL.revokeObjectURL(url);
 }
 
 function deletarTodosDados(){
@@ -703,4 +993,24 @@ function definirBackground(timeMandante){
     }else{
         body.style.backgroundImage = "url(../img/background.png)";
     }
+}
+
+function verificarFormacao(time){
+    let jogadores = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id==id)).filter(jogador => jogador.pos);
+
+    if(jogadores.length!=6){
+        return null;
+    }else{
+        time.jogadores = jogadores;
+    }
+    
+    return time;
+}
+
+function gerarId(lista){
+    if (lista.length == 0){
+        return 0;
+    }
+    
+    return Number(lista[lista.length-1].id+1);
 }

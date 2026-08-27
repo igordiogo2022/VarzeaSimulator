@@ -44,11 +44,12 @@ main{
 }
 .cardTime{
     width: 90%;
+    height: fit-content;
     margin: 3%;
     background-color: var(--cor2);
     border-radius: 12px;
     padding: 2%;
-    box-shadow: 5px 5px 5px rgba(87, 87, 87, 0.185);
+    box-shadow: 5px 5px 5px #5757572f;
 }
 .tituloCard{
     padding: 2%;

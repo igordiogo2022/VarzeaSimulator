@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/jogadores.css">
+    <title>Jogadores</title>
+</head>
+<body onload="carregarPaginaJogadores()">
+    <header>
+        <a href="index.html" id="botao-home"><i class="fa-solid fa-house"></i></a>
+        <h2>Jogadores</h2>
+        <p></p>
+    </header>
+    <section id="formulario">
+        <div class="formulario-input">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome-input" autofocus>
+        </div>
+        <div class="formulario-input">
+            <label for="over">Over</label>
+            <input type="number" name="over" id="over-input">
+        </div>
+        <div class="formulario-input">
+            <label for="clube">Clube</label>
+            <select name="clube" id="clube-select">
+                <option value="">Selecione um clube</option>
+            </select>
+        </div>
+        <button id="botao-adicionar-jogador" onclick="adicionarJogador()">Adicionar Jogador</button>
+    </section>
+
+    <table>
+        <thead>
+            <th>Nome</th>
+            <th>Over</th>
+            <th>Clube</th>
+            <th>Editar</th>
+            <th>Deletar</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script src="https://kit.fontawesome.com/3802d20ec1.js" crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

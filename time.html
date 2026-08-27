@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="img/varzea-simulator.png">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/index.css">
-    <title>Várzea Simulator</title>
+    <link rel="stylesheet" href="css/time.css">
+    <title>Perfil Time</title>
 </head>
-<body onload="carregarTimes()">
+<body onload="carregarPaginaTime(false)">
     <button class="btnCanto" id="btnAbrirMenu" onclick="abrirMenu()"><i class="fa-solid fa-bars"></i></button>
     <menu>
         <button class="btnMenu" onclick="irParaPagina('index.html')"><i class="fa-solid fa-users"></i> Times</button>
@@ -16,33 +16,25 @@
         <button class="btnMenu" onclick="irParaPagina('configuracoes.html')"><i class="fa-solid fa-gear"></i> Configurações</button>
         <button class="btnMenu" onclick="fecharMenu()"><i class="fa-solid fa-reply"></i> Fechar</button>
     </menu>
-    
-    <main>
-        <div id="botoesMain">
-            <button class="botaoMain" id="criarTimeBtn" onclick="abrirJanela('formulario')"><i class="fa-solid fa-plus"></i> Criar Time</button>
-            <button class="botaoMain" onclick="irParaPagina('jogadores.html')"><i class="fa-solid fa-people-group"></i> Jogadores</button>
+    <section id="informacoesBasicas">
+        <div id="nomeTimeDiv">
+            <label for="nomeTime">Nome</label>
+            <input type="text" id="nomeTime" placeholder="Nome do time">
         </div>
-        <div id="timesDiv">
-            
+        <div id="coresDiv">
+            <div id="cor1Div">
+                <label for="cor1">Cor 1</label>
+                <input type="color" id="cor1">
+            </div>
+            <div id="cor2Div">
+                <label for="cor2">Cor 2</label>
+                <input type="color" id="cor2">
+            </div>
         </div>
-    </main>
-    <div id="janela-modal">
-        <div id="formularioDiv" class="divJanela">
-            <button onclick="fecharJanela('formulario')" class="botaoSairJanela"><i class="fa-solid fa-x" aria-hidden="true"></i></button>
-            <div id="nomeTimeDiv">
-                <label for="nomeTime-formulario">Nome</label>
-                <input type="text" id="nomeTime-formulario" placeholder="Nome do time">
-            </div>
-            <div id="coresDiv">
-                <div id="cor1Div">
-                    <label for="cor1-formulario">Cor 1</label>
-                    <input type="color" id="cor1-formulario">
-                </div>
-                <div id="cor2Div">
-                    <label for="cor2-formulario">Cor 2</label>
-                    <input type="color" id="cor2-formulario">
-                </div>
-            </div>
+        <button id="botaoConfirmarAlteracoes" onclick="editarTime()">Salvar Alterações</button>
+    </section>
+    <section id="informacoesAvancadas">
+        <div id="configuracoesTimeDiv">
             <div id="taticasTime">
                 <div class="taticaDiv">
                     <label for="estiloJogo">Estilo de Jogo</label>
@@ -73,16 +65,36 @@
                         <option value="linhaImpedimento">Linha de impedimento</option>
                     </select>
                 </div>
+                <div class="taticaDiv">
+                    <label for="formacao">Formação</label>
+                    <select name="formacao" id="formacao" onchange="carregarPaginaTime(true)">
+                        <option value="122">1-2-2</option>
+                        <option value="212">2-1-2</option>
+                        <option value="221">2-2-1</option>
+                        <option value="311">3-1-1</option>
+                        <option value="131">1-3-1</option>
+                        <option value="113">1-1-3</option>
+                    </select>
+                </div>
             </div>
-            <button id="botaoConfirmarFormulario" onclick="registrarTime()">Confirmar</button>
+            <section id="campoTatico">
+                <div class="linha ataque"></div>
+                <div class="linha meio"></div>
+                <div class="linha defesa"></div>
+
+                <div class="linha goleiro">
+                    <div class="posicao GK">
+                        <span class="funcao">Goleiro</span>
+                    </div>
+                </div>
+            </section>
         </div>
-    </div>
-    
-    <script src="js/app.js"></script>
+        <div id="reservasDiv">
+            <h2>Reservas</h2>
+        </div>
+    </section>
+
+    <script src="js/app.js"></script> 
     <script src="https://kit.fontawesome.com/3802d20ec1.js" crossorigin="anonymous"></script>
-    <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

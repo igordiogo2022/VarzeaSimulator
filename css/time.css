@@ -1,0 +1,142 @@
+body{
+    flex-direction: column;
+    background-image: none;
+    color: white;
+    margin: 2% 0;
+}
+
+.btnCanto{
+    top: 0;
+}
+
+input{
+    border: 1px solid var(--cor3);
+    background-color: #00000000;
+    border-radius: 4px;
+    padding: 0.75%;
+    color: white;
+    font-size: 14px;
+}
+
+input[type="color"]{
+    border: 0;
+}
+
+#informacoesBasicas{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#nomeTimeDiv{
+    display: flex;
+    width: 50%;
+    justify-content: space-around;
+    margin-bottom: 1%;
+}
+
+#nomeTime{
+    width: 60%;
+}
+
+#coresDiv{
+    display: flex;
+    justify-content: space-around;
+    width: 70%;
+}
+
+#cor1Div, #cor2Div{
+    display: flex;
+    width: 14%;
+    justify-content: space-between;
+}
+
+#informacoesAvancadas{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2%;
+}
+
+#configuracoesTimeDiv{
+    width: 60%;
+}
+
+#taticasTime{
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--cor2);
+    padding: 1.5% 0;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.taticaDiv{
+    display: flex;
+    flex-direction: column;
+}
+
+#botaoConfirmarAlteracoes{
+    margin-top: 1%;
+    width: 30%;
+    height: 5vh;
+    color: white;
+    border: 0;
+    font-size: 15px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(rgb(13, 170, 26), rgb(11, 131, 21));
+}
+
+#campoTatico{
+    padding: 2% 0;
+    background-image: url("/img/campo.png");
+    background-size: 100% 100%;
+    background-color: green;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.linha{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2%;
+    width: 100%;
+}
+
+.posicao{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #00000083;
+    padding: 1%;
+    width: 25%;
+    border: 1px solid white;
+    border-radius: 6px;
+}
+
+#reservasDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1%;
+    border-radius: 12px;
+    background-color: var(--cor2);
+    width: 20%;
+}
+
+.jogador{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 6px;
+    width: 70%;
+    padding: 1%;
+}
+
+.arrastando{
+    width: 150px;
+}
