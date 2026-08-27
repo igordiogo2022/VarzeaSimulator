@@ -886,6 +886,7 @@ async function importarPacote(){
     let dados = JSON.parse(conteudo);    
     
     if(!dados.versaoDados){
+        listaTimes = [];
         for(let time of dados){
             if(!listaTimes.includes(time)){
                 if(listaTimes.length == 0){
