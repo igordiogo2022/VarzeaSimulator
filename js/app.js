@@ -1,6 +1,6 @@
 let versaoDados = Number(localStorage.getItem("versaoDados") || "1");
 
-const listaTimes = JSON.parse(localStorage.getItem("listaTimes")||"[]");
+let listaTimes = JSON.parse(localStorage.getItem("listaTimes")||"[]");
 const listaJogadores = JSON.parse(localStorage.getItem("listaJogadores")||"[]");
 
 if (versaoDados < 2){
