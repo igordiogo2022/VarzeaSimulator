@@ -30,14 +30,14 @@ input[type="color"]{
     width: 100%;
 }
 
-#nomeTimeDiv{
+.inputDiv{
     display: flex;
     width: 50%;
     justify-content: space-around;
     margin-bottom: 1%;
 }
 
-#nomeTime{
+.inputDiv input{
     width: 60%;
 }
 

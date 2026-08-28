@@ -128,12 +128,12 @@ main{
     right: 5%;
     top: 3vh;
 }
-#nomeTimeDiv{
+.inputDiv{
     display: flex;
     width: 70%;
     justify-content: space-around;
 }
-#nomeTime-formulario{
+.inputDiv input{
     width: 60%;
 }
 #coresDiv{

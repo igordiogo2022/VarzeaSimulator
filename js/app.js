@@ -31,6 +31,8 @@ function migrarDados1Para2() {
             
             // O modelo antigo não possui formação
             formacao: null,
+            torcida: null,
+            escudo: null,
             
             jogadores: []
         };
@@ -232,13 +234,14 @@ function editarTime(){
     let timeAntes = listaTimes.find(time => time.id==idTime);
     
     const nomeTime = $("#nomeTime").value;
+    const escudoTime = $("#escudoTime").value || null;
+    const torcidaTime = $("#torcidaTime").value || null;
     const cor1Time = $("#cor1").value;
     const cor2Time = $("#cor2").value;
     const estiloJogoTime = $("#estiloJogo").value;
     const modoAtaqueTime = $("#modoAtaque").value;
     const modoDefesaTime = $("#modoDefesa").value;
     const formacao = $("#formacao").value;
-
     
     if(!nomeTime || !cor1Time || !cor2Time || estiloJogoTime=="nenhum" || modoAtaqueTime=="nenhum" || modoDefesaTime=="nenhum"){
         return alert("Não deixe campos incompletos ou táticas não definidas.");
@@ -272,6 +275,8 @@ function editarTime(){
     const timeAtualizado = {
         id: idTime,
         nome: nomeTime,     
+        escudo: escudoTime,
+        torcida: torcidaTime,
         cor1: cor1Time,
         cor2: cor2Time,
         estiloJogo: estiloJogoTime,
@@ -312,6 +317,8 @@ function preDeletarTime(id){
 
 function obterDadosFormulario(idTime){
     const nomeTime = $("#nomeTime-formulario").value;
+    const escudoTime = $("#escudoTime-formulario")?.value ?? null;
+    const torcidaTime = $("#torcidaTime-formulario")?.value ?? null;
     const cor1Time = $("#cor1-formulario").value;
     const cor2Time = $("#cor2-formulario").value;
     const estiloJogoTime = $("#estiloJogo").value;
@@ -325,6 +332,8 @@ function obterDadosFormulario(idTime){
     const time = {
         id: idTime,
         nome: nomeTime,     
+        escudo: escudoTime,     
+        torcida: torcidaTime,     
         cor1: cor1Time,
         cor2: cor2Time,
         estiloJogo: estiloJogoTime,
@@ -493,9 +502,7 @@ function chamarSimulacao(){
     parseInt($("#placarIdaTime2").value),
     time1, time2);
 
-    if(collectorsModeEstaAtivo){
-        definirBackground(time1.nome);
-    }
+    definirBackground(time1);
     
     limparEventos();
     exibirTimesPlacar(time1, time2);
@@ -619,6 +626,19 @@ function exibirTimesPlacar(time1, time2){
     const time1Placar = $("#time1Placar");
     const time2Placar = $("#time2Placar");
     
+    if(time1.escudo){
+        let imagem = $("#time1Escudo");
+        imagem.src = time1.escudo;
+        imagem.onload = () => {
+            imagem.style.display = "block";
+        }
+    }
+    if(time2.escudo){
+        let imagem = $("#time2Escudo");
+        imagem.src = time2.escudo;
+        imagem.style.display = "block";
+    }
+
     time1Placar.textContent = time1.nome;
     time1Placar.style.background = `linear-gradient(90deg, ${time1.cor1}, ${time1.cor2}, ${time1.cor1})`;
     let tom1 = obterTomCor(time1.cor2);
@@ -687,6 +707,8 @@ function carregarPaginaTime(atualizarFormacao){
     const time = listaTimes.find(item => item.id == idTime);
 
     $("#nomeTime").value = time.nome;
+    $("#escudoTime").value = time.escudo;
+    $("#torcidaTime").value = time.torcida;
     $("#cor1").value = time.cor1;
     $("#cor2").value = time.cor2;
     
@@ -694,7 +716,6 @@ function carregarPaginaTime(atualizarFormacao){
     const modoAtaqueTime = !time.modoAtaque ? "nenhum" : time.modoAtaque;
     const modoDefesaTime = !time.modoDefesa ? "nenhum" : time.modoDefesa;
     let formacao = !time.formacao ? "221" : time.formacao;
-    
     
     $("#estiloJogo").value = estiloJogoTime;
     $("#modoAtaque").value = modoAtaqueTime;
@@ -963,27 +984,9 @@ function ativarCollectorsMode(){
 
 function definirBackground(timeMandante){
     const body = $("body");
-
-    listaTimesCollectors = {
-        "Safados FC": "https://i.imgur.com/mh3bRqV.png",
-        "Anaconda Mineira": "https://i.imgur.com/rpFpNus.png",
-        "Carlos FC": "https://i.imgur.com/CaqWGam.png",
-        "Danados FC": "https://i.imgur.com/FAKwxbM.jpeg",
-        "Magic All Stars": "https://i.imgur.com/CugH1FX.jpeg",
-        "Renegados FC": "https://i.imgur.com/caLNRG7.png",
-        "Olaria Tietê FC": "https://i.imgur.com/wYPtyri.jpeg",
-        "Atl. Várzeanos": "https://i.imgur.com/x2FB1Ll.png",
-        "Jabatiuma FC": "https://i.imgur.com/kaSK1es.png",
-        "Davi FC": "https://i.imgur.com/sEAvd1Q.png",
-        "Sinistros FC": "https://i.imgur.com/J4tLOOd.png",
-        "Geral Sabe FC":"https://i.imgur.com/7wc3F9c.png",
-        "Maconharia do botafogo":"https://i.imgur.com/uw7WmIN.png",
-        "Kauanverse":"https://i.imgur.com/hRkb025.png",
-        "Batistuta FC":"https://i.imgur.com/2DkyfbB.png"
-    };
     
-    if(listaTimesCollectors[timeMandante]){
-        body.style.backgroundImage = `url(${listaTimesCollectors[timeMandante]})`;
+    if(timeMandante.torcida){
+        body.style.backgroundImage = `url(${timeMandante.torcida})`;
     }else{
         body.style.backgroundImage = "url(../img/background.png)";
     }

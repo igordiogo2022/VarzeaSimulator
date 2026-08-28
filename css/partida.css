@@ -98,9 +98,16 @@ main{
     display: flex;
     align-items: center;
     justify-content: space-around;
-    height: 7%;
-    width: 80%;
-    padding: 1% 0;
+    height: 13%;
+    width: 90%;
+    padding: 1%;
+}
+.infoTimePlacar{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    width: 40%;
 }
 .timeNome{
     display: flex;
@@ -110,10 +117,14 @@ main{
     background-color: var(--cor5);
     color: white;
     border-radius: 6px;
-    width: 35%;
-    height: 100%;
+    width: 75%;
+    height: 6vh;
     font-weight: 700;
     letter-spacing: 1px;
+}
+.timeImagem{
+    height: 100%;
+    display: none;
 }
 #timer{
     background-color: var(--cor5);
