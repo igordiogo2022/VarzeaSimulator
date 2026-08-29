@@ -409,7 +409,7 @@ function definirPosseBola(time1, time2, meiocampoTime1, meiocampoTime2, eventoOf
 
 function sorteiarJogadorEvento(jogadores, evento){
     const valores = [];
-    for(let i=1;i<=5;i++){
+    for(let i=0;i<=5;i++){
         if(jogadores[i].pos=="AT" && evento=="gol"){
             valores.push(i);
         }
@@ -419,7 +419,7 @@ function sorteiarJogadorEvento(jogadores, evento){
     let valorRandom = valores[Math.floor(Math.random() * valores.length)];
     let jogador = jogadores[valorRandom];
     
-    if(jogador.jogando){
+    if(jogador.jogando && jogador.pos != "GK"){
         return jogador;
     }else{
         return sorteiarJogadorEvento(jogadores);
@@ -433,7 +433,7 @@ function sorteiarJogadorAssistencia(jogadores, jogadorGol){
     }
 
     const valores = [];
-    for(let i=1;i<=5;i++){
+    for(let i=0;i<=5;i++){
         if(jogadores[i].pos=="MC"){
             valores.push(i);
         }
@@ -443,7 +443,7 @@ function sorteiarJogadorAssistencia(jogadores, jogadorGol){
     let valorRandom2 = valores[Math.floor(Math.random() * valores.length)];
     let jogador = jogadores[valorRandom2];
     
-    if(jogador.jogando && jogador!=jogadorGol){
+    if(jogador.jogando && jogador!=jogadorGol && jogador.pos != "GK"){
         return jogador.nome;
     }else{
         return sorteiarJogadorAssistencia(jogadores, jogadorGol);
