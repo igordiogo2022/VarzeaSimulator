@@ -66,7 +66,7 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
                         timeInverso = time1;
                     }
                     timeEvento = timeInverso;
-                    jogador = timeInverso.jogadores[0];
+                    jogador = timeInverso.jogadores.find(jogador => jogador.pos=="GK");
                     if(evento=="superDefesaGoleiro"){
                         exibirEvento = true;
                     }
