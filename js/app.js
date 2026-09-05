@@ -2,6 +2,7 @@ let versaoDados = Number(localStorage.getItem("versaoDados") || "1");
 
 let listaTimes = JSON.parse(localStorage.getItem("listaTimes")||"[]");
 const listaJogadores = JSON.parse(localStorage.getItem("listaJogadores")||"[]");
+let jogosSimulados = JSON.parse(localStorage.getItem("jogosSimulados")||"[]");
 
 if (versaoDados < 2){
     migrarDados1Para2();
@@ -45,7 +46,6 @@ function migrarDados1Para2() {
                 nome: jogadorAntigo.nome,
                 over: jogadorAntigo.over,
                 time: String(i),
-                clube: String(i),
                 pos: jogadorAntigo.pos
             };
             
@@ -300,7 +300,12 @@ function editarTime(){
 function deletarTime(id){
     for(let i=0;i<listaTimes.length;i++){
         if(listaTimes[i].id == id){
-            listaTimes.splice(i, 1);
+            time = listaTimes.find(time => time.id == id);
+            if(time.jogadores==0){
+                listaTimes.splice(i, 1);
+            }else{
+                return alert("Esse time não pode ser deletado pois contém jogadores registrados nele.");
+            }
         }
     }
     
@@ -355,11 +360,10 @@ function buscarJogadores(){
 function carregarJogadores(jogadores){
     conteudo = "";
     let time;
-    
+
     for (const jogador of jogadores){
         time = listaTimes.find(time => time.id==jogador.time);
-        
-
+    
         conteudo += `<tr>
         <td>${jogador.nome}</td>
         <td>${jogador.over}</td>
@@ -698,6 +702,12 @@ function carregarEstatisticas(time1, time2, sumula){
     const cartoesTime2Td = $("#cartoesTime2");
     cartoesTime1Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time1).length;
     cartoesTime2Td.textContent = sumula.filter(evento => evento.tipo=="amarelo" || evento.tipo=="vermelho").filter(evento => evento.time==time2).length;
+
+    let qtdGolsTime1 = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="varGol" || evento.tipo=="contra").filter(evento => evento.time==time1).length;
+    let qtdGolsTime2 = sumula.filter(evento => evento.tipo=="gol" || evento.tipo=="varGol" || evento.tipo=="contra").filter(evento => evento.time==time2).length;
+
+    jogosSimulados.push(`${time1.nome} ${qtdGolsTime1} x ${qtdGolsTime2} ${time2.nome}`);
+    localStorage.setItem("jogosSimulados", JSON.stringify(jogosSimulados));
 }
 
 function carregarPaginaTime(atualizarFormacao){
@@ -926,6 +936,7 @@ async function importarPacote(){
         localStorage.setItem("versaoDados", JSON.stringify(dados.versaoDados));
         localStorage.setItem("listaTimes", JSON.stringify(dados.times));
         localStorage.setItem("listaJogadores", JSON.stringify(dados.jogadores));
+        localStorage.setItem("jogosSimulados", JSON.stringify(dados.jogos));
     }
 
     irParaPagina("index.html")
@@ -935,7 +946,8 @@ function exportarPacote(){
     const conteudo = {
         versaoDados: 2,
         times: listaTimes,
-        jogadores: listaJogadores
+        jogadores: listaJogadores,
+        jogos: jogosSimulados
     }
 
     const json = JSON.stringify(conteudo, null, 4);

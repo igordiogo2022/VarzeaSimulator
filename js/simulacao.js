@@ -42,7 +42,7 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
     let tempoPartida = 90 + Math.floor(Math.random()*10);
     let timeEvento = "";
     
-    for(let minuto=0;minuto<=tempoPartida;minuto++){
+    for(let minuto=1;minuto<=tempoPartida;minuto++){
         let valorRandom1 = Math.random() * 100;
         
         if(valorRandom1 < chanceEvento){
