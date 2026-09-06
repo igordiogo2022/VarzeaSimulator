@@ -101,10 +101,13 @@ function carregarTimes(){
         }
         
         const ordemPosicoes = ["GK", "ZG", "MC", "AT", null];
-        jogadores = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id === id));
+        jogadores = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id == id));
         
         for (const posicao of ordemPosicoes){
+            console.log(jogadores);
             for(const jogador of jogadores){
+                console.log(jogador);
+                
                 if(jogador.pos == posicao){
                     let tr = document.createElement("tr");
                     
@@ -125,7 +128,7 @@ function carregarTimes(){
         botaoDeletar.classList.add("botaoDeletar");
         botaoDeletar.id = "botaoDeletar"+time.id;
         botaoDeletar.textContent = "Deletar";
-        botaoDeletar.setAttribute("onclick", "preDeletarTime("+time.id+")");
+        botaoDeletar.setAttribute("onclick", `preDeletar(${time.id}, "deletarTime")`);
         
         botoesCard.classList.add("botoesCard");
         botoesCard.style.background = `linear-gradient(45deg, ${time.cor1} 60%, ${time.cor2})`;
@@ -313,11 +316,11 @@ function deletarTime(id){
     window.location.reload();
 }
 
-function preDeletarTime(id){
+function preDeletar(id, funcao){
     const botaoDeletar = $("#botaoDeletar"+id);
     botaoDeletar.textContent = "Confirmar";
     botaoDeletar.style.background = "linear-gradient(rgb(255, 0, 13), rgb(216, 0, 0)";
-    botaoDeletar.setAttribute("onclick", "deletarTime("+id+")");
+    botaoDeletar.setAttribute("onclick", `${funcao}(${id})`);
 }
 
 function obterDadosFormulario(idTime){
@@ -369,7 +372,7 @@ function carregarJogadores(jogadores){
         <td>${jogador.over}</td>
         <td>${time.nome}</td>
         <td><button class="botao-tabela botao-editar" onclick="carregarDadosFormularioJogador(${jogador.id})">Editar</button></td>
-        <td><button class="botao-tabela botao-deletar" onclick="preDeletar(${jogador.id}, 'deletarJogador')" data-id="${jogador.id}">Deletar</button></td>
+        <td><button id="botaoDeletar${jogador.id}" class="botao-tabela botao-deletar" onclick="preDeletar(${jogador.id}, 'deletarJogador')" data-id="${jogador.id}">Deletar</button></td>
         </tr>`
     }
     
@@ -450,11 +453,15 @@ function editarJogador(id){
 }
 
 function deletarJogador(id){
-    const index = listaJogadores.findIndex(jogador => jogador.id === id);
+    const time = listaTimes.find(time => time.jogadores.includes(id));
+    time.jogadores = time.jogadores.filter(jogador => jogador!=id);
+   
+    const index = listaJogadores.findIndex(jogador => jogador.id == id);
     
     listaJogadores.splice(index, 1);
-
+    
     localStorage.setItem("listaJogadores", JSON.stringify(listaJogadores));
+    localStorage.setItem("listaTimes", JSON.stringify(listaTimes));
     window.location.reload();
 }
 
