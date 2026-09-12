@@ -10,7 +10,6 @@ if (versaoDados < 2){
     localStorage.setItem("versaoDados", versaoDados);
 }
 
-
 function migrarDados1Para2() {
     const times = [];
     const jogadores = [];
@@ -743,14 +742,17 @@ function carregarPaginaTime(atualizarFormacao){
 
     carregarCampoTaticoHtml(formacao);
 
+    // Pega todos os jogadores do time
     let jogadoresDisponiveis = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id === id));
     let posicoes = ["GK", "ZG", "MC", "AT"];
     let posicaoAtual;
     let jogadoresPorPosicao;
 
     for(let i=0;i<4;i++){
+        // Se a posição for 0(logo é goleiro), então apenas 1 jogador nessa posição
         if(i==0){
             jogadoresPorPosicao = 1;
+        // Se não é goleiro, a quantidade jogadores por posição é baseada na formação do time
         }else{
             jogadoresPorPosicao = formacao[i-1];
         }
@@ -758,12 +760,15 @@ function carregarPaginaTime(atualizarFormacao){
 
         posicoesPorLinhaHtml = document.querySelectorAll("."+posicaoAtual);
 
+        // Carrega a linha do campo
         for(let n=0;n<jogadoresPorPosicao;n++){
+            // Busca um jogador com a posição compativel com a linha que está sendo carregada
             jogador = jogadoresDisponiveis.find(jogador => jogador.pos==posicaoAtual);
 
+            // Se tem jogador nessa posição, então carrega a div jogador na posição
             if(jogador){
                 posicaoHtml = posicoesPorLinhaHtml[n];
-                posicaoHtml.innerHTML += `<div class="jogador" id=${jogador.id} draggable="true">
+                posicaoHtml.innerHTML += `<div class="jogador" id=${jogador.id}>
                 <span class="nomeJogador">${jogador.nome}</span>
                 <span class="overJogador">${jogador.over}</span>
             </div>`;
@@ -772,39 +777,60 @@ function carregarPaginaTime(atualizarFormacao){
             }
         }
     }
-
     
+    // Carrega os jogadores sem posição no banco de reservas
     let conteudo = "";
     for (const jogador1 of jogadoresDisponiveis){
-        conteudo += `<div class="jogador" draggable="true" id=${jogador1.id}>
+        conteudo += `<div class="jogador" id=${jogador1.id}>
                 <span class="nomeJogador">${jogador1.nome}</span>
                 <span class="overJogador">${jogador1.over}</span>
             </div>`;
     }
-
     const reservasDiv = $("#reservasDiv");
     reservasDiv.innerHTML += conteudo;
 
-    document.addEventListener("dragstart", (elemento) => {
-        elemento.target.classList.add("arrastando");
-    });
-    
-    document.addEventListener("dragend", (elemento) => {
-        elemento.target.classList.remove("arrastando");
+    // Configuração da div jogador
+    let jogadorSelecionado = null;
+
+    const jogadoresHtml = document.querySelectorAll(".jogador");
+    // Se jogador for clicado, ele é selecionado
+    jogadoresHtml.forEach(item => {
+        item.addEventListener("click", (event) => {
+            // Evita que outras função sejam executadas após está
+            event.stopPropagation();
+            
+            // Se tem um jogador selecionado, mas não é o que foi clicado, remove seleção do antigo
+            if(jogadorSelecionado && jogadorSelecionado!=item){
+                jogadorSelecionado.classList.remove("selecionado");
+            }
+
+            // Se o jogador clicado ja está selecionado, ele perde a seleção
+            if(jogadorSelecionado == item){
+                jogadorSelecionado = null;
+                item.classList.remove("selecionado");
+            // Se não está selecionado e foi clicado, recebe a seleção
+            }else{
+                jogadorSelecionado = item;
+                item.classList.add("selecionado");
+            }
+
+        }) 
     });
 
     let posicoesHtml = [...document.querySelectorAll(".posicao"),
     $("#reservasDiv")];
     
     posicoesHtml.forEach((item) => {
-        item.addEventListener("dragover", (event) => {
-            event.preventDefault();
-        })
+        // Verifica se a posição foi clicada
+        item.addEventListener("click", () => {
+            
+            // Se não há jogador selecionado, não faz nada
+            if(!jogadorSelecionado) return;
 
-        item.addEventListener("drop", () => {
-            const jogador = document.querySelector(".arrastando");
+            item.appendChild(jogadorSelecionado);
 
-            item.appendChild(jogador);
+            jogadorSelecionado.classList.remove("selecionado");
+            jogadorSelecionado = null;
         });
     })
 }

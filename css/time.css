@@ -126,6 +126,7 @@ input[type="color"]{
     border-radius: 12px;
     background-color: var(--cor2);
     width: 20%;
+    min-height: 15vh;
 }
 
 .jogador{
@@ -138,8 +139,9 @@ input[type="color"]{
     padding: 1%;
 }
 
-.arrastando{
-    width: 150px;
+.selecionado{
+    background-color: #b8cc005d;
+    border: 1px solid yellow;
 }
 
 @media (max-width: 550px) {
@@ -192,5 +194,6 @@ input[type="color"]{
 
     #reservasDiv{
         width: 100%;
+        margin: 6% 0;
     }
 }
