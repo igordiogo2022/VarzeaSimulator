@@ -104,10 +104,7 @@ function carregarTimes(){
         jogadores = time.jogadores.map(id => listaJogadores.find(jogador => jogador.id == id));
         
         for (const posicao of ordemPosicoes){
-            console.log(jogadores);
             for(const jogador of jogadores){
-                console.log(jogador);
-                
                 if(jogador.pos == posicao){
                     let tr = document.createElement("tr");
                     

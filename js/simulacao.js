@@ -153,8 +153,30 @@ function simulacaoPartida(estilo, clima, torcida, moralTime1, moralTime2, ehJogo
 function disputaPenaltis(time1, time2){
     let gkTime1 = time1.jogadores[0];
     let gkTime2 = time2.jogadores[0];
-    let batedoresTime1 = JSON.parse(JSON.stringify(time1.jogadores)).reverse();
-    let batedoresTime2 = JSON.parse(JSON.stringify(time2.jogadores)).reverse();
+
+    const ordemPosicoes = ["AT", "MC", "ZG", "GK"];
+    let [batedoresTime1, batedoresTime2] = [[], []];
+
+    for (const posicao of ordemPosicoes){
+        for(const jogador of time1.jogadores){
+            if(posicao == jogador.pos){
+                batedoresTime1.push(jogador);
+            }
+        }
+    }
+    
+    for (const posicao of ordemPosicoes){
+        for(const jogador of time2.jogadores){
+            if(posicao == jogador.pos){
+                batedoresTime2.push(jogador);
+            }
+        }
+    }
+
+    console.log(batedoresTime1);
+    console.log(batedoresTime2);
+    
+
     let [expulsosTime1, expulsosTime2, placarTime1, placarTime2] = [0,0,0,0];
     let sumulaPenaltis = [{
         gkTime1: gkTime1,
