@@ -218,7 +218,7 @@ main{
         flex-direction: column;
     }
     #configuracoesPartidaDiv{
-        width: 80%;
+        width: 100%;
     }
     #formularioDiv{
         grid-template-columns: repeat(2, 1fr);
